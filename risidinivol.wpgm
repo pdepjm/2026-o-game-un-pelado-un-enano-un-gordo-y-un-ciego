@@ -41,7 +41,5 @@ program risidinivol {
     game.start()
     game.addVisual(personaje)
     game.addVisual(zombie)
-    zombie.moverZombie()
-
-    game.onCollideDo(zombie, { visual => visual.empujado(zombie,2) })
+    zombie.activar()
 }
