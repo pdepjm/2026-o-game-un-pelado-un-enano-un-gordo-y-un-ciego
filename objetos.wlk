@@ -7,6 +7,8 @@ object personaje {
     const saludMaxima = 3
     var salud = saludMaxima
 
+    var arma = revolver
+
     method position() = posicion
     method image() = "personaje_" + direccion + ".png"
     method text() = salud.toString()          // muestra la salud sobre el personaje
@@ -14,6 +16,7 @@ object personaje {
     method salud() = salud
     method estaVivo() = salud > 0
 
+    method direccion() = direccion
     method direccion(nuevaDireccion) { direccion = nuevaDireccion }
 
     method moverArriba() { if (posicion.y() < game.height() - 1) { posicion = posicion.up(velocidad) } }
@@ -54,6 +57,11 @@ object personaje {
         keyboard.right().onReleaseDo({ tickDerecha.stop() })
     }
 
+    method activarDisparo() {
+        
+        keyboard.x().onPressDo({arma.disparar()})
+    }
+
     method empujado(enemigo) {
         self.empujar(enemigo.direccion(), enemigo.fuerzaEmpuje())
     }
@@ -76,6 +84,48 @@ object personaje {
 
     method morido() {
         game.schedule(15, { game.stop() })
+    }
+}
+
+/*
+    ADVERTENCIA:
+    Al ser proyectil un objeto único, cuando se dispara y se llama a addVisual existe la posibilidad
+    de que el objeto ya haya sido agregado a la pantalla, por lo cual se debe buscar una solución,
+    posiblemente con proyectiles independientes
+*/
+object proyectil {
+    const imagen = "goat.png"
+    var posicion = game.at(0,0)
+    var direccionAvance = game.at(0, 0)
+    var distanciaRecorrida = 1 //esta variable tiene un nombre largo, excesivamente largo, no deberia ser tan largo, pero voy a hacerlo largo, quiero hacerlo largo, tan largo como yo quiera, aunque solo almace un numero, no me importa, será largo, tan largo como yo quiera, porque si quiero hacerlo largo, lo hago largo, no me imnporta lo que vos quieras, largo, largo, largo
+    var distanciaMaxima = 0
+    var velocidad = 4
+
+    method retraso() = 100/velocidad //alonso
+    const tickAvance = game.tick(self.retraso(), {self.confirmarAvance()}, false)
+
+
+    method position(nuevaPos) {posicion = nuevaPos}
+    method position() = posicion
+    method image() = imagen
+
+    method avanzar(direccion, alcance, velProyectil) {
+        direccionAvance = direccion
+        distanciaMaxima = alcance
+        velocidad = velProyectil
+        tickAvance.start()
+    }
+
+    method confirmarAvance() {
+        if (distanciaRecorrida < distanciaMaxima) {
+            self.position(game.at(posicion.x()+direccionAvance.x(), posicion.y()+direccionAvance.y()))
+            distanciaRecorrida += 1
+        } else {
+            tickAvance.stop()
+            distanciaMaxima = 0
+            distanciaRecorrida = 1
+            game.removeVisual(self)
+        }
     }
 }
 
@@ -133,6 +183,50 @@ class Enemigo {
         game.schedule(1000, { pausa = false })
     }
 }
+
+class Arma {
+    const alcance
+    const velProyectil
+
+    var pausa = false
+
+    method disparar() {
+        if (!pausa) {
+            self.pausar()
+            game.addVisual(proyectil)
+            if (personaje.direccion() == "arriba") {
+                proyectil.position(game.at(personaje.position().x(), personaje.position().y() + 1))
+                proyectil.avanzar(game.at(0, 1), alcance, velProyectil)
+            }
+            if (personaje.direccion() == "abajo") { 
+                proyectil.position(game.at(personaje.position().x(), personaje.position().y() - 1))
+                proyectil.avanzar(game.at(0, -1), alcance, velProyectil)
+            }
+            if (personaje.direccion() == "izquierda") {
+                proyectil.position(game.at(personaje.position().x() - 1, personaje.position().y()))
+                proyectil.avanzar(game.at(-1, 0), alcance, velProyectil)
+            }
+            if (personaje.direccion() == "derecha") {
+                proyectil.position(game.at(personaje.position().x() + 1, personaje.position().y()))
+                proyectil.avanzar(game.at(1, 0), alcance, velProyectil)
+            }
+        }
+    }
+    method pausar() {
+        pausa = true
+        game.schedule(150, { pausa = false })
+    }
+}
+
+const cuchillo = new Arma(
+    alcance = 1,
+    velProyectil = 2
+)
+
+const revolver = new Arma(
+    alcance = 5,
+    velProyectil = 4
+)
 
 const zombie = new Enemigo(
     nombre = "zombie",

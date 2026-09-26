@@ -8,6 +8,7 @@ program risidinivol {
     game.title("Risidinivol")
 
     personaje.activarMovimiento()
+    personaje.activarDisparo()
 
     game.start()
     game.addVisual(personaje)
