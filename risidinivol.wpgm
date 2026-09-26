@@ -7,36 +7,7 @@ program risidinivol {
     game.cellSize(128)
     game.title("Risidinivol")
 
-    const retraso = 100
-
-    const tickArriba = game.tick(retraso, { personaje.moverArriba() }, false)
-    const tickAbajo = game.tick(retraso, { personaje.moverAbajo() }, false)
-    const tickIzquierda = game.tick(retraso, { personaje.moverIzquierda() }, false)
-    const tickDerecha = game.tick(retraso, { personaje.moverDerecha() }, false)
-
-    keyboard.up().onPressDo({
-        personaje.direccion("arriba")
-        tickArriba.start()
-    })
-    keyboard.up().onReleaseDo({ tickArriba.stop() })
-
-    keyboard.down().onPressDo({
-        personaje.direccion("abajo")
-        tickAbajo.start()
-    })
-    keyboard.down().onReleaseDo({ tickAbajo.stop() })
-
-    keyboard.left().onPressDo({
-        personaje.direccion("izquierda")
-        tickIzquierda.start()
-    })
-    keyboard.left().onReleaseDo({ tickIzquierda.stop() })
-
-    keyboard.right().onPressDo({
-        personaje.direccion("derecha")
-        tickDerecha.start()
-    })
-    keyboard.right().onReleaseDo({ tickDerecha.stop() })
+    personaje.activarMovimiento()
 
     game.start()
     game.addVisual(personaje)

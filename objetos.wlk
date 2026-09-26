@@ -21,6 +21,39 @@ object personaje {
     method moverIzquierda() { if (posicion.x() > 0) { posicion = posicion.left(velocidad) } }
     method moverDerecha() { if (posicion.x() < game.width() - 1) { posicion = posicion.right(velocidad) } }
 
+    method activarMovimiento() {
+        const retraso = 100
+
+        const tickArriba = game.tick(retraso, { self.moverArriba() }, false)
+        const tickAbajo = game.tick(retraso, { self.moverAbajo() }, false)
+        const tickIzquierda = game.tick(retraso, { self.moverIzquierda() }, false)
+        const tickDerecha = game.tick(retraso, { self.moverDerecha() }, false)
+
+        keyboard.up().onPressDo({
+            self.direccion("arriba")
+            tickArriba.start()
+        })
+        keyboard.up().onReleaseDo({ tickArriba.stop() })
+
+        keyboard.down().onPressDo({
+            self.direccion("abajo")
+            tickAbajo.start()
+        })
+        keyboard.down().onReleaseDo({ tickAbajo.stop() })
+
+        keyboard.left().onPressDo({
+            self.direccion("izquierda")
+            tickIzquierda.start()
+        })
+        keyboard.left().onReleaseDo({ tickIzquierda.stop() })
+
+        keyboard.right().onPressDo({
+            self.direccion("derecha")
+            tickDerecha.start()
+        })
+        keyboard.right().onReleaseDo({ tickDerecha.stop() })
+    }
+
     method empujado(enemigo) {
         self.empujar(enemigo.direccion(), enemigo.fuerzaEmpuje())
     }
