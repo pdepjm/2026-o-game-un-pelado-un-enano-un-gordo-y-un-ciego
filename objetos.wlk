@@ -1,13 +1,14 @@
 import wollok.game.*
 
+const alturaInterfaz = 1
 object personaje {
     var posicion = game.center()
     var direccion = "abajo"
     const velocidad = 1
     const saludMaxima = 3
     var salud = saludMaxima
+    method saludMaxima() = saludMaxima
 
-    var arma = revolver
 
     method position() = posicion
     method image() = "personaje_" + direccion + ".png"
@@ -20,7 +21,7 @@ object personaje {
     method direccion(nuevaDireccion) { direccion = nuevaDireccion }
 
     method moverArriba() { if (posicion.y() < game.height() - 1) { posicion = posicion.up(velocidad) } }
-    method moverAbajo() { if (posicion.y() > 0) { posicion = posicion.down(velocidad) } }
+    method moverAbajo() { if (posicion.y() > alturaInterfaz) { posicion = posicion.down(velocidad) } }
     method moverIzquierda() { if (posicion.x() > 0) { posicion = posicion.left(velocidad) } }
     method moverDerecha() { if (posicion.x() < game.width() - 1) { posicion = posicion.right(velocidad) } }
 
@@ -57,9 +58,9 @@ object personaje {
         keyboard.right().onReleaseDo({ tickDerecha.stop() })
     }
 
+
     method activarDisparo() {
-        
-        keyboard.x().onPressDo({arma.disparar()})
+        keyboard.x().onPressDo({ inventario.seleccionarArma().disparar() })
     }
 
     method empujado(enemigo) {
@@ -116,17 +117,51 @@ object proyectil {
         tickAvance.start()
     }
 
-    method confirmarAvance() {
-        if (distanciaRecorrida < distanciaMaxima) {
-            self.position(game.at(posicion.x()+direccionAvance.x(), posicion.y()+direccionAvance.y()))
-            distanciaRecorrida += 1
-        } else {
-            tickAvance.stop()
-            distanciaMaxima = 0
-            distanciaRecorrida = 1
-            game.removeVisual(self)
-        }
+   method confirmarAvance() {
+    if (distanciaRecorrida < distanciaMaxima) {
+        self.position(game.at(posicion.x() + direccionAvance.x(), posicion.y() + direccionAvance.y()))
+        distanciaRecorrida += 1
+        self.verificarColision()
+    } else {
+        self.detener()
     }
+}
+
+method verificarColision() {
+    const enemigoGolpeado = game.colliders(self).filter({ bicho => bicho.estaVivo() })
+    if (enemigoGolpeado.size() > 0) {
+        enemigoGolpeado.first().recibirDanio(1)
+        self.detener()
+    }
+}
+
+    method detener() {
+        tickAvance.stop()
+        distanciaMaxima = 0
+        distanciaRecorrida = 1
+        game.removeVisual(self)
+    }
+        
+}
+
+object inventario{
+    const listaInventario = [cuchillo,revolver]
+    var armaElegida = 0
+
+    method aniadirArma(arma){
+        listaInventario.add(arma)
+    }
+    method cambiarArma(){
+        keyboard.num(1).onPressDo({armaElegida = 0})
+        keyboard.num(2).onPressDo({armaElegida = 1})
+        keyboard.num(3).onPressDo({armaElegida = 2})
+        keyboard.num(4).onPressDo({armaElegida = 3})
+    }
+    method seleccionarArma() = listaInventario.get(armaElegida)
+    method tieneArma(indice) = listaInventario.size() > indice
+    method arma(indice) = listaInventario.get(indice)
+    method estaSeleccionada(indice) = armaElegida == indice
+    method armas() = listaInventario 
 }
 
 class Enemigo {
@@ -137,12 +172,20 @@ class Enemigo {
     var posicion
     var direccion = "abajo"
     var pausa = false
+    var velocidad 
+    var salud
+
+    method estaVivo() = salud > 0
 
     method position() = posicion
     method image() = imagen
     method direccion() = direccion
     method danio() = danio
     method fuerzaEmpuje() = fuerzaEmpuje
+    method moverArriba() { if (posicion.y() < game.height() - 1) { posicion = posicion.up(velocidad) } }
+    method moverAbajo() { if (posicion.y() > 0) { posicion = posicion.down(velocidad) } }
+    method moverIzquierda() { if (posicion.x() > 0) { posicion = posicion.left(velocidad) } }
+    method moverDerecha() { if (posicion.x() < game.width() - 1) { posicion = posicion.right(velocidad) } }
 
     method activar() {
         game.onTick(500, "movimiento" + nombre, { self.perseguir() })
@@ -177,17 +220,45 @@ class Enemigo {
         personaje.empujado(self)
         self.pausar()
     }
+     method empujado(enemigo) {
+        self.empujar(enemigo.direccion(), enemigo.fuerzaEmpuje())
+    }
+
+    method empujar(direccionEmpuje, fuerza) {
+        (1..fuerza).forEach({ i =>
+            if (direccionEmpuje == "arriba") { self.moverArriba() }
+            if (direccionEmpuje == "abajo") { self.moverAbajo() }
+            if (direccionEmpuje == "izquierda") { self.moverIzquierda() }
+            if (direccionEmpuje == "derecha") { self.moverDerecha() }
+        })
+    }
+
+    method recibirDanio(cantidad) {
+        if (self.estaVivo()) {
+            salud = (salud - cantidad).max(0)
+            self.empujado(self)
+            if (!self.estaVivo()) { self.morido() }
+        }
+    }
 
     method pausar() {
         pausa = true
         game.schedule(1000, { pausa = false })
+    }
+
+    method morido(){
+            game.removeVisual(self)
+            game.removeTickEvent("movimiento" + nombre)
     }
 }
 
 class Arma {
     const alcance
     const velProyectil
-
+    const imgSeleccionado
+    const imgNoSeleccionado
+    method imgSeleccionado() = imgSeleccionado
+    method imgNoSeleccionado() = imgNoSeleccionado
     var pausa = false
 
     method disparar() {
@@ -220,12 +291,16 @@ class Arma {
 
 const cuchillo = new Arma(
     alcance = 1,
-    velProyectil = 2
+    velProyectil = 2,
+    imgSeleccionado= "cuchillo_seleccionado.png",
+    imgNoSeleccionado = "cuchillo_noseleccionado.png"
 )
 
 const revolver = new Arma(
     alcance = 5,
-    velProyectil = 4
+    velProyectil = 4,
+    imgSeleccionado ="revolver_seleccionado.png",
+    imgNoSeleccionado = "revolver_noseleccionado.png"
 )
 
 const zombie = new Enemigo(
@@ -233,5 +308,48 @@ const zombie = new Enemigo(
     imagen = "spiderodo_128x128.png",
     danio = 1,
     fuerzaEmpuje = 1,
-    posicion = game.at(5, 5)
+    posicion = game.at(5, 5),
+    salud = 3,
+    velocidad = 1
 )
+
+
+
+//Cositas de la interfaz
+class Corazon {
+    const indice
+
+    method position() = game.at(indice - 1, 0)
+    method image() = if (personaje.salud() >= indice) "corazon_lleno.png" else "corazon_vacio.png"
+}
+
+const corazon1 = new Corazon(
+    indice = 1
+)
+const corazon2 = new Corazon(
+    indice = 2
+)
+const corazon3 = new Corazon(
+    indice = 3
+)
+
+const listaCorazones = (1..personaje.saludMaxima()).map({ i => new Corazon(indice = i) })
+
+class IconoInventario {
+    const arma
+    const indice
+
+    method position() = game.at(5 + indice, 0)
+    method image() = if (inventario.estaSeleccionada(indice)) arma.imgSeleccionado() else arma.imgNoSeleccionado()
+}
+
+const listaIconos = (0..(inventario.armas().size() - 1)).map({ i => new IconoInventario(arma = inventario.arma(i), indice = i)})
+
+class FondoHUD {
+    const posicionX
+
+    method position() = game.at(posicionX, 0)
+    method image() = "hud_fondo.png"
+}
+
+const listaFondoHUD = (0..(24)).map({ x => new FondoHUD(posicionX = x) }) //24 provicional, la idea es que sea del ancho de la pantalla.
