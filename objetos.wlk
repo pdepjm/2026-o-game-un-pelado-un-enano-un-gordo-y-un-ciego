@@ -95,7 +95,7 @@ object personaje {
     posiblemente con proyectiles independientes
 */
 object proyectil {
-    const imagen = "goat.png"
+    const imagen = "bala.png"
     var posicion = game.at(0,0)
     var direccionAvance = game.at(0, 0)
     var distanciaRecorrida = 1 //esta variable tiene un nombre largo, excesivamente largo, no deberia ser tan largo, pero voy a hacerlo largo, quiero hacerlo largo, tan largo como yo quiera, aunque solo almace un numero, no me importa, será largo, tan largo como yo quiera, porque si quiero hacerlo largo, lo hago largo, no me imnporta lo que vos quieras, largo, largo, largo
