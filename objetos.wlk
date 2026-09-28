@@ -12,7 +12,7 @@ object personaje {
 
     method position() = posicion
     method image() = "personaje_" + direccion + ".png"
-    method text() = salud.toString()          // muestra la salud sobre el personaje
+
 
     method salud() = salud
     method estaVivo() = salud > 0
@@ -100,6 +100,7 @@ object personaje {
 */
 object proyectil {
     var orientacion = "abajo"
+    var nombreArma = "cuchillo"
     var posicion = game.at(0,0)
     var direccionAvance = game.at(0, 0)
     var distanciaRecorrida = 1 //esta variable tiene un nombre largo, excesivamente largo, no deberia ser tan largo, pero voy a hacerlo largo, quiero hacerlo largo, tan largo como yo quiera, aunque solo almace un numero, no me importa, será largo, tan largo como yo quiera, porque si quiero hacerlo largo, lo hago largo, no me imnporta lo que vos quieras, largo, largo, largo
@@ -112,13 +113,14 @@ object proyectil {
 
     method position(nuevaPos) {posicion = nuevaPos}
     method position() = posicion
-    method image() = "bala_" + orientacion + ".png"
+    method image() = nombreArma + "_" + orientacion + ".png"
 
-    method avanzar(direccion, nombreDireccion, alcance, velProyectil) {
+     method avanzar(direccion, nombreDireccion, alcance, velProyectil, nomArma) {
         direccionAvance = direccion
         orientacion = nombreDireccion
         distanciaMaxima = alcance
         velocidad = velProyectil
+        nombreArma = nomArma
         tickAvance.start()
     }
 
@@ -296,6 +298,7 @@ object spawner{
 }
 
 class Arma {
+    const nombre 
     const alcance
     const velProyectil
     const imgSeleccionado
@@ -304,22 +307,25 @@ class Arma {
     method imgNoSeleccionado() = imgNoSeleccionado
     var pausa = false
 
-method vectorDe(dir)=
-    if (dir == "arriba") game.at(0, 1)
-    else if (dir == "abajo") game.at(0, -1)
-    else if (dir == "izquierda") game.at(-1, 0)
-    else if (dir == "derecha") game.at(1, 0)
+    method vectorDe(dir)=
+        if (dir == "arriba") game.at(0, 1)
+        else if (dir == "abajo") game.at(0, -1)
+        else if (dir == "izquierda") game.at(-1, 0)
+        else if (dir == "derecha") game.at(1, 0)
 
     method disparar() {
         if (!pausa) {
-           self.pausar()
-           const dir = personaje.direccion()
-           const vector = self.vectorDe(dir)
-           game.addVisual(proyectil)
-           proyectil.position(game.at(personaje.position().x() + vector.x(), personaje.position().y() + vector.y()))
-              proyectil.avanzar(vector, dir, alcance, velProyectil)
+            self.pausar()
+            const dir = personaje.direccion()
+            const vector = self.vectorDe(dir)
+            game.addVisual(proyectil)
+            proyectil.position(game.at(
+                personaje.position().x() + vector.x(),
+                personaje.position().y() + vector.y()
+            ))
+            proyectil.avanzar(vector, dir, alcance, velProyectil, nombre) 
         }
-}
+    }
 
     method pausar() {
         pausa = true
@@ -328,6 +334,7 @@ method vectorDe(dir)=
 }
 
 const cuchillo = new Arma(
+    nombre = "cuchillo",
     alcance = 1,
     velProyectil = 2,
     imgSeleccionado= "cuchillo_seleccionado.png",
@@ -335,6 +342,7 @@ const cuchillo = new Arma(
 )
 
 const revolver = new Arma(
+    nombre = "revolver",
     alcance = 5,
     velProyectil = 4,
     imgSeleccionado ="revolver_seleccionado.png",
