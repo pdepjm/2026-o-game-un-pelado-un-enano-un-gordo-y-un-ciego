@@ -99,7 +99,7 @@ object personaje {
     posiblemente con proyectiles independientes
 */
 object proyectil {
-    const imagen = "bala.png"
+    var orientacion = "abajo"
     var posicion = game.at(0,0)
     var direccionAvance = game.at(0, 0)
     var distanciaRecorrida = 1 //esta variable tiene un nombre largo, excesivamente largo, no deberia ser tan largo, pero voy a hacerlo largo, quiero hacerlo largo, tan largo como yo quiera, aunque solo almace un numero, no me importa, será largo, tan largo como yo quiera, porque si quiero hacerlo largo, lo hago largo, no me imnporta lo que vos quieras, largo, largo, largo
@@ -112,10 +112,11 @@ object proyectil {
 
     method position(nuevaPos) {posicion = nuevaPos}
     method position() = posicion
-    method image() = imagen
+    method image() = "bala_" + orientacion + ".png"
 
-    method avanzar(direccion, alcance, velProyectil) {
+    method avanzar(direccion, nombreDireccion, alcance, velProyectil) {
         direccionAvance = direccion
+        orientacion = nombreDireccion
         distanciaMaxima = alcance
         velocidad = velProyectil
         tickAvance.start()
@@ -271,28 +272,23 @@ class Arma {
     method imgNoSeleccionado() = imgNoSeleccionado
     var pausa = false
 
+method vectorDe(dir)=
+    if (dir == "arriba") game.at(0, 1)
+    else if (dir == "abajo") game.at(0, -1)
+    else if (dir == "izquierda") game.at(-1, 0)
+    else if (dir == "derecha") game.at(1, 0)
+
     method disparar() {
         if (!pausa) {
-            self.pausar()
-            game.addVisual(proyectil)
-            if (personaje.direccion() == "arriba") {
-                proyectil.position(game.at(personaje.position().x(), personaje.position().y() + 1))
-                proyectil.avanzar(game.at(0, 1), alcance, velProyectil)
-            }
-            if (personaje.direccion() == "abajo") { 
-                proyectil.position(game.at(personaje.position().x(), personaje.position().y() - 1))
-                proyectil.avanzar(game.at(0, -1), alcance, velProyectil)
-            }
-            if (personaje.direccion() == "izquierda") {
-                proyectil.position(game.at(personaje.position().x() - 1, personaje.position().y()))
-                proyectil.avanzar(game.at(-1, 0), alcance, velProyectil)
-            }
-            if (personaje.direccion() == "derecha") {
-                proyectil.position(game.at(personaje.position().x() + 1, personaje.position().y()))
-                proyectil.avanzar(game.at(1, 0), alcance, velProyectil)
-            }
+           self.pausar()
+           const dir = personaje.direccion()
+           const vector = self.vectorDe(dir)
+           game.addVisual(proyectil)
+           proyectil.position(game.at(personaje.position().x() + vector.x(), personaje.position().y() + vector.y()))
+              proyectil.avanzar(vector, dir, alcance, velProyectil)
         }
-    }
+}
+
     method pausar() {
         pausa = true
         game.schedule(150, { pausa = false })
