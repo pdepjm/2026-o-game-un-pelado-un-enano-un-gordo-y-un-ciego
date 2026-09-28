@@ -7,6 +7,10 @@ program risidinivol {
     game.cellSize(128)
     game.title("Risidinivol")
 
+//prueba pared
+    (8..10).forEach({ x => mapa.agregarPared(x, 8) })
+    (4..5).forEach({ y => mapa.agregarPared(15, y) })   
+
     personaje.activarMovimiento()
     personaje.activarDisparo()
     inventario.cambiarArma()

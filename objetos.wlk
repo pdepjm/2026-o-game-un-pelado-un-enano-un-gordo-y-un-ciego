@@ -20,10 +20,14 @@ object personaje {
     method direccion() = direccion
     method direccion(nuevaDireccion) { direccion = nuevaDireccion }
 
-    method moverArriba() { if (posicion.y() < game.height() - 1) { posicion = posicion.up(velocidad) } }
-    method moverAbajo() { if (posicion.y() > alturaInterfaz) { posicion = posicion.down(velocidad) } }
-    method moverIzquierda() { if (posicion.x() > 0) { posicion = posicion.left(velocidad) } }
-    method moverDerecha() { if (posicion.x() < game.width() - 1) { posicion = posicion.right(velocidad) } }
+    method puedeMoverA(pos) =
+    pos.x() >= 0 && pos.x() < game.width() && pos.y() >= alturaInterfaz && pos.y() < game.height() && !mapa.hayPared(pos)
+    method moverA(pos) {if (self.puedeMoverA(pos)) {posicion = pos}}
+
+    method moverArriba() { self.moverA(posicion.up(velocidad)) }
+    method moverAbajo() { self.moverA(posicion.down(velocidad)) }
+    method moverIzquierda() { self.moverA(posicion.left(velocidad)) }
+    method moverDerecha() { self.moverA(posicion.right(velocidad)) }
 
     method activarMovimiento() {
         const retraso = 100
@@ -118,8 +122,9 @@ object proyectil {
     }
 
    method confirmarAvance() {
-    if (distanciaRecorrida < distanciaMaxima) {
-        self.position(game.at(posicion.x() + direccionAvance.x(), posicion.y() + direccionAvance.y()))
+    const siguiente = game.at(posicion.x() + direccionAvance.x(), posicion.y() + direccionAvance.y()) 
+    if (distanciaRecorrida < distanciaMaxima && !mapa.hayPared(siguiente)) {
+       self.position(siguiente)
         distanciaRecorrida += 1
         self.verificarColision()
     } else {
@@ -182,10 +187,15 @@ class Enemigo {
     method direccion() = direccion
     method danio() = danio
     method fuerzaEmpuje() = fuerzaEmpuje
-    method moverArriba() { if (posicion.y() < game.height() - 1) { posicion = posicion.up(velocidad) } }
-    method moverAbajo() { if (posicion.y() > 0) { posicion = posicion.down(velocidad) } }
-    method moverIzquierda() { if (posicion.x() > 0) { posicion = posicion.left(velocidad) } }
-    method moverDerecha() { if (posicion.x() < game.width() - 1) { posicion = posicion.right(velocidad) } }
+
+    method puedeMoverA(pos) = pos.x() >= 0 && pos.x() < game.width() && pos.y() >= 0 && pos.y() <game.height() && !mapa.hayPared(pos)
+
+    method moverA(pos) {if (self.puedeMoverA(pos)) {posicion = pos}}
+
+    method moverArriba() { self.moverA(posicion.up(velocidad)) }
+    method moverAbajo() { self.moverA(posicion.down(velocidad)) }
+    method moverIzquierda() { self.moverA(posicion.left(velocidad)) }
+    method moverDerecha() { self.moverA(posicion.right(velocidad)) }
 
     method activar() {
         game.onTick(500, "movimiento" + nombre, { self.perseguir() })
@@ -211,7 +221,7 @@ class Enemigo {
         if (nuevaPosicion == personaje.position()) {
             self.atacar()
         } else {
-            posicion = nuevaPosicion
+            self.moverA(nuevaPosicion)
         }
     }
 
@@ -353,3 +363,23 @@ class FondoHUD {
 }
 
 const listaFondoHUD = (0..(24)).map({ x => new FondoHUD(posicionX = x) }) //24 provicional, la idea es que sea del ancho de la pantalla.
+
+
+class Pared {
+    const posicion
+
+    method position() = posicion
+    method image() = "hud_fondo.png"
+}
+
+object mapa {
+    const paredes = []
+
+    method agregarPared(x, y) {
+        const pared = new Pared(posicion = game.at(x, y))
+        paredes.add(pared)
+        game.addVisual(pared)
+    }
+
+    method hayPared(pos) = paredes.any({ p => p.position() == pos })
+}
