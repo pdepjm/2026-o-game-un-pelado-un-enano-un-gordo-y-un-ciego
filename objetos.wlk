@@ -263,6 +263,38 @@ class Enemigo {
     }
 }
 
+object spawner{
+    var contador = 0
+
+    method posicionAleaoria(){
+        const x = 0.randomUpTo(game.width().truncate(0))
+        const y = alturaInterfaz.randomUpTo(game.height().truncate(0))
+        const pos = game.at(x,y)
+        return if (mapa.hayPared(pos) || pos.distance(personaje.position()) < 4) 
+            self.posicionAleaoria() 
+        else 
+            pos
+    }
+
+    method crearZombie(){
+        contador += 1
+        const nuevo = new Enemigo(
+            nombre = "zombie" + contador,
+            imagen = "spiderodo_128x128.png",
+            danio = 1,
+            fuerzaEmpuje = 1,
+            posicion = self.posicionAleaoria(),
+            salud = 3,
+            velocidad = 1
+        )
+        game.addVisual(nuevo)
+        nuevo.activar()
+    }
+    method crearZombiesAleatorios(){
+        (1..[1,2].anyOne()).forEach({i => self.crearZombie()})
+    }
+}
+
 class Arma {
     const alcance
     const velProyectil

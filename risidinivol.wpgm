@@ -19,6 +19,7 @@ program risidinivol {
     game.addVisual(personaje)
     game.addVisual(zombie)
     zombie.activar()
+    spawner.crearZombiesAleatorios()
 
     listaFondoHUD.forEach({ a => game.addVisual(a) })
     listaCorazones.forEach({ lol => game.addVisual(lol) })
