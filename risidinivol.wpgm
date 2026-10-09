@@ -1,5 +1,10 @@
 import wollok.game.*
-import objetos.*
+import armas.*
+import mapas.*
+import personaje.*
+import movimiento.*
+import enemigo.*
+import interfaz.*
 
 program risidinivol {
     game.width(24)
@@ -14,6 +19,7 @@ program risidinivol {
     personaje.activarMovimiento()
     personaje.activarDisparo()
     inventario.cambiarArma()
+    
 
     game.start()
     game.addVisual(personaje)
