@@ -14,8 +14,11 @@ object personaje {
     method saludMaxima() = saludMaxima
 
 
+
+    method image() = "personaje_" + direccion.nombre() + ".gif"
     method position() = posicion
-    method image() = "personaje_" + direccion.nombre() + ".png"
+    method position(nuevaPos) { posicion = nuevaPos }
+
 
 
     method salud() = salud
@@ -26,7 +29,11 @@ object personaje {
 
     method puedeMoverA(pos) =
     pos.x() >= 0 && pos.x() < game.width() && pos.y() >= alturaInterfaz && pos.y() < game.height() && !mapa.hayPared(pos)
-    method moverA(pos) { if (self.puedeMoverA(pos)) { posicion = pos } }
+    method moverA(pos) { 
+        if (self.puedeMoverA(pos)) {
+            posicion = pos 
+            mapa.alPisar(pos)}
+            }
 
     method activarMovimiento() { movimiento.activarTeclas(self) }
 

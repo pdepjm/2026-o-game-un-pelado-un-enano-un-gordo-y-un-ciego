@@ -13,13 +13,14 @@ program risidinivol {
     game.title("Risidinivol")
 
 //prueba pared
-    (8..10).forEach({ x => mapa.agregarPared(x, 8) })
-    (4..5).forEach({ y => mapa.agregarPared(15, y) })   
+      
 
     personaje.activarMovimiento()
     personaje.activarDisparo()
     inventario.cambiarArma()
-    
+    mapa.conectar(salaA, "1", salaB, "1")
+    mapa.empezarEn(salaA, game.center())
+
 
     game.start()
     game.addVisual(personaje)
