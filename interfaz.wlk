@@ -4,6 +4,7 @@ import mapas.*
 import personaje.*
 import movimiento.*
 
+const alturaInterfaz = 1
 
 //Cositas de la interfaz
 class Corazon {

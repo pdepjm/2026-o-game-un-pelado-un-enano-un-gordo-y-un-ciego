@@ -3,6 +3,7 @@ import armas.*
 import mapas.*
 import personaje.*
 import movimiento.*
+import interfaz.alturaInterfaz
 
 class Enemigo {
     const nombre               

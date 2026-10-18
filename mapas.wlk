@@ -1,36 +1,24 @@
 import wollok.game.*
 import personaje.*
-
-const alturaInterfaz = 1
+import puertas.*
+import interfaz.alturaInterfaz
 
 class Pared {
     const posicion
 
     method position() = posicion
-    method image() = "arboleda.png"   
-    method estaVivo() = false
-}
-
-class Puerta {
-    const posicion
-    const id
-
-    method position() = posicion
-    method id() = id
-    method image() = "hud_fondo.png"   
+    method image() = "arboleda.png"
     method estaVivo() = false
 }
 
 class Sala {
     const diseno
     const paredes = []
-    const puertas = []
-    const conexiones = new Dictionary()   // id de puerta -> [salaDestino, idDestino]
-
-
-    method conexion(id, destino, idDestino) { conexiones.put(id, [destino, idDestino]) }
-    method destinoDe(id) = conexiones.get(id)
-
+    
+    const puerta1
+    const puerta2
+    const puerta3
+    const puerta4
 
     method caracterEn(pos) {
         const filas = diseno.size()
@@ -56,10 +44,18 @@ class Sala {
                     const pared = new Pared(posicion = pos)
                     paredes.add(pared)
                     game.addVisual(pared)
-                } else if (c != " ") {
-                    const puerta = new Puerta(posicion = pos, id = c)
-                    puertas.add(puerta)
-                    game.addVisual(puerta)
+                } else if (c == "1") {
+                    puerta1.position(pos)
+                    game.addVisual(puerta1)
+                } else if (c == "2") {
+                    puerta2.position(pos)
+                    game.addVisual(puerta2)
+                } else if (c == "3") {
+                    puerta3.position(pos)
+                    game.addVisual(puerta3)
+                } else if (c == "4") {
+                    puerta4.position(pos)
+                    game.addVisual(puerta4)
                 }
             })
         })
@@ -67,18 +63,26 @@ class Sala {
 
     method descargar() {
         paredes.forEach({ p => game.removeVisual(p) })
-        puertas.forEach({ p => game.removeVisual(p) })
+        game.removeVisual(puerta1)
+        game.removeVisual(puerta2)
+        game.removeVisual(puerta3)
+        game.removeVisual(puerta4)
+
         paredes.clear()
-        puertas.clear()
     }
 
 
     method hayPared(pos) = paredes.any({ p => p.position() == pos })
-    method puertaEn(pos) = puertas.findOrDefault({ p => p.position() == pos }, null)
+    method puertaEn(pos) = 
+        if (puerta1 != null && puerta1.position() == pos) puerta1
+        else if (puerta2 != null && puerta2.position() == pos) puerta2
+        else if (puerta3 != null && puerta3.position() == pos) puerta3
+        else if (puerta4 != null && puerta4.position() == pos) puerta4
+        else null
 
     // celda libre pegada a la puerta (donde aparece el personaje al llegar)
-    method entradaDe(id) {
-        const p = puertas.find({ d => d.id() == id }).position()
+    method entradaDe(puerta) {
+        const p = puerta.position()
         const vecinos = [p.up(1), p.down(1), p.left(1), p.right(1)]
         return vecinos.find({ v => self.esPiso(v) })
     }
@@ -86,11 +90,6 @@ class Sala {
 
 object mapa {
     var salaActual = null
-
-    method conectar(salaA, idA, salaB, idB) {
-        salaA.conexion(idA, salaB, idB)
-        salaB.conexion(idB, salaA, idA)
-    }
 
     method empezarEn(sala, posicionInicial) {
         salaActual = sala
@@ -106,20 +105,17 @@ object mapa {
     }
 
     method cruzar(puerta) {
-        const destino = salaActual.destinoDe(puerta.id())
-        const salaDestino = destino.get(0)
-        const idDestino = destino.get(1)
-
+        const destino = puerta.destino()
         salaActual.descargar()
-        salaActual = salaDestino
+        salaActual = destino
         salaActual.cargar()
-        personaje.position(salaActual.entradaDe(idDestino))
+        personaje.position(salaActual.entradaDe(puerta.puertaDeVuelta()))
     }
 }
 
 // ================= SALAS=================
 const salaA = new Sala(diseno = [
-    "HHHHHHHHHHH1111111111HHHHHHHH",
+    "HHHHHHHHHHH1HHHHHHHHHHHH",
     "H                      H",
     "H                      H",
     "H                      H",
@@ -134,7 +130,11 @@ const salaA = new Sala(diseno = [
     "H                      H",
     "H                      H",
     "                                                             "
-])
+    ],
+    puerta1 = puertaAB,
+    puerta2 = null,
+    puerta3 = null,
+    puerta4 = null)
 
 const salaB = new Sala(diseno = [
     "HHHHHHHHHHHHHHHHHHHHHHHH",
@@ -152,11 +152,14 @@ const salaB = new Sala(diseno = [
     "H                      H",
     "H                      H",
     "                                                                   "
-])
+    ],
+    puerta1 = puertaBA,
+    puerta2 = null,
+    puerta3 = null,
+    puerta4 = null)
 
 object nivel {
     method cargar() {
-        mapa.conectar(salaA, "1", salaB, "1")   // ida y vuelta
         mapa.empezarEn(salaA, game.center())
     }
 }
