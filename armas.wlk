@@ -10,58 +10,62 @@ import movimiento.*
     de que el objeto ya haya sido agregado a la pantalla, por lo cual se debe buscar una solución,
     posiblemente con proyectiles independientes
 */
-object proyectil {
-    var orientacion = "abajo"
-    var nombreArma = "cuchillo"
-    var posicion = game.at(0,0)
-    var direccionAvance = game.at(0, 0)
-    var distanciaRecorrida = 1 //esta variable tiene un nombre largo, excesivamente largo, no deberia ser tan largo, pero voy a hacerlo largo, quiero hacerlo largo, tan largo como yo quiera, aunque solo almace un numero, no me importa, será largo, tan largo como yo quiera, porque si quiero hacerlo largo, lo hago largo, no me imnporta lo que vos quieras, largo, largo, largo
-    var distanciaMaxima = 0
-    var velocidad = 4
+object municion {
+    var contador = 0
+    method siguienteId() {
+        contador += 1
+        return contador
+    }
+}
 
-    method retraso() = 100/velocidad //alonso
-    const tickAvance = game.tick(self.retraso(), {self.confirmarAvance()}, false)
+class Proyectil {
+    const id = municion.siguienteId()
+    const nombreArma
+    const orientacion      // objeto: arriba/abajo/izquierda/derecha
+    const alcance
+    const retraso
+    var posicion
+    var recorrido = 1
+    var activo = true
 
-
-    method position(nuevaPos) {posicion = nuevaPos}
     method position() = posicion
-    method image() = nombreArma + "_" + orientacion + ".png"
+    method image() = nombreArma + "_" + orientacion.nombre() + ".png"
+    method estaVivo() = false   // para que otros proyectiles no cuenten como enemigos
 
-     method avanzar(direccion, nombreDireccion, alcance, velProyectil, nomArma) {
-        direccionAvance = direccion
-        orientacion = nombreDireccion
-        distanciaMaxima = alcance
-        velocidad = velProyectil
-        nombreArma = nomArma
-        tickAvance.start()
-    }
-
-   method confirmarAvance() {
-    const siguiente = game.at(posicion.x() + direccionAvance.x(), posicion.y() + direccionAvance.y()) 
-    if (distanciaRecorrida < distanciaMaxima && !mapa.hayPared(siguiente)) {
-       self.position(siguiente)
-        distanciaRecorrida += 1
+    method lanzar() {
+        game.addVisual(self)
+        game.onTick(retraso, "proyectil" + id, { self.avanzar() })
         self.verificarColision()
-    } else {
-        self.detener()
     }
+
+   method avanzar() {
+        if (activo) {
+            const siguiente = orientacion.desde(posicion, 1)
+            if (recorrido < alcance && !mapa.hayPared(siguiente)) {
+                posicion = siguiente
+                recorrido += 1
+                self.verificarColision()
+            } else {
+                self.detener()
+            }
+        }
     }
 
     method verificarColision() {
-        const enemigoGolpeado = game.colliders(self).filter({ bicho => bicho.estaVivo() })
-        if (enemigoGolpeado.size() > 0) {
-            enemigoGolpeado.first().recibirDanio(1)
+        const golpeados = game.colliders(self).filter({ b => b.estaVivo() })
+        if (!golpeados.isEmpty()) {
+            golpeados.first().recibirDanio(1)
             self.detener()
         }
-        }
+    }
 
     method detener() {
-        tickAvance.stop()
-        distanciaMaxima = 0
-        distanciaRecorrida = 1
-        game.removeVisual(self)
+        if (activo) {
+            activo = false
+            game.removeTickEvent("proyectil" + id)
+            game.removeVisual(self)
+        }
     }
-        
 }
 
 class Arma {
@@ -80,14 +84,20 @@ class Arma {
         else if (dir == "izquierda") game.at(-1, 0)
         else if (dir == "derecha") game.at(1, 0)
 
-    method disparar() {
+        method disparar() {
         if (!pausa) {
             self.pausar()
             const dir = personaje.direccion()
-            const vector = dir.desde(game.origin(), 1)
-            game.addVisual(proyectil)
-            proyectil.position(dir.desde(personaje.position(), 1))
-            proyectil.avanzar(vector, dir.nombre(), alcance, velProyectil, nombre)
+            const pos = dir.desde(personaje.position(), 1)
+            if (!mapa.hayPared(pos)) {
+                new Proyectil(
+                    nombreArma = nombre,
+                    orientacion = dir,
+                    alcance = alcance,
+                    retraso = 100 / velProyectil,
+                    posicion = pos
+                ).lanzar()
+            }
         }
     }
 
