@@ -44,7 +44,14 @@ object movimiento {
             dir.tecla().onReleaseDo({ tick.stop() })
         })
     }
-
+    // Direcciones hacia el objetivo, la del eje más lejano primero
+    method direccionesHacia(desde, hasta) {
+        const dx = hasta.x() - desde.x()
+        const dy = hasta.y() - desde.y()
+        const horizontal = if (dx > 0) [derecha] else if (dx < 0) [izquierda] else []
+        const vertical = if (dy > 0) [arriba] else if (dy < 0) [abajo] else []
+        return if (dx.abs() >= dy.abs()) horizontal + vertical else vertical + horizontal
+    }
     // Reemplaza la cadena de if de perseguir
     method haciaObjetivo(desde, hasta) =
         if (hasta.x() > desde.x()) derecha
@@ -53,3 +60,4 @@ object movimiento {
         else if (hasta.y() < desde.y()) abajo
         else null
 }
+

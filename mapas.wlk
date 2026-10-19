@@ -2,7 +2,7 @@ import wollok.game.*
 import personaje.*
 import puertas.*
 import interfaz.alturaInterfaz
-
+import enemigo.*
 class Pared {
     const posicion
 
@@ -98,6 +98,7 @@ object mapa {
     }
 
     method hayPared(pos) = salaActual.hayPared(pos)
+    method esPiso(pos) = salaActual.esPiso(pos)
 
     method alPisar(pos) {
         const puerta = salaActual.puertaEn(pos)
@@ -106,10 +107,12 @@ object mapa {
 
     method cruzar(puerta) {
         const destino = puerta.destino()
+        spawner.limpiar()
         salaActual.descargar()
         salaActual = destino
         salaActual.cargar()
         personaje.position(salaActual.entradaDe(puerta.puertaDeVuelta()))
+        spawner.crearZombiesAleatorios()
     }
 }
 

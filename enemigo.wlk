@@ -25,8 +25,11 @@ class Enemigo {
     method danio() = danio
     method fuerzaEmpuje() = fuerzaEmpuje
 
-    method puedeMoverA(pos) = pos.x() >= 0 && pos.x() < game.width() && pos.y() >= 0 && pos.y() <game.height() && !mapa.hayPared(pos)
-
+    method puedeMoverA(pos) = mapa.esPiso(pos)
+    method puedeAvanzar(dir) {
+        const destino = dir.desde(posicion, 1)
+        return destino == personaje.position() || self.puedeMoverA(destino)
+    }
     method moverA(pos) {if (self.puedeMoverA(pos)) {posicion = pos}}
 
     method activar() {
@@ -34,10 +37,16 @@ class Enemigo {
     }
 
     
-    method perseguir() {
+   method perseguir() {
         if (!pausa) {
-            const dir = movimiento.haciaObjetivo(posicion, personaje.position())
-            if (dir != null) { self.intentarMover(dir) }
+            const preferidas = movimiento.direccionesHacia(posicion, personaje.position())
+                .filter({ d => self.puedeAvanzar(d) })
+            if (!preferidas.isEmpty()) {
+                self.intentarMover(preferidas.first())
+            } else {
+                const libres = movimiento.direcciones().filter({ d => self.puedeAvanzar(d) })
+                if (!libres.isEmpty()) { self.intentarMover(libres.anyOne()) }
+            }
         }
     }
 
@@ -62,7 +71,10 @@ class Enemigo {
             if (!self.estaVivo()) { self.morido() }
         }
     }
-
+     method eliminar() {
+        game.removeVisual(self)
+        game.removeTickEvent("movimiento" + nombre)
+    }
     method atacar(){
         personaje.empujado(self)
         personaje.recibirDanio(fuerzaEmpuje)
@@ -73,51 +85,46 @@ class Enemigo {
         game.schedule(1000, { pausa = false })
     }
 
-    method morido(){
-            game.removeVisual(self)
-            game.removeTickEvent("movimiento" + nombre)
-    }
+    method morido() { self.eliminar() }
 }
 
-object spawner{
+object spawner {
     var contador = 0
+    const enemigos = []
 
-    method posicionAleaoria(){
-        const x = 0.randomUpTo(game.width().truncate(0))
-        const y = alturaInterfaz.randomUpTo(game.height().truncate(0))
-        const pos = game.at(x,y)
-        return if (mapa.hayPared(pos) || pos.distance(personaje.position()) < 4) 
-            self.posicionAleaoria() 
-        else 
+    method posicionAleatoria() {
+        const x = 0.randomUpTo(game.width()).truncate(0)
+        const y = alturaInterfaz.randomUpTo(game.height()).truncate(0)
+        const pos = game.at(x, y)
+        return if (!mapa.esPiso(pos) || pos.distance(personaje.position()) < 4)
+            self.posicionAleatoria()
+        else
             pos
     }
 
-    method crearZombie(){
+    method crearZombie() {
         contador += 1
         const nuevo = new Enemigo(
             nombre = "zombie" + contador,
             imagen = "spiderodo_128x128.png",
             danio = 1,
             fuerzaEmpuje = 1,
-            posicion = self.posicionAleaoria(),
+            posicion = self.posicionAleatoria(),
             salud = 3,
             velocidad = 1
         )
+        enemigos.add(nuevo)
         game.addVisual(nuevo)
         nuevo.activar()
     }
-    method crearZombiesAleatorios(){
-        (1..[1,2].anyOne()).forEach({i => self.crearZombie()})
+
+    method crearZombiesAleatorios() {
+        (1..[1, 2].anyOne()).forEach({ i => self.crearZombie() })
+    }
+
+    method limpiar() {
+        enemigos.filter({ e => e.estaVivo() }).forEach({ e => e.eliminar() })
+        enemigos.clear()
     }
 }
-
-const zombie = new Enemigo(
-    nombre = "zombie",
-    imagen = "spiderodo_128x128.png",
-    danio = 1,
-    fuerzaEmpuje = 1,
-    posicion = game.at(5, 5),
-    salud = 3,
-    velocidad = 1
-)
 

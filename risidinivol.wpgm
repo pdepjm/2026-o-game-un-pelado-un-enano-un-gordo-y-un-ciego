@@ -12,22 +12,17 @@ program risidinivol {
     game.cellSize(128)
     game.title("Risidinivol")
 
-//prueba pared
-      
-
     personaje.activarMovimiento()
     personaje.activarDisparo()
     inventario.cambiarArma()
     mapa.empezarEn(salaA, game.center())
 
-
-    game.start()
     game.addVisual(personaje)
-    game.addVisual(zombie)
-    zombie.activar()
     spawner.crearZombiesAleatorios()
 
     listaFondoHUD.forEach({ a => game.addVisual(a) })
     listaCorazones.forEach({ lol => game.addVisual(lol) })
     listaIconos.forEach({ lmao => game.addVisual(lmao) })
+
+    game.start()
 }
