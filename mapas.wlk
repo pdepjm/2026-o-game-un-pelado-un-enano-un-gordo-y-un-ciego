@@ -3,6 +3,7 @@ import personaje.*
 import puertas.*
 import interfaz.alturaInterfaz
 import enemigo.*
+import jefePelado.*
 class Pared {
     const posicion
 
@@ -107,12 +108,24 @@ object mapa {
 
     method cruzar(puerta) {
         const destino = puerta.destino()
+
         spawner.limpiar()
+
+        if(salaActual == salaJefePelado){
+            jefePelado.desaparecer()
+        }
+
         salaActual.descargar()
         salaActual = destino
         salaActual.cargar()
+
         personaje.position(salaActual.entradaDe(puerta.puertaDeVuelta()))
-        spawner.crearZombiesAleatorios()
+
+        if (salaActual == salaJefePelado) {
+            jefePelado.aparecer()
+        }else{
+            spawner.crearZombiesAleatorios()
+        }
     }
 }
 
@@ -147,7 +160,7 @@ const salaB = new Sala(diseno = [
     "H    HHH               H",
     "H                      H",
     "H                      H",
-    "1                      H",
+    "1                      2",
     "H                      H",
     "H                      H",
     "H    HHH               H",
@@ -157,9 +170,30 @@ const salaB = new Sala(diseno = [
     "                                                                   "
     ],
     puerta1 = puertaBA,
+    puerta2 = puertaBJefePelado,
+    puerta3 = null,
+    puerta4 = null)
+
+const salaJefePelado = new Sala(diseno = [
+        "   HHHHHHHHHHHHHHH",
+        "   H             H",
+        "   H             H",
+        "   H             H",
+        "   H             H",
+        "   H             H",
+        "   H             H",
+        "   H 1           H",
+        "   H             H",
+        "   H             H",
+        "   H             H",
+        "   H             H",
+        "                        "
+    ],
+    puerta1 = puertaJefePeladoB,
     puerta2 = null,
     puerta3 = null,
     puerta4 = null)
+
 
 object nivel {
     method cargar() {

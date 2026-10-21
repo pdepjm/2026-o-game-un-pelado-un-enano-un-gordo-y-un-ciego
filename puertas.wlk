@@ -15,3 +15,6 @@ class Puerta {
 
     const puertaAB = new Puerta(destino = salaB, puertaDeVuelta = puertaBA)
     const puertaBA = new Puerta(destino = salaA, puertaDeVuelta = puertaAB)
+
+    const puertaBJefePelado = new Puerta(destino = salaJefePelado, puertaDeVuelta = puertaJefePeladoB)
+    const puertaJefePeladoB = new Puerta(destino = salaB,puertaDeVuelta = puertaBJefePelado)
