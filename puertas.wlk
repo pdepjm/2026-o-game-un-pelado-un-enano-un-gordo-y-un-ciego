@@ -13,10 +13,5 @@ class Puerta {
     method image() = "hud_fondo.png"
 }
 
-const puertaAB = new Puerta(
-    destino = salaB,
-    puertaDeVuelta = puertaBA)
-const puertaBA = new Puerta(
-    destino = salaA,
-    puertaDeVuelta = puertaAB
-    )
+    const puertaAB = new Puerta(destino = salaB, puertaDeVuelta = puertaBA)
+    const puertaBA = new Puerta(destino = salaA, puertaDeVuelta = puertaAB)

@@ -1,10 +1,5 @@
 import wollok.game.*
-import armas.*
-import mapas.*
-import personaje.*
-import movimiento.*
-import enemigo.*
-import interfaz.*
+import pantallaInicio.*
 
 program risidinivol {
     game.width(24)
@@ -12,17 +7,7 @@ program risidinivol {
     game.cellSize(128)
     game.title("Risidinivol")
 
-    personaje.activarMovimiento()
-    personaje.activarDisparo()
-    inventario.cambiarArma()
-    mapa.empezarEn(salaA, game.center())
-
-    game.addVisual(personaje)
-    spawner.crearZombiesAleatorios()
-
-    listaFondoHUD.forEach({ a => game.addVisual(a) })
-    listaCorazones.forEach({ lol => game.addVisual(lol) })
-    listaIconos.forEach({ lmao => game.addVisual(lmao) })
+    pantallaInicio.mostrar()
 
     game.start()
 }
