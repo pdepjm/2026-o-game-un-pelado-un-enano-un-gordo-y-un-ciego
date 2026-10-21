@@ -13,7 +13,7 @@ object partida {
     method comenzar() {
         if (!iniciada) {
             iniciada = true
-
+            game.addVisual(fondoNivel)
             personaje.activarMovimiento()
             personaje.activarDisparo()
             inventario.cambiarArma()

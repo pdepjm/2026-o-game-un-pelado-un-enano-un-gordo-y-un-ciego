@@ -4,6 +4,7 @@ import puertas.*
 import interfaz.alturaInterfaz
 import enemigo.*
 import jefePelado.*
+
 class Pared {
     const posicion
 
@@ -195,8 +196,15 @@ const salaJefePelado = new Sala(diseno = [
     puerta4 = null)
 
 
+// ================= FONDO =================
+object fondoNivel {
+    method image() = "fondo_nivel.png"
+    method position() = game.origin()
+}
+
 object nivel {
     method cargar() {
+        game.addVisual(fondoNivel)
         mapa.empezarEn(salaA, game.center())
     }
 }

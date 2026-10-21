@@ -21,7 +21,7 @@ object pantallaInicio {
             comenzo = true
 
             musica.stop()
-            game.boardGround("fondo_vacio.png")
+            game.boardGround("fondo_nivel.png")
 
             partida.comenzar()
         }
