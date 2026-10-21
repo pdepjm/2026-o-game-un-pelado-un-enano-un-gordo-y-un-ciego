@@ -1,39 +1,27 @@
-
 import wollok.game.*
 import partida.*
 
 object pantallaInicio {
     var comenzo = false
-    var mostrarSegundoFrame = false
 
-    const animacion = game.tick(350, {self.animar()}, false)
+    const musica = game.sound("menu_principal.mp3")
 
     method mostrar() {
-        game.boardGround("menu_principal.png")
+        comenzo = false
+        game.boardGround("menu_principal.gif")
 
-        animacion.start()
+        musica.shouldLoop(true)
+        musica.play()
 
-        keyboard.enter().onPressDo({self.comenzar()})
-    }
-
-    method animar() {
-        if (!comenzo) {
-            if (mostrarSegundoFrame) {
-                game.boardGround("menu_principal.png")
-            } else {
-                game.boardGround("menu_principal2.png")
-            }
-
-            mostrarSegundoFrame = !mostrarSegundoFrame
-        }
+        keyboard.enter().onPressDo({ self.comenzar() })
     }
 
     method comenzar() {
         if (!comenzo) {
             comenzo = true
 
-            animacion.stop()
-            game.boardGround("")
+            musica.stop()
+            game.boardGround("fondo_vacio.png")
 
             partida.comenzar()
         }
