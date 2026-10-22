@@ -2,7 +2,7 @@ import wollok.game.*
 import mapas.*
 import personaje.*
 import movimiento.*
-
+import jefePelado.*
 
 /*
     ADVERTENCIA:
@@ -21,7 +21,7 @@ object municion {
 class Proyectil {
     const id = municion.siguienteId()
     const nombreArma
-    const orientacion      // objeto: arriba/abajo/izquierda/derecha
+    var orientacion      // objeto: arriba/abajo/izquierda/derecha
     const alcance
     const retraso
     var posicion
@@ -51,12 +51,24 @@ class Proyectil {
         }
     }
 
+
+
     method verificarColision() {
         const golpeados = game.colliders(self).filter({ b => b.estaVivo() })
         if (!golpeados.isEmpty()) {
-            golpeados.first().recibirDanio(1)
-            self.detener()
+            const objetivo = golpeados.first()
+            if (objetivo == jefePelado && jefePelado.reflejaBalas()) {
+                self.rebotar()
+            } else {
+                objetivo.recibirDanio(1)
+                self.detener()
+            }
         }
+    }
+
+    method rebotar() {
+        orientacion = orientacion.opuesto()
+        recorrido = 1
     }
 
     method detener() {

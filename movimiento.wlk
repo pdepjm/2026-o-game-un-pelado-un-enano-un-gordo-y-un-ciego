@@ -2,24 +2,28 @@ object arriba {
     method nombre() = "arriba"
     method tecla() = keyboard.up()
     method desde(pos, pasos) = pos.up(pasos)
+    method opuesto() = abajo
 }
 
 object abajo {
     method nombre() = "abajo"
     method tecla() = keyboard.down()
     method desde(pos, pasos) = pos.down(pasos)
+    method opuesto() = arriba
 }
 
 object izquierda {
     method nombre() = "izquierda"
     method tecla() = keyboard.left()
     method desde(pos, pasos) = pos.left(pasos)
+    method opuesto() = derecha
 }
 
 object derecha {
     method nombre() = "derecha"
     method tecla() = keyboard.right()
     method desde(pos, pasos) = pos.right(pasos)
+    method opuesto() = izquierda
 }
 
 object movimiento {

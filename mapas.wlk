@@ -13,9 +13,19 @@ class Pared {
     method estaVivo() = false
 }
 
+class Pozo {
+    const posicion
+
+    method position() = posicion
+    method image() = "hud_fondo.png"  
+    method estaVivo() = false
+}
 class Sala {
     const diseno
     const paredes = []
+    const pozos = []
+
+    method hayPozo(pos) = pozos.any({ p => p.position() == pos })
     
     const puerta1
     const puerta2
@@ -45,7 +55,11 @@ class Sala {
                 if (c == "H") {
                     const pared = new Pared(posicion = pos)
                     paredes.add(pared)
-                    game.addVisual(pared)
+                    game.addVisual(pared)   
+                } else if (c == "P") {
+                    const pozo = new Pozo(posicion = pos)
+                    pozos.add(pozo)
+                    game.addVisual(pozo)
                 } else if (c == "1") {
                     puerta1.position(pos)
                     game.addVisual(puerta1)
@@ -92,7 +106,7 @@ class Sala {
 
 object mapa {
     var salaActual = null
-
+    
     method empezarEn(sala, posicionInicial) {
         salaActual = sala
         salaActual.cargar()
@@ -101,6 +115,9 @@ object mapa {
 
     method hayPared(pos) = salaActual.hayPared(pos)
     method esPiso(pos) = salaActual.esPiso(pos)
+
+    method hayPozo(pos) = salaActual.hayPozo(pos)
+    method bloqueaJugador(pos) = self.hayPared(pos) || self.hayPozo(pos)
 
     method alPisar(pos) {
         const puerta = salaActual.puertaEn(pos)
@@ -176,18 +193,19 @@ const salaB = new Sala(diseno = [
     puerta4 = null)
 
 const salaJefePelado = new Sala(diseno = [
-        "   HHHHHHHHHHHHHHH",
-        "   H             H",
-        "   H             H",
-        "   H             H",
-        "   H             H",
-        "   H             H",
-        "   H             H",
-        "   H 1           H",
-        "   H             H",
-        "   H             H",
-        "   H             H",
-        "   H             H",
+        "     HHHHHHHHHHHHHHH",
+        "     H             H",
+        "     H             H",
+        "     H             H",
+        "     H             H",
+        "     H     PPP     H",
+        "     H     P P     H",
+        "     H     PPP     H",
+        "     H 1           H",
+        "     H             H",
+        "     H             H",
+        "     H             H",
+        "     H             H",
         "                        "
     ],
     puerta1 = puertaJefePeladoB,
