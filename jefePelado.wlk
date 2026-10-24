@@ -1,6 +1,7 @@
 import wollok.game.*
 import armas.*
 import laser.*
+import mapas.*
 
 object jefePelado {
     var posicion = game.at(12, 8)
@@ -8,6 +9,14 @@ object jefePelado {
     var brillando = true
     var faseFinalUsada = false
     var rafagaActiva = false
+
+    var laser = new Laser(
+            origen = posicion,
+            direcciones = 0,
+            msPorBloque = 0,
+            msTrasLimite = 0,
+            alTerminar = 0
+        )
 
     const cruz = [game.at(0, 1), game.at(0, -1), game.at(1, 0), game.at(-1, 0)]
     const equis = [game.at(1, 1), game.at(1, -1), game.at(-1, 1), game.at(-1, -1)]
@@ -41,20 +50,22 @@ object jefePelado {
     method desaparecer() {
         game.removeTickEvent("brilloJefe")
         game.removeVisual(self)
+        laser.apagar()
     }
 
     method lanzarLaser(direcciones, msPorBloque, msTrasLimite, alTerminar) {
-        new Laser(
+        laser = new Laser(
             origen = posicion,
             direcciones = direcciones,
             msPorBloque = msPorBloque,
             msTrasLimite = msTrasLimite,
             alTerminar = alTerminar
-        ).lanzar()
+        )
+        laser.lanzar()
     }
 
     method siguienteAtaque() {
-        if (self.estaVivo()) {
+        if (self.estaVivo() && mapa.salaActual() == salaJefePelado) {
             if (vida == 1 && !faseFinalUsada) {
                 self.faseFinal()
             } else {

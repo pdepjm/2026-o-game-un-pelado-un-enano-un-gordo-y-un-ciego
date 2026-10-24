@@ -41,6 +41,7 @@ class FondoHUD {
 
     method position() = game.at(posicionX, 0)
     method image() = "hud_fondo.png"
+    method estaVivo() = false
 }
 
 const listaFondoHUD = (0..(24)).map({ x => new FondoHUD(posicionX = x) }) //24 provicional, la idea es que sea del ancho de la pantalla.

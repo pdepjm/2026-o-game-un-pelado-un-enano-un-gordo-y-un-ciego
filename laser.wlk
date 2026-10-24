@@ -3,6 +3,7 @@ import armas.*
 import interfaz.*
 import personaje.*
 import mapas.*
+import jefePelado.*
 
 class CeldaLaser {
     const property position

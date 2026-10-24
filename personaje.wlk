@@ -55,7 +55,7 @@ object personaje {
         game.schedule(150, { if (pasoId == id) caminando = false })
     }
     method activarDisparo() {
-        keyboard.x().onPressDo({ inventario.seleccionarArma().disparar() })
+        keyboard.x().onPressDo({ inventario.armaSeleccionada().disparar() })
     }
 
        method empujado(enemigo) {

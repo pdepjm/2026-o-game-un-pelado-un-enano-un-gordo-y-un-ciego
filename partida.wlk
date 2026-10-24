@@ -17,7 +17,7 @@ object partida {
             personaje.activarMovimiento()
             personaje.activarDisparo()
             inventario.cambiarArma()
-            mapa.empezarEn(salaA, game.center())
+            mapa.empezarEn(inicio, game.center())
 
             game.addVisual(personaje)
             spawner.crearZombiesAleatorios()

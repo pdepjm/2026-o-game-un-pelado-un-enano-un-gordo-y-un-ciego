@@ -143,12 +143,15 @@ object inventario{
         listaInventario.add(arma)
     }
     method cambiarArma(){
-        keyboard.num(1).onPressDo({armaElegida = 0})
-        keyboard.num(2).onPressDo({armaElegida = 1})
-        keyboard.num(3).onPressDo({armaElegida = 2})
-        keyboard.num(4).onPressDo({armaElegida = 3})
+        keyboard.num(1).onPressDo({self.seleccionar(0)})
+        keyboard.num(2).onPressDo({self.seleccionar(1)})
+        keyboard.num(3).onPressDo({self.seleccionar(2)})
+        keyboard.num(4).onPressDo({self.seleccionar(3)})
     }
-    method seleccionarArma() = listaInventario.get(armaElegida)
+    method seleccionar(indice) {
+        if (self.tieneArma(indice)) armaElegida = indice
+    }
+    method armaSeleccionada() =  listaInventario.get(armaElegida)
     method tieneArma(indice) = listaInventario.size() > indice
     method arma(indice) = listaInventario.get(indice)
     method estaSeleccionada(indice) = armaElegida == indice

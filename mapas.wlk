@@ -25,6 +25,10 @@ class Sala {
     const paredes = []
     const pozos = []
 
+    const zombisAleatorios
+
+    method zombisAleatorios() = zombisAleatorios
+
     method hayPozo(pos) = pozos.any({ p => p.position() == pos })
     
     const puerta1
@@ -79,6 +83,7 @@ class Sala {
 
     method descargar() {
         paredes.forEach({ p => game.removeVisual(p) })
+        pozos.forEach({ p => game.removeVisual(p) })
         game.removeVisual(puerta1)
         game.removeVisual(puerta2)
         game.removeVisual(puerta3)
@@ -90,11 +95,11 @@ class Sala {
 
     method hayPared(pos) = paredes.any({ p => p.position() == pos })
     method puertaEn(pos) = 
-        if (puerta1 != null && puerta1.position() == pos) puerta1
-        else if (puerta2 != null && puerta2.position() == pos) puerta2
-        else if (puerta3 != null && puerta3.position() == pos) puerta3
-        else if (puerta4 != null && puerta4.position() == pos) puerta4
-        else null
+        if (puerta1 != vacio && puerta1.position() == pos) puerta1
+        else if (puerta2 != vacio && puerta2.position() == pos) puerta2
+        else if (puerta3 != vacio && puerta3.position() == pos) puerta3
+        else if (puerta4 != vacio && puerta4.position() == pos) puerta4
+        else vacio
 
     // celda libre pegada a la puerta (donde aparece el personaje al llegar)
     method entradaDe(puerta) {
@@ -105,8 +110,10 @@ class Sala {
 }
 
 object mapa {
-    var salaActual = null
+    var salaActual = salaVacia
     
+    method salaActual() = salaActual
+
     method empezarEn(sala, posicionInicial) {
         salaActual = sala
         salaActual.cargar()
@@ -121,7 +128,7 @@ object mapa {
 
     method alPisar(pos) {
         const puerta = salaActual.puertaEn(pos)
-        if (puerta != null) { self.cruzar(puerta) }
+        if (puerta != vacio) { self.cruzar(puerta) }
     }
 
     method cruzar(puerta) {
@@ -141,56 +148,92 @@ object mapa {
 
         if (salaActual == salaJefePelado) {
             jefePelado.aparecer()
-        }else{
+        }
+        if (salaActual.zombisAleatorios()) {
             spawner.crearZombiesAleatorios()
         }
     }
 }
 
 // ================= SALAS=================
-const salaA = new Sala(diseno = [
+
+const salaVacia = new Sala (
+    diseno = [""],
+    zombisAleatorios = false,
+    puerta1 = vacio,
+    puerta2 = vacio,
+    puerta3 = vacio,
+    puerta4 = vacio
+)
+
+const inicio = new Sala(diseno = [
     "HHHHHHHHHHH1HHHHHHHHHHHH",
     "H                      H",
     "H                      H",
     "H                      H",
-    "H                       H",
     "H                      H",
     "H                      H",
     "H                      H",
     "H                      H",
     "H                      H",
-    "H                       H",
     "H                      H",
     "H                      H",
     "H                      H",
-    "                                                             "
+    "H                      H",
+    "H                      H",
+    "                        "
     ],
-    puerta1 = puertaAB,
-    puerta2 = null,
-    puerta3 = null,
-    puerta4 = null)
+    zombisAleatorios = true,
+    puerta1 = puertaInicioPueblo,
+    puerta2 = vacio,
+    puerta3 = vacio,
+    puerta4 = vacio)
 
-const salaB = new Sala(diseno = [
-    "HHHHHHHHHHHHHHHHHHHHHHHH",
-    "H                      H",
-    "H                      H",
+const pueblo = new Sala(diseno = [
+    "HHHHHHHHHHHHHHHHHHH4HHHH",
     "H                      H",
     "H    HHH               H",
+    "H    HHH               H",
+    "H    H2H               H",
     "H                      H",
-    "H                      H",
-    "1                      2",
-    "H                      H",
+    "H              HHH     H",
+    "H              HHH     H",
+    "H              HHH     H",
     "H                      H",
     "H    HHH               H",
-    "H                      H",
-    "H                      H",
-    "H                      H",
-    "                                                                   "
+    "H    HHH               3",
+    "H    HHH               H",
+    "H              H1H     H",
+    "                        "
     ],
-    puerta1 = puertaBA,
-    puerta2 = puertaBJefePelado,
-    puerta3 = null,
-    puerta4 = null)
+    zombisAleatorios = true,
+    puerta1 = puertaPuebloInicio,
+    puerta2 = puertaPuebloIglesia,
+    puerta3 = puertaPuebloMuelle,
+    puerta4 = puertaPuebloEntradaCastillo) //odio que sea un nombre tan largo, pero este chiste ya lo hice y nadie lo borró, así que no voy a volver a hacer lo mismo porque eso sería desconsiderado de mi parte y no me parece que tenga que ser de esta manera para el equipo de ayudantes de la cursada de Paradigmas de Programación, ya que ellos han sido muy buenas personas y buenos catedráticos, los quiero mucho Atte: Lechuza-N
+
+const iglesia = new Sala(diseno = [
+        "     HHHHHHHHHHHHHHH",
+        "     H             H",
+        "     H             H",
+        "     H             H",
+        "     H             H",
+        "     H             H",
+        "     H      2      H",
+        "     H             H",
+        "     H             H",
+        "     H             H",
+        "     H             H",
+        "     H             H",
+        "     H      1      H",
+        "                    "
+    ],
+    zombisAleatorios = true,
+    puerta1 = puertaIglesiaPueblo,
+    puerta2 = puertaIglesiaPelado,
+    puerta3 = vacio,
+    puerta4 = vacio
+)
 
 const salaJefePelado = new Sala(diseno = [
         "     HHHHHHHHHHHHHHH",
@@ -206,13 +249,65 @@ const salaJefePelado = new Sala(diseno = [
         "     H             H",
         "     H             H",
         "     H             H",
+        "                    "
+    ],
+    zombisAleatorios = false,
+    puerta1 = puertaPeladoIglesia,
+    puerta2 = vacio,
+    puerta3 = vacio,
+    puerta4 = vacio)
+
+const muelle = new Sala(diseno = [
+        "HHHHHHHHHHHHHHHHHHHHHHHH",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      2",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "1                      H",
+        "H                      H",
+        "H                      H",
         "                        "
     ],
-    puerta1 = puertaJefePeladoB,
-    puerta2 = null,
-    puerta3 = null,
-    puerta4 = null)
+    zombisAleatorios = true,
+    puerta1 = puertaMuellePueblo,
+    puerta2 = puertaMuelleIsla,
+    puerta3 = vacio,
+    puerta4 = vacio
+)
 
+const entradaCastillo = new Sala(diseno = [
+        "HHHHHHHHHHHHHHHHHHHHHHHH",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      2",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H          H1H         H",
+        "                        "
+    ],
+    zombisAleatorios = false,
+    puerta1 = puertaEntradaCastilloPueblo,
+    puerta2 = puertaEntradaCastilloCastillo,   //ni siquiera me voy a esforzar
+    puerta3 = vacio,
+    puerta4 = vacio
+)
+
+const castillo = salaVacia
+
+const isla = salaVacia
 
 // ================= FONDO =================
 object fondoNivel {
@@ -223,6 +318,6 @@ object fondoNivel {
 object nivel {
     method cargar() {
         game.addVisual(fondoNivel)
-        mapa.empezarEn(salaA, game.center())
+        mapa.empezarEn(inicio, game.center())
     }
 }
