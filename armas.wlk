@@ -84,6 +84,7 @@ class Arma {
     const nombre 
     const alcance
     const velProyectil
+    const tiempoPausa
     const imgSeleccionado
     const imgNoSeleccionado
     method imgSeleccionado() = imgSeleccionado
@@ -96,7 +97,7 @@ class Arma {
         else if (dir == "izquierda") game.at(-1, 0)
         else if (dir == "derecha") game.at(1, 0)
 
-        method disparar() {
+    method disparar() {
         if (!pausa) {
             self.pausar()
             const dir = personaje.direccion()
@@ -115,14 +116,75 @@ class Arma {
 
         method pausar() {
         pausa = true
-        game.schedule(150, { pausa = false })
+        game.schedule(tiempoPausa, { pausa = false })
     }
+}
+
+class Escopeta inherits Arma {
+    override method disparar() {
+        if (!pausa) {
+            self.pausar()
+            const dir = personaje.direccion()
+            const dirOrtogonal = if (dir.nombre() == "arriba" || dir.nombre() == "abajo") izquierda else arriba
+            const pos = dir.desde(personaje.position(), 1)
+            if (!mapa.hayPared(pos)) {
+                game.schedule(200/velProyectil, {
+                    new Proyectil(
+                        nombreArma = nombre,
+                        orientacion = dir,
+                        alcance = alcance - 2,
+                        retraso = 100 / velProyectil,
+                        posicion = self.conoEn(3, dir, dirOrtogonal, 2)
+                    ).lanzar()
+                    new Proyectil(
+                        nombreArma = nombre,
+                        orientacion = dir,
+                        alcance = alcance - 2,
+                        retraso = 100 / velProyectil,
+                        posicion = self.conoEn(3, dir, dirOrtogonal, -2)
+                    ).lanzar()
+                })
+                game.schedule(100/velProyectil, {
+                    new Proyectil(
+                        nombreArma = nombre,
+                        orientacion = dir,
+                        alcance = alcance - 1,
+                        retraso = 100 / velProyectil,
+                        posicion = self.conoEn(2, dir, dirOrtogonal, 1)
+                    ).lanzar()
+                    new Proyectil(
+                        nombreArma = nombre,
+                        orientacion = dir,
+                        alcance = alcance - 1,
+                        retraso = 100 / velProyectil,
+                        posicion = self.conoEn(2, dir, dirOrtogonal, -1)
+                    ).lanzar()
+                })
+                new Proyectil(
+                    nombreArma = nombre,
+                    orientacion = dir,
+                    alcance = alcance,
+                    retraso = 100 / velProyectil,
+                    posicion = pos
+                ).lanzar()
+            }
+        }
+    }
+
+    /*expansion representa hacia qué sentido de la direccion ortogonal y con qué magnitud se expande el cono*/
+    method conoEn(posicion, direccion, ortogonal, expansion) =
+        if (posicion < 2) direccion.desde(personaje.position(), 1)
+        else game.at(
+            direccion.desde(personaje.position(), posicion).x() + ortogonal.desde(game.at(0,0), expansion).x(),
+            direccion.desde(personaje.position(), posicion).y() + ortogonal.desde(game.at(0,0), expansion).y()
+        )
 }
 
 const cuchillo = new Arma(
     nombre = "cuchillo",
     alcance = 1,
     velProyectil = 2,
+    tiempoPausa = 150,
     imgSeleccionado= "cuchillo_seleccionado.png",
     imgNoSeleccionado = "cuchillo_noseleccionado.png"
 )
@@ -131,12 +193,22 @@ const revolver = new Arma(
     nombre = "revolver",
     alcance = 5,
     velProyectil = 4,
+    tiempoPausa = 150,
+    imgSeleccionado ="revolver_seleccionado.png",
+    imgNoSeleccionado = "revolver_noseleccionado.png"
+)
+
+const escopeta = new Escopeta(
+    nombre = "escopeta",
+    alcance = 3,
+    velProyectil = 4,
+    tiempoPausa = 1000,
     imgSeleccionado ="revolver_seleccionado.png",
     imgNoSeleccionado = "revolver_noseleccionado.png"
 )
 
 object inventario{
-    const listaInventario = [cuchillo,revolver]
+    const listaInventario = [cuchillo,revolver,escopeta]
     var armaElegida = 0
 
     method aniadirArma(arma){
