@@ -65,6 +65,9 @@ class Enemigo {
     }
 
     method recibirDanio(cantidad) {
+        if (inventario.estaSeleccionada(0)){
+            movimiento.empujar(self, personaje.direccion(), 1)
+        }
         if (self.estaVivo()) {
             salud = (salud - cantidad).max(0)
 
