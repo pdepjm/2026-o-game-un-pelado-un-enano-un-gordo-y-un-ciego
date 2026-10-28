@@ -203,8 +203,8 @@ const escopeta = new Escopeta(
     alcance = 3,
     velProyectil = 4,
     tiempoPausa = 1000,
-    imgSeleccionado ="revolver_seleccionado.png",
-    imgNoSeleccionado = "revolver_noseleccionado.png"
+    imgSeleccionado ="escopeta_seleccionada.png",
+    imgNoSeleccionado = "escopeta_noseleccionada.png"
 )
 
 object inventario{

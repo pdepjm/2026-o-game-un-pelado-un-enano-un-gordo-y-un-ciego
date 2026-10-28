@@ -16,7 +16,6 @@ class Puerta {
     method puertaDeVuelta() = puertaDeVuelta
     method position(nuevaPos) {posicion = nuevaPos}
     method position() = posicion
-    method image() = "hud_fondo.png"
 }
 
     const vacio = new Puerta(destino = salaVacia, puertaDeVuelta = vacio)

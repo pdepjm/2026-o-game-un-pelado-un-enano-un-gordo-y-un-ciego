@@ -4,7 +4,7 @@ import laser.*
 import mapas.*
 
 object jefePelado {
-    var posicion = game.at(12, 8)
+    const posicion = game.at(12, 8)
     var vida = 5
     var brillando = true
     var faseFinalUsada = false

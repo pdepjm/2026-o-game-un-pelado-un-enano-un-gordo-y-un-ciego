@@ -10,7 +10,7 @@ class Pared {
     const posicion
 
     method position() = posicion
-    method image() = "arboleda.png"
+    method image() = "hud_fondo.png"
     method estaVivo() = false
 }
 
@@ -108,6 +108,20 @@ class Sala {
         const vecinos = [p.up(1), p.down(1), p.left(1), p.right(1)]
         return vecinos.find({ v => self.esPiso(v) })
     }
+
+    method recorridoPerimetral() {
+    const xMin = 1
+    const xMax = diseno.first().length() - 2
+    const yMin = alturaInterfaz + 1
+    const yMax = alturaInterfaz + diseno.size() - 2
+
+    const ruta = []
+    (xMin..xMax).forEach({ x => ruta.add(game.at(x, yMin)) })                              // abajo, de izq. a der.
+    ((yMin + 1)..yMax).forEach({ y => ruta.add(game.at(xMax, y)) })                        // derecha, subiendo
+    (xMin..(xMax - 1)).asList().reverse().forEach({ x => ruta.add(game.at(x, yMax)) })     // arriba, de der. a izq.
+    ((yMin + 1)..(yMax - 1)).asList().reverse().forEach({ y => ruta.add(game.at(xMin, y)) }) // izquierda, bajando
+    return ruta.filter({ p => self.esPiso(p) })
+}
 }
 
 object mapa {
@@ -163,6 +177,8 @@ object mapa {
     }
 }
 
+
+
 // ================= SALAS=================
 
 const salaVacia = new Sala (
@@ -175,7 +191,7 @@ const salaVacia = new Sala (
 )
 
 const inicio = new Sala(diseno = [
-    "HHHHHHHHHHH1HHHHHHHHHHHH",
+    "HHHHHHHHHHHHH1HHHHHHHHHH",
     "H                      H",
     "H                      H",
     "H                      H",
@@ -189,7 +205,7 @@ const inicio = new Sala(diseno = [
     "H                      H",
     "H                      H",
     "H                      H",
-    "                        "
+    "H                      H"
     ],
     zombisAleatorios = true,
     puerta1 = puertaInicioPueblo,
@@ -211,8 +227,8 @@ const pueblo = new Sala(diseno = [
     "H    HHH               H",
     "H    HHH               3",
     "H    HHH               H",
-    "H              H1H     H",
-    "                        "
+    "H                      H",
+    "HHHHHHHHHHH1HHHHHHHHHHHHHH"
     ],
     zombisAleatorios = true,
     puerta1 = puertaPuebloInicio,
@@ -221,20 +237,22 @@ const pueblo = new Sala(diseno = [
     puerta4 = puertaPuebloEntradaCastillo) //odio que sea un nombre tan largo, pero este chiste ya lo hice y nadie lo borró, así que no voy a volver a hacer lo mismo porque eso sería desconsiderado de mi parte y no me parece que tenga que ser de esta manera para el equipo de ayudantes de la cursada de Paradigmas de Programación, ya que ellos han sido muy buenas personas y buenos catedráticos, los quiero mucho Atte: Lechuza-N
 
 const iglesia = new Sala(diseno = [
-        "     HHHHHHHHHHHHHHH",
-        "     H             H",
-        "     H             H",
-        "     H             H",
-        "     H             H",
-        "     H             H",
-        "     H      2      H",
-        "     H             H",
-        "     H             H",
-        "     H             H",
-        "     H             H",
-        "     H             H",
-        "     H      1      H",
-        "                    "
+        "HHHHHHHHHHHHHHHHHHHH",
+        "HHHHHHHHHHHHHHHHHHHH",
+        "HHHHHHHHHHHHHHHHHHHH",
+        "HHHHHH             HHHHH",
+        "HHHHHH             HHHHH",
+        "HHHHHH             HHHHH",
+        "HHHHHH             HHHHHH",
+        "HHHHHH             HHHHHH",
+        "HHHHHH      2      HHHHHH",
+        "HHHHHH             HHHHHH",
+        "HHHHHH             HHHHHH",
+        "HHHHHH             HHHHHH",
+        "HHHHHH             HHHHHH",
+        "HHHHHH             HHHHHH",
+        "HHHHHH      1      HHHHHH",
+        "HHHHHH              HHHHHH"
     ],
     zombisAleatorios = true,
     puerta1 = puertaIglesiaPueblo,
@@ -244,20 +262,20 @@ const iglesia = new Sala(diseno = [
 )
 
 const salaJefePelado = new Sala(diseno = [
-        "     HHHHHHHHHHHHHHH",
-        "     H             H",
-        "     H             H",
-        "     H             H",
-        "     H             H",
-        "     H     PPP     H",
-        "     H     P P     H",
-        "     H     PPP     H",
-        "     H 1           H",
-        "     H             H",
-        "     H             H",
-        "     H             H",
-        "     H             H",
-        "                    "
+        "HHHHHHHHHHHHHHHHHHHH",
+        "HHHHHH             H",
+        "HHHHHH             H",
+        "HHHHHH             H",
+        "HHHHHH             H",
+        "HHHHHH     PPP     H",
+        "HHHHHH     P P     H",
+        "HHHHHH     PPP     H",
+        "HHHHHH 1           H",
+        "HHHHHH             H",
+        "HHHHHH             H",
+        "HHHHHH             H",
+        "HHHHHH             H",
+        "HHHHHH             H"
     ],
     zombisAleatorios = false,
     puerta1 = puertaPeladoIglesia,
@@ -290,11 +308,7 @@ const muelle = new Sala(diseno = [
 )
 
 const entradaCastillo = new Sala(diseno = [
-        "HHHHHHHHHHHHHHHHHHHHHHHH",
-        "H                      H",
-        "H                      H",
-        "H                      H",
-        "H                      2",
+        "HHHHHHHHHHHH2HHHHHHHHHHH",
         "H                      H",
         "H                      H",
         "H                      H",
@@ -303,8 +317,12 @@ const entradaCastillo = new Sala(diseno = [
         "H                      H",
         "H                      H",
         "H                      H",
-        "H          H1H         H",
-        "                        "
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "HHHHHHHHHHHHH1HHHHHHHHHH"
     ],
     zombisAleatorios = false,
     puerta1 = puertaEntradaCastilloPueblo,
