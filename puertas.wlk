@@ -41,3 +41,8 @@ class Puerta {
 
     const puertaEntradaCastilloCastillo = new Puerta(destino = castillo, puertaDeVuelta = puertaCastilloEntradaCastillo)
     const puertaCastilloEntradaCastillo = new Puerta(destino = entradaCastillo, puertaDeVuelta = puertaEntradaCastilloCastillo)
+
+  
+    
+
+  

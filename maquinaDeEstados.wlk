@@ -51,3 +51,4 @@ const ciegoDerrotado = new Estado (
     escopetaConseguida = true,
     lanzapapaConseguida = true
 )
+

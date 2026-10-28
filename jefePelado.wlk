@@ -39,7 +39,6 @@ object jefePelado {
         brillando = true
         faseFinalUsada = false
         game.addVisual(self)
-        // Ventana vulnerable de 3 s cada 10 s
         game.onTick(10000, "brilloJefe", {
             brillando = false
             game.schedule(3000, { brillando = true })

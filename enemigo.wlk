@@ -106,21 +106,26 @@ object spawner {
     }
 
     method crearZombie() {
+    self.crearZombieEn(self.posicionAleatoria())
+    }
+
+    method crearZombieEn(pos) {
         contador += 1
+
         const nuevo = new Enemigo(
             nombre = "zombie" + contador,
             imagen = "spiderodo_128x128.png",
             danio = 1,
             fuerzaEmpuje = 1,
-            posicion = self.posicionAleatoria(),
+            posicion = pos,
             salud = 3,
             velocidad = 1
         )
+
         enemigos.add(nuevo)
         game.addVisual(nuevo)
         nuevo.activar()
     }
-
     method crearZombiesAleatorios() {
         (1..[1, 2].anyOne()).forEach({ i => self.crearZombie() })
     }

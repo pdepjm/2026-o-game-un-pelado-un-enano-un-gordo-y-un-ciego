@@ -4,6 +4,7 @@ import puertas.*
 import interfaz.alturaInterfaz
 import enemigo.*
 import jefePelado.*
+import jefeEnano.*
 
 class Pared {
     const posicion
@@ -139,6 +140,9 @@ object mapa {
         if(salaActual == salaJefePelado){
             jefePelado.desaparecer()
         }
+        if(salaActual == entradaCastillo){
+            jefeEnano.desaparecer()
+        }
 
         salaActual.descargar()
         salaActual = destino
@@ -149,6 +153,10 @@ object mapa {
         if (salaActual == salaJefePelado) {
             jefePelado.aparecer()
         }
+        if (salaActual == entradaCastillo) {
+            jefeEnano.aparecer()
+        }
+
         if (salaActual.zombisAleatorios()) {
             spawner.crearZombiesAleatorios()
         }
