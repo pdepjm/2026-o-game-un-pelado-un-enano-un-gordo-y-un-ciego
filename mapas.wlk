@@ -5,7 +5,8 @@ import interfaz.alturaInterfaz
 import enemigo.*
 import jefePelado.*
 import jefeEnano.*
-
+import jefeKrauser.*
+import armas.*
 class Pared {
     const posicion
 
@@ -169,34 +170,42 @@ method alPisar(pos) {
     method agregarItem(item) { itemsEnSuelo.add(item) }
 
     method cruzar(puerta) {
-        const destino = puerta.destino()
+    const destino = puerta.destino()
 
-        spawner.limpiar()
+    spawner.limpiar()
 
-        if(salaActual == salaJefePelado){
-            jefePelado.desaparecer()
-        }
-        if(salaActual == entradaCastillo){
-            jefeEnano.desaparecer()
-        }
-
-        salaActual.descargar()
-        salaActual = destino
-        salaActual.cargar()
-
-        personaje.position(salaActual.entradaDe(puerta.puertaDeVuelta()))
-
-        if (salaActual == salaJefePelado) {
-            jefePelado.aparecer()
-        }
-        if (salaActual == entradaCastillo) {
-            jefeEnano.aparecer()
-        }
-
-        if (salaActual.zombisAleatorios()) {
-            spawner.crearZombiesAleatorios()
-        }
+    if (salaActual == salaJefePelado) {
+        jefePelado.desaparecer()
     }
+    if (salaActual == entradaCastillo) {
+        jefeEnano.desaparecer()
+    }
+    if (salaActual == salaKrauser) {
+        jefeKrauser.desaparecer()
+        inventario.soloCuchillo(false)
+    }
+
+    salaActual.descargar()
+    salaActual = destino
+    salaActual.cargar()
+
+    personaje.position(salaActual.entradaDe(puerta.puertaDeVuelta()))
+
+    if (salaActual == salaJefePelado) {
+        jefePelado.aparecer()
+    }
+    if (salaActual == entradaCastillo) {
+        jefeEnano.aparecer()
+    }
+    if (salaActual == salaKrauser) {
+        inventario.soloCuchillo(true)
+        jefeKrauser.aparecer()
+    }
+
+    if (salaActual.zombisAleatorios()) {
+        spawner.crearZombiesAleatorios()
+    }
+}
     
 }
 
@@ -351,14 +360,37 @@ const entradaCastillo = new Sala(diseno = [
         "HHHHHHHHHHHHH1HHHHHHHHHH"
     ],
     zombisAleatorios = false,
-    condicionPuertas = new JefeMuerto(jefe = jefePelado),
+    condicionPuertas = new JefeMuerto(jefe = jefeEnano),
     puerta1 = puertaEntradaCastilloPueblo,
     puerta2 = puertaEntradaCastilloCastillo,
     puerta3 = vacio,
     puerta4 = vacio
 )
-
-const castillo = salaVacia
+const salaKrauser = new Sala(diseno = [
+        "HHHHHHHHHHHHHHHHHHHHHHHH",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "H                      H",
+        "HHHHHHHHHHHHH1HHHHHHHHHH"
+    ],
+    zombisAleatorios = false,
+    condicionPuertas = new JefeMuerto(jefe = jefeKrauser),
+    puerta1 = puertaCastilloEntradaCastillo,
+    puerta2 = vacio,
+    puerta3 = vacio,
+    puerta4 = vacio
+)
+const castillo = salaKrauser
 
 const isla = salaVacia
 

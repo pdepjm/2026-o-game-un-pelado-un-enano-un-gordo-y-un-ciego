@@ -226,9 +226,16 @@ object inventario{
         keyboard.num(3).onPressDo({self.seleccionar(2)})
         keyboard.num(4).onPressDo({self.seleccionar(3)})
     }
-    method seleccionar(indice) {
-        if (self.tieneArma(indice)) armaElegida = indice
-    }
+    var soloCuchillo = false
+
+method soloCuchillo(valor) {
+    soloCuchillo = valor
+    if (valor) armaElegida = 0
+}
+
+method seleccionar(indice) {
+    if (!soloCuchillo && self.tieneArma(indice)) armaElegida = indice
+}
     method armaSeleccionada() =  listaInventario.get(armaElegida)
     method tieneArma(indice) = listaInventario.size() > indice
     method arma(indice) = listaInventario.get(indice)
