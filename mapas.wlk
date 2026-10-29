@@ -143,6 +143,8 @@ const condicionPuertas = sinCondicion
 
 object mapa {
     var salaActual = salaVacia
+    const itemsEnSuelo = []
+
     
     method salaActual() = salaActual
 
@@ -161,8 +163,11 @@ object mapa {
 method alPisar(pos) {
     const puerta = salaActual.puertaEn(pos)
     if (puerta != vacio && salaActual.puertasAbiertas()) { self.cruzar(puerta) }
+    const items = itemsEnSuelo.filter({ i => i.position() == pos })
+        items.forEach({ i =>i.alPisar() itemsEnSuelo.remove(i)})
 }
-    
+    method agregarItem(item) { itemsEnSuelo.add(item) }
+
     method cruzar(puerta) {
         const destino = puerta.destino()
 
@@ -225,7 +230,7 @@ const inicio = new Sala(diseno = [
     "H                      H",
     "H                      H"
     ],
-    zombisAleatorios = true,
+    zombisAleatorios = false,
     condicionPuertas = sinZombies,
     puerta1 = puertaInicioPueblo,
     puerta2 = vacio,
@@ -245,11 +250,12 @@ const pueblo = new Sala(diseno = [
     "H                      H",
     "H    HHH               H",
     "H    HHH               3",
-    "H    HHH               H",
+    "H                      H",
     "H                      H",
     "HHHHHHHHHHH1HHHHHHHHHHHHHH"
     ],
     zombisAleatorios = true,
+    condicionPuertas = sinZombies,
     puerta1 = puertaPuebloInicio,
     puerta2 = puertaPuebloIglesia,
     puerta3 = puertaPuebloMuelle,
@@ -273,7 +279,7 @@ const iglesia = new Sala(diseno = [
         "HHHHHH      1      HHHHHH",
         "HHHHHH              HHHHHH"
     ],
-    zombisAleatorios = true,
+    zombisAleatorios = false,
     puerta1 = puertaIglesiaPueblo,
     puerta2 = puertaIglesiaPelado,
     puerta3 = vacio,
@@ -345,7 +351,7 @@ const entradaCastillo = new Sala(diseno = [
         "HHHHHHHHHHHHH1HHHHHHHHHH"
     ],
     zombisAleatorios = false,
-    condicionPuertas = new JefeMuerto(jefe = jefeEnano),
+    condicionPuertas = new JefeMuerto(jefe = jefePelado),
     puerta1 = puertaEntradaCastilloPueblo,
     puerta2 = puertaEntradaCastilloCastillo,
     puerta3 = vacio,

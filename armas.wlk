@@ -121,9 +121,15 @@ class Arma {
 }
 
 class Escopeta inherits Arma {
+    var balas = 0
+
+    method balas() = balas
+    method cargar(cantidad) { balas += cantidad }
+
     override method disparar() {
-        if (!pausa) {
+        if (!pausa && balas > 0) {
             self.pausar()
+            balas -= 1
             const dir = personaje.direccion()
             const dirOrtogonal = if (dir.nombre() == "arriba" || dir.nombre() == "abajo") izquierda else arriba
             const pos = dir.desde(personaje.position(), 1)
@@ -230,5 +236,47 @@ object inventario{
     method armas() = listaInventario 
 }
 
+object loot {
+    method tirar(pos) {
+        const tirada = 0.randomUpTo(1)
+        const item =
+            if (tirada < 0.2) new ItemCorazon(posicion = pos)
+            else if (tirada < 0.5) new ItemBalas(posicion = pos, cantidad = 2)
+            else null
+
+        if (item != null) {
+            mapa.agregarItem(item)
+            game.addVisual(item)
+        }
+    }
+}
+
+class ItemBalas {
+    const posicion
+    const cantidad
+
+    method position() = posicion
+    method image() = "balas_escopeta.png"
+    method estaVivo() = false   
+
+    method alPisar() {
+    escopeta.cargar(cantidad)
+    game.removeVisual(self)
+    }
 
 
+}
+
+class ItemCorazon {
+    var posicion
+    const curacion = 1
+
+    method position() = posicion
+    method image() = "corazon_loot.png"
+    method estaVivo() = false
+
+    method alPisar() {
+        personaje.curar(curacion)
+        game.removeVisual(self)
+    }
+}

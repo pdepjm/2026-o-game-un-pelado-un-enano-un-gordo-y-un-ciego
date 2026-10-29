@@ -88,7 +88,10 @@ class Enemigo {
         game.schedule(1000, { pausa = false })
     }
 
-    method morido() { self.eliminar() }
+     method morido() {
+        loot.tirar(posicion)
+        self.eliminar()
+    }
 }
 
 object spawner {

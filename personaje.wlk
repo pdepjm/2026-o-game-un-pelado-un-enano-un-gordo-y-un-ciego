@@ -32,6 +32,9 @@ object personaje {
 
     method salud() = salud
     method estaVivo() = salud > 0
+    method curar(cantidad) {
+    salud = (salud + cantidad).min(saludMaxima)
+}
 
     method direccion() = direccion
     method direccion(nuevaDireccion) { direccion = nuevaDireccion }

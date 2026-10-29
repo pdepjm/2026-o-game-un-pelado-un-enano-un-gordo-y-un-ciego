@@ -88,7 +88,7 @@ method avanzarEnRuta() {
                 estado.alRecibirDanio(self)
                 cooldownId += 1
                 const id = cooldownId
-                game.schedule(3000, { if (cooldownId == id) invulnerable = false })
+                game.schedule(1000, { if (cooldownId == id) invulnerable = false })
             }
         }
     }
