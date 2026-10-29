@@ -129,7 +129,7 @@ object spawner {
     method crearZombiesAleatorios() {
         (1..[1, 2].anyOne()).forEach({ i => self.crearZombie() })
     }
-
+    method hayZombiesVivos() = enemigos.any({ e => e.estaVivo() })
     method limpiar() {
         enemigos.filter({ e => e.estaVivo() }).forEach({ e => e.eliminar() })
         enemigos.clear()

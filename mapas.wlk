@@ -21,6 +21,18 @@ class Pozo {
     method image() = "hud_fondo.png"  
     method estaVivo() = false
 }
+object sinCondicion {
+    method cumple() = true
+}
+
+object sinZombies {
+    method cumple() = !spawner.hayZombiesVivos()
+}
+
+class JefeMuerto {
+    const jefe
+    method cumple() = !jefe.estaVivo()
+}
 class Sala {
     const diseno
     const paredes = []
@@ -122,6 +134,11 @@ class Sala {
     ((yMin + 1)..(yMax - 1)).asList().reverse().forEach({ y => ruta.add(game.at(xMin, y)) }) // izquierda, bajando
     return ruta.filter({ p => self.esPiso(p) })
 }
+const condicionPuertas = sinCondicion
+
+    method puertasAbiertas() = condicionPuertas.cumple()
+    method puertaBloqueadaEn(pos) = self.puertaEn(pos) != vacio && !self.puertasAbiertas()
+
 }
 
 object mapa {
@@ -139,13 +156,13 @@ object mapa {
     method esPiso(pos) = salaActual.esPiso(pos)
 
     method hayPozo(pos) = salaActual.hayPozo(pos)
-    method bloqueaJugador(pos) = self.hayPared(pos) || self.hayPozo(pos)
+    method bloqueaJugador(pos) = self.hayPared(pos) || self.hayPozo(pos) || salaActual.puertaBloqueadaEn(pos)
 
-    method alPisar(pos) {
-        const puerta = salaActual.puertaEn(pos)
-        if (puerta != vacio) { self.cruzar(puerta) }
-    }
-
+method alPisar(pos) {
+    const puerta = salaActual.puertaEn(pos)
+    if (puerta != vacio && salaActual.puertasAbiertas()) { self.cruzar(puerta) }
+}
+    
     method cruzar(puerta) {
         const destino = puerta.destino()
 
@@ -175,6 +192,7 @@ object mapa {
             spawner.crearZombiesAleatorios()
         }
     }
+    
 }
 
 
@@ -208,6 +226,7 @@ const inicio = new Sala(diseno = [
     "H                      H"
     ],
     zombisAleatorios = true,
+    condicionPuertas = sinZombies,
     puerta1 = puertaInicioPueblo,
     puerta2 = vacio,
     puerta3 = vacio,
@@ -277,7 +296,8 @@ const salaJefePelado = new Sala(diseno = [
         "HHHHHH             H",
         "HHHHHH             H"
     ],
-    zombisAleatorios = false,
+   zombisAleatorios = false,
+    condicionPuertas = new JefeMuerto(jefe = jefePelado),
     puerta1 = puertaPeladoIglesia,
     puerta2 = vacio,
     puerta3 = vacio,
@@ -325,8 +345,9 @@ const entradaCastillo = new Sala(diseno = [
         "HHHHHHHHHHHHH1HHHHHHHHHH"
     ],
     zombisAleatorios = false,
+    condicionPuertas = new JefeMuerto(jefe = jefeEnano),
     puerta1 = puertaEntradaCastilloPueblo,
-    puerta2 = puertaEntradaCastilloCastillo,   //ni siquiera me voy a esforzar
+    puerta2 = puertaEntradaCastilloCastillo,
     puerta3 = vacio,
     puerta4 = vacio
 )
