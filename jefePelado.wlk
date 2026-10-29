@@ -6,6 +6,7 @@ import mapas.*
 object jefePelado {
     const posicion = game.at(12, 8)
     var vida = 5
+    var cooldownId = 0
     var brillando = true
     var faseFinalUsada = false
     var rafagaActiva = false
@@ -29,8 +30,13 @@ object jefePelado {
 
     method recibirDanio(cantidad) {
         if (self.estaVivo() && !brillando) {
-            vida = (vida - cantidad).max(0)
             if (!self.estaVivo()) self.desaparecer()
+            vida = (vida - cantidad).max(0)
+            cooldownId += 1
+            brillando = true
+            const id = cooldownId
+            game.schedule(3000, { if (cooldownId == id) brillando = false })
+
         }
     }
 

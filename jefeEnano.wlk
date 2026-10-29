@@ -16,7 +16,7 @@ object jefeEnano {
     var cooldownId = 0
     var enEscena = false
     const msPorCelda = 400 
-    const msTeletransporte = 2500
+    const msTeletransporte = 5000
 
     method position() = posicion
     method image() = "jefeEnano.png"
