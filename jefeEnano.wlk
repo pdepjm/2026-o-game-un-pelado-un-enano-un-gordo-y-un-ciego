@@ -3,6 +3,7 @@ import mapas.*
 import personaje.*
 import movimiento.*
 import enemigo.*
+import maquinaDeEstados.*
 
 
 object jefeEnano {
@@ -34,17 +35,19 @@ method detenerClones() { self.eliminarClones() }
 
 
 method aparecer() {
-    vida = 6
-    invulnerable = false
-    cooldownId += 1
-    ruta = entradaCastillo.recorridoPerimetral()
-    indice = 0
-    posicion = ruta.get(0)
-    enEscena = true
-    game.addVisual(self)
-    estado = estadoClones
-    estado.entrar(self)
-    game.onTick(msPorCelda, "carreraEnano", { self.correr() })
+    if (!juego.existeLlave(llaves.llaveEnano)){
+        vida = 6
+        invulnerable = false
+        cooldownId += 1
+        ruta = entradaCastillo.recorridoPerimetral()
+        indice = 0
+        posicion = ruta.get(0)
+        enEscena = true
+        game.addVisual(self)
+        estado = estadoClones
+        estado.entrar(self)
+        game.onTick(msPorCelda, "carreraEnano", { self.correr() })
+    }
 }
 
 method desaparecer() {
@@ -82,6 +85,7 @@ method avanzarEnRuta() {
         if (self.estaVivo() && !invulnerable) {
             vida = (vida - cantidad).max(0)
             if (!self.estaVivo()) {
+                juego.cambiarEstado(enanoDerrotado)
                 self.desaparecer()
             } else {
                 invulnerable = true

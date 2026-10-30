@@ -2,6 +2,7 @@ import wollok.game.*
 import armas.*
 import laser.*
 import mapas.*
+import maquinaDeEstados.*
 
 object jefePelado {
     const posicion = game.at(12, 8)
@@ -30,8 +31,12 @@ object jefePelado {
 
     method recibirDanio(cantidad) {
         if (self.estaVivo() && !brillando) {
-            if (!self.estaVivo()) self.desaparecer()
-            vida = (vida - cantidad).max(0)
+            vida = (vida - cantidad).max(0)//??????max(0)?????
+            if (!self.estaVivo()) {
+                juego.cambiarEstado(peladoDerrotado)
+                self.desaparecer()
+            }
+            
             cooldownId += 1
             brillando = true
             const id = cooldownId
@@ -41,15 +46,17 @@ object jefePelado {
     }
 
     method aparecer() {
-        vida = 5
-        brillando = true
-        faseFinalUsada = false
-        game.addVisual(self)
-        game.onTick(10000, "brilloJefe", {
-            brillando = false
-            game.schedule(3000, { brillando = true })
-        })
-        game.schedule(2000, { self.siguienteAtaque() })
+        if (!juego.existeLlave(llaves.llavePelado)){
+            vida = 5
+            brillando = true
+            faseFinalUsada = false
+            game.addVisual(self)
+            game.onTick(10000, "brilloJefe", {
+                brillando = false
+                game.schedule(3000, { brillando = true })
+            })
+            game.schedule(2000, { self.siguienteAtaque() })
+        }
     }
 
     method desaparecer() {

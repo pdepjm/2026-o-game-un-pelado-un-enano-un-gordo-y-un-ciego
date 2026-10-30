@@ -6,7 +6,7 @@ import enemigo.*
 import jefePelado.*
 import jefeEnano.*
 import jefeKrauser.*
-import armas.*
+import emboscadaPueblo.*
 class Pared {
     const posicion
 
@@ -22,24 +22,16 @@ class Pozo {
     method image() = "hud_fondo.png"  
     method estaVivo() = false
 }
-object sinCondicion {
-    method cumple() = true
-}
 
-object sinZombies {
-    method cumple() = !spawner.hayZombiesVivos()
-}
-
-class JefeMuerto {
-    const jefe
-    method cumple() = !jefe.estaVivo()
-}
 class Sala {
     const diseno
+    const jefe
     const paredes = []
     const pozos = []
 
     const zombisAleatorios
+
+    method jefe() = jefe
 
     method zombisAleatorios() = zombisAleatorios
 
@@ -135,11 +127,14 @@ class Sala {
     ((yMin + 1)..(yMax - 1)).asList().reverse().forEach({ y => ruta.add(game.at(xMin, y)) }) // izquierda, bajando
     return ruta.filter({ p => self.esPiso(p) })
 }
-const condicionPuertas = sinCondicion
 
-    method puertasAbiertas() = condicionPuertas.cumple()
-    method puertaBloqueadaEn(pos) = self.puertaEn(pos) != vacio && !self.puertasAbiertas()
+    method puertaBloqueadaEn(pos) = self.puertaEn(pos) != vacio && !self.puertaEn(pos).estaTrabada()
 
+}
+
+object jefeNulo {
+    method aparecer() {}
+    method desaparecer() {}
 }
 
 object mapa {
@@ -163,7 +158,9 @@ object mapa {
 
 method alPisar(pos) {
     const puerta = salaActual.puertaEn(pos)
-    if (puerta != vacio && salaActual.puertasAbiertas()) { self.cruzar(puerta) }
+    if (puerta != vacio) {
+        if (!salaActual.puertaBloqueadaEn(pos)) { self.cruzar(puerta) }
+    }
     const items = itemsEnSuelo.filter({ i => i.position() == pos })
         items.forEach({ i =>i.alPisar() itemsEnSuelo.remove(i)})
 }
@@ -174,16 +171,7 @@ method alPisar(pos) {
 
     spawner.limpiar()
 
-    if (salaActual == salaJefePelado) {
-        jefePelado.desaparecer()
-    }
-    if (salaActual == entradaCastillo) {
-        jefeEnano.desaparecer()
-    }
-    if (salaActual == salaKrauser) {
-        jefeKrauser.desaparecer()
-        inventario.soloCuchillo(false)
-    }
+    salaActual.jefe().desaparecer()
 
     salaActual.descargar()
     salaActual = destino
@@ -191,16 +179,7 @@ method alPisar(pos) {
 
     personaje.position(salaActual.entradaDe(puerta.puertaDeVuelta()))
 
-    if (salaActual == salaJefePelado) {
-        jefePelado.aparecer()
-    }
-    if (salaActual == entradaCastillo) {
-        jefeEnano.aparecer()
-    }
-    if (salaActual == salaKrauser) {
-        inventario.soloCuchillo(true)
-        jefeKrauser.aparecer()
-    }
+    salaActual.jefe().aparecer()
 
     if (salaActual.zombisAleatorios()) {
         spawner.crearZombiesAleatorios()
@@ -215,6 +194,7 @@ method alPisar(pos) {
 
 const salaVacia = new Sala (
     diseno = [""],
+    jefe = jefeNulo,
     zombisAleatorios = false,
     puerta1 = vacio,
     puerta2 = vacio,
@@ -239,8 +219,8 @@ const inicio = new Sala(diseno = [
     "H                      H",
     "H                      H"
     ],
+    jefe = jefeNulo,
     zombisAleatorios = false,
-    condicionPuertas = sinZombies,
     puerta1 = puertaInicioPueblo,
     puerta2 = vacio,
     puerta3 = vacio,
@@ -263,8 +243,8 @@ const pueblo = new Sala(diseno = [
     "H                      H",
     "HHHHHHHHHHH1HHHHHHHHHHHHHH"
     ],
+    jefe = emboscadaPueblo,
     zombisAleatorios = true,
-    condicionPuertas = sinZombies,
     puerta1 = puertaPuebloInicio,
     puerta2 = puertaPuebloIglesia,
     puerta3 = puertaPuebloMuelle,
@@ -288,6 +268,7 @@ const iglesia = new Sala(diseno = [
         "HHHHHH      1      HHHHHH",
         "HHHHHH              HHHHHH"
     ],
+    jefe = jefeNulo,
     zombisAleatorios = false,
     puerta1 = puertaIglesiaPueblo,
     puerta2 = puertaIglesiaPelado,
@@ -311,8 +292,8 @@ const salaJefePelado = new Sala(diseno = [
         "HHHHHH             H",
         "HHHHHH             H"
     ],
+    jefe = jefePelado,
    zombisAleatorios = false,
-    condicionPuertas = new JefeMuerto(jefe = jefePelado),
     puerta1 = puertaPeladoIglesia,
     puerta2 = vacio,
     puerta3 = vacio,
@@ -335,6 +316,7 @@ const muelle = new Sala(diseno = [
         "H                      H",
         "                        "
     ],
+    jefe = jefeNulo,
     zombisAleatorios = true,
     puerta1 = puertaMuellePueblo,
     puerta2 = puertaMuelleIsla,
@@ -359,8 +341,8 @@ const entradaCastillo = new Sala(diseno = [
         "H                      H",
         "HHHHHHHHHHHHH1HHHHHHHHHH"
     ],
+    jefe = jefeEnano,
     zombisAleatorios = false,
-    condicionPuertas = new JefeMuerto(jefe = jefeEnano),
     puerta1 = puertaEntradaCastilloPueblo,
     puerta2 = puertaEntradaCastilloCastillo,
     puerta3 = vacio,
@@ -383,16 +365,17 @@ const salaKrauser = new Sala(diseno = [
         "H                      H",
         "HHHHHHHHHHHHH1HHHHHHHHHH"
     ],
+    jefe = jefeKrauser,
     zombisAleatorios = false,
-    condicionPuertas = new JefeMuerto(jefe = jefeKrauser),
     puerta1 = puertaCastilloEntradaCastillo,
     puerta2 = vacio,
     puerta3 = vacio,
     puerta4 = vacio
 )
+//??????????????????????
 const castillo = salaKrauser
-
 const isla = salaVacia
+//??????????????????????
 
 // ================= FONDO =================
 object fondoNivel {

@@ -214,7 +214,7 @@ const escopeta = new Escopeta(
 )
 
 object inventario{
-    const listaInventario = [cuchillo,revolver,escopeta]
+    const listaInventario = [cuchillo, revolver]
     var armaElegida = 0
 
     method aniadirArma(arma){
@@ -228,14 +228,14 @@ object inventario{
     }
     var soloCuchillo = false
 
-method soloCuchillo(valor) {
-    soloCuchillo = valor
-    if (valor) armaElegida = 0
-}
+    method soloCuchillo(valor) {
+        soloCuchillo = valor
+        if (valor) armaElegida = 0
+    }
 
-method seleccionar(indice) {
-    if (!soloCuchillo && self.tieneArma(indice)) armaElegida = indice
-}
+    method seleccionar(indice) {
+        if (!soloCuchillo && self.tieneArma(indice)) armaElegida = indice
+    }
     method armaSeleccionada() =  listaInventario.get(armaElegida)
     method tieneArma(indice) = listaInventario.size() > indice
     method arma(indice) = listaInventario.get(indice)
@@ -275,7 +275,7 @@ class ItemBalas {
 }
 
 class ItemCorazon {
-    var posicion
+    const posicion
     const curacion = 1
 
     method position() = posicion

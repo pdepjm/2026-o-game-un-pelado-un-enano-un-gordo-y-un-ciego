@@ -1,3 +1,5 @@
+import maquinaDeEstados.*
+import armas.*
 import wollok.game.*
 import mapas.*
 import personaje.*
@@ -27,6 +29,7 @@ object jefeKrauser {
     var fase = faseCuchillo
     var enEscena = false
     var ticksActivos = false
+    var mutado = false
 
     method position() = posicion
     method image() = fase.image()
@@ -34,20 +37,24 @@ object jefeKrauser {
     method vidaActual() = vida
     method direccion() = direccion
     method fuerzaEmpuje() = fase.empuje()
-    method mutado() = fase == faseMutado
+    method mutado() = mutado
 
     method activo() = self.estaVivo() && mapa.salaActual() == salaKrauser
 
     method aparecer() {
-        if (self.estaVivo() && !enEscena) {
-            enEscena = true
-            posicion = game.at(12, 8)
-            game.addVisual(self)
-            self.programarTicks()
+        if (!juego.existeLlave(llaves.llaveKrauser)){
+            inventario.soloCuchillo(true)
+            if (self.estaVivo() && !enEscena) {
+                enEscena = true
+                posicion = game.at(12, 8)
+                game.addVisual(self)
+                self.programarTicks()
+            }
         }
     }
 
     method desaparecer() {
+        inventario.soloCuchillo(false)
         if (enEscena) {
             enEscena = false
             self.detenerTicks()
@@ -96,9 +103,13 @@ object jefeKrauser {
     }
 
     method recibirDanio(cantidad) {
+        if (inventario.estaSeleccionada(0)){
+            movimiento.empujar(self, personaje.direccion(), 1)
+        }
         if (self.estaVivo()) {
             vida = (vida - cantidad).max(0)
             if (!self.estaVivo()) {
+                juego.cambiarEstado(krauserDerrotado)
                 self.desaparecer()
             } else if (!self.mutado() && vida <= vidaMaxima / 2) {
                 self.mutar()
@@ -108,6 +119,7 @@ object jefeKrauser {
 
     method mutar() {
         fase = faseMutado
+        mutado = true
         self.programarTicks()   
     }
 }
