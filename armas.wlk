@@ -250,11 +250,17 @@ object loot {
             if (tirada < 0.2) new ItemCorazon(posicion = pos)
             else if (tirada < 0.5) new ItemBalas(posicion = pos, cantidad = 2)
             else null
-
         if (item != null) {
             mapa.agregarItem(item)
             game.addVisual(item)
         }
+    }
+
+    // Esto es para el jefe Gordo, así evitamos un softlock. Si le disparás mientras se lastra un sanguche, la bola de cebo va a soltar balas
+    method tirarBalas(pos, cantidad) {
+        const item = new ItemBalas(posicion = pos, cantidad = cantidad)
+        mapa.agregarItem(item)
+        game.addVisual(item)
     }
 }
 
@@ -271,6 +277,7 @@ class ItemBalas {
     game.removeVisual(self)
     }
 
+    
 
 }
 

@@ -30,6 +30,7 @@ object jefeKrauser {
     var enEscena = false
     var ticksActivos = false
     var mutado = false
+    method velocidad() = 1
 
     method position() = posicion
     method image() = fase.image()
@@ -42,16 +43,17 @@ object jefeKrauser {
     method activo() = self.estaVivo() && mapa.salaActual() == salaKrauser
 
     method aparecer() {
-        if (!juego.existeLlave(llaves.llaveKrauser)){
-            inventario.soloCuchillo(true)
-            if (self.estaVivo() && !enEscena) {
-                enEscena = true
-                posicion = game.at(12, 8)
-                game.addVisual(self)
-                self.programarTicks()
-            }
+    inventario.soloCuchillo(false)   // ← siempre resetear al entrar
+    if (!juego.existeLlave(llaves.llaveKrauser)) {
+        inventario.soloCuchillo(true)
+        if (self.estaVivo() && !enEscena) {
+            enEscena = true
+            posicion = game.at(12, 8)
+            game.addVisual(self)
+            self.programarTicks()
         }
     }
+}
 
     method desaparecer() {
         inventario.soloCuchillo(false)

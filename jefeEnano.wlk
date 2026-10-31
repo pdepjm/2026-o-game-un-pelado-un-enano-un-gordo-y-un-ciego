@@ -18,9 +18,11 @@ object jefeEnano {
     var enEscena = false
     const msPorCelda = 400 
     const msTeletransporte = 5000
+    var direccion = abajo 
+    method direccion() = direccion
 
     method position() = posicion
-    method image() = "jefeEnano.png"
+    method image() = "jefeEnano_"+ self.direccion()+".gif"
     method estaVivo() = vida > 0
     method vidaActual() = vida
 
@@ -65,14 +67,18 @@ method correr() {
 }
 
 method avanzarEnRuta() {
+    const posAnterior = posicion
     indice = (indice + 1) % ruta.size()
     posicion = ruta.get(indice)
-    self.tePegaSiTeToka(self)
+    direccion = movimiento.haciaObjetivo(posAnterior, posicion)
 
-    clones.filter({ c => c.estaVivo() }).forEach({ c =>
-        const separacion = (ruta.size() * (c.numero() + 1) / 4).truncate(0)
-        c.position(ruta.get((indice + separacion) % ruta.size()))
-        self.tePegaSiTeToka(c)
+        self.tePegaSiTeToka(self)
+        clones.filter({ c => c.estaVivo() }).forEach({ c =>
+            const separacion = (ruta.size() * (c.numero() + 1) / 4).truncate(0)
+            const posAnteriorClon = c.position()
+            c.position(ruta.get((indice + separacion) % ruta.size()))
+            c.actualizarDireccion(posAnteriorClon, c.position())
+            self.tePegaSiTeToka(c)
     })
 }
     method tePegaSiTeToka(quien) {
@@ -143,6 +149,7 @@ method iniciarClones() {
 }
 
 object estadoClones {
+    
     method entrar(jefe) { jefe.iniciarClones() }
     method salir(jefe) { jefe.detenerClones() }
     method alCorrer(jefe) { jefe.avanzarEnRuta() }
@@ -159,15 +166,18 @@ class ClonJefeEnano {
     var posicion
     const numero
     var vivo = true
-
+    var direccion = abajo
+    method direccion() = direccion
+    
     method position() = posicion
     method numero() = numero
-
-    method position(nuevaPosicion) {
-        posicion = nuevaPosicion
+    method position(nuevaPosicion) { posicion = nuevaPosicion }
+     method actualizarDireccion(posAnterior, posActual) {
+        const dir = movimiento.haciaObjetivo(posAnterior, posActual)
+        if (dir != null) { direccion = dir }
     }
 
-    method image() = "clonesJefeEnano.png"
+    method image() = "clonEnano_"+self.direccion() + ".gif"
 
     method estaVivo() = vivo
 

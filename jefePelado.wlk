@@ -5,12 +5,14 @@ import mapas.*
 import maquinaDeEstados.*
 
 object jefePelado {
-    const posicion = game.at(12, 8)
+    const posicion = game.at(12, 7)
     var vida = 5
     var cooldownId = 0
     var brillando = true
     var faseFinalUsada = false
     var rafagaActiva = false
+    method image() = "jefePelado_" + estado+".gif"
+    var estado = "normal"
 
     var laser = new Laser(
             origen = posicion,
@@ -24,7 +26,6 @@ object jefePelado {
     const equis = [game.at(1, 1), game.at(1, -1), game.at(-1, 1), game.at(-1, -1)]
 
     method position() = posicion
-    method image() = "fotoPruebaJefePelado.png"
     method estaVivo() = vida > 0
     method vidaActual() = vida
     method reflejaBalas() = brillando
@@ -39,8 +40,9 @@ object jefePelado {
             
             cooldownId += 1
             brillando = true
+            estado = "brillo"
             const id = cooldownId
-            game.schedule(3000, { if (cooldownId == id) brillando = false })
+            game.schedule(3000, { if (cooldownId == id) brillando = false estado = "normal" })
 
         }
     }
@@ -49,11 +51,12 @@ object jefePelado {
         if (!juego.existeLlave(llaves.llavePelado)){
             vida = 5
             brillando = true
+            estado = "brillo"
             faseFinalUsada = false
             game.addVisual(self)
-            game.onTick(10000, "brilloJefe", {
-                brillando = false
-                game.schedule(3000, { brillando = true })
+            game.onTick(5000, "brilloJefe", {
+                brillando = false estado = "normal"
+                game.schedule(3000, { brillando = true estado ="brillo"})
             })
             game.schedule(2000, { self.siguienteAtaque() })
         }

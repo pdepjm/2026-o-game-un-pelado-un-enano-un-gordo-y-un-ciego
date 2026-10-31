@@ -11,7 +11,7 @@ class Enemigo {
     const danio
     const fuerzaEmpuje
     var posicion
-    var direccion = "abajo"
+    var direccion = abajo
     var pausa = false
     const velocidad 
     method velocidad() = velocidad
@@ -20,7 +20,7 @@ class Enemigo {
     method estaVivo() = salud > 0
 
     method position() = posicion
-    method image() = imagen
+    method image() = imagen +"_"+ self.direccion() + ".gif"
     method direccion() = direccion
     method danio() = danio
     method fuerzaEmpuje() = fuerzaEmpuje
@@ -117,7 +117,7 @@ object spawner {
 
         const nuevo = new Enemigo(
             nombre = "zombie" + contador,
-            imagen = "spiderodo_128x128.png",
+            imagen = "pueblerino",
             danio = 1,
             fuerzaEmpuje = 1,
             posicion = pos,
