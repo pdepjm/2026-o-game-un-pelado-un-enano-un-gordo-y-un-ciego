@@ -348,32 +348,307 @@ const entradaCastillo = new Sala(diseno = [
     puerta3 = vacio,
     puerta4 = vacio
 )
+// Hall de entrada (lima: viene de entradaCastillo / violeta: arriba / naranja: abajo)
+const castillo = new Sala(diseno = [
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHH2HHHHHHHH",
+    "H                    HHH",
+    "H                    HHH",
+    "H                    HHH",
+    "H                    HHH",
+    "1                    HHH",
+    "H                    HHH",
+    "H                    HHH",
+    "H                    HHH",
+    "H                    HHH",
+    "HHHHHHHHHHHHHHH3HHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH"
+    ],
+    jefe = jefeNulo,
+    zombisAleatorios = false,
+    puerta1 = puertaCastilloEntradaCastillo,
+    puerta2 = puertaCastilloColumnaNorte,
+    puerta3 = puertaCastilloColumnaSur,
+    puerta4 = vacio)
+
+// verde: arriba / violeta: abajo / azul: pared derecha
+const columnaNorte = new Sala(diseno = [
+    "HHHHHHHHHHHH1HHHHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      3HHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHHHH2HHHHHHHHHHHH"
+    ],
+    jefe = jefeNulo,
+    zombisAleatorios = false,
+    puerta1 = puertaColumnaNorteSalaVerde,
+    puerta2 = puertaColumnaNorteCastillo,
+    puerta3 = puertaColumnaNortePasilloNorte,
+    puerta4 = vacio)
+
+// Sala de la palanca verde
+const salaVerde = new Sala(diseno = [
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHHHHHH1HHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH"
+    ],
+    jefe = jefeNulo,
+    zombisAleatorios = false,
+    puerta1 = puertaSalaVerdeColumnaNorte,
+    puerta2 = vacio,
+    puerta3 = vacio,
+    puerta4 = vacio)
+
+// naranja: arriba / rosa: pared derecha / roja: abajo
+const columnaSur = new Sala(diseno = [
+    "HHHHHHHHHHH1HHHHHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      2HHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHHHHH3HHHHHHHHHHH"
+    ],
+    jefe = jefeNulo,
+    zombisAleatorios = false,
+    puerta1 = puertaColumnaSurCastillo,
+    puerta2 = puertaColumnaSurPasilloSurOeste,
+    puerta3 = puertaColumnaSurSalaRoja,
+    puerta4 = vacio)
+
+// Sala de la palanca roja
+const salaRoja = new Sala(diseno = [
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHH1HHHHHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH"
+    ],
+    jefe = jefeNulo,
+    zombisAleatorios = false,
+    puerta1 = puertaSalaRojaColumnaSur,
+    puerta2 = vacio,
+    puerta3 = vacio,
+    puerta4 = vacio)
+
+// azul: pared izquierda / bordo: abajo
+const pasilloNorte = new Sala(diseno = [
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HH                    HH",
+    "HH                    HH",
+    "HH                    HH",
+    "H1                    HH",
+    "HH                    HH",
+    "HH                    HH",
+    "HH                    HH",
+    "HHHHHHHHHHHHHHHHHH2HHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH"
+    ],
+    jefe = jefeNulo,
+    zombisAleatorios = false,
+    puerta1 = puertaPasilloNorteColumnaNorte,
+    puerta2 = puertaPasilloNortePasilloCentral,
+    puerta3 = vacio,
+    puerta4 = vacio)
+
+// bordo: arriba / celeste: pared izquierda / marron: abajo
+const pasilloCentral = new Sala(diseno = [
+    "HHHHHHHHHHHH1HHHHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHH2      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHH      HHHHHHHHH",
+    "HHHHHHHHHHH3HHHHHHHHHHHH"
+    ],
+    jefe = jefeNulo,
+    zombisAleatorios = false,
+    puerta1 = puertaPasilloCentralPasilloNorte,
+    puerta2 = puertaPasilloCentralSalaAzul,
+    puerta3 = puertaPasilloCentralPasilloSurOeste,
+    puerta4 = vacio)
+
+// Sala interior de la palanca azul (puerta celeste)
+const salaAzul = new Sala(diseno = [
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        1HHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH"
+    ],
+    jefe = jefeNulo,
+    zombisAleatorios = false,
+    puerta1 = puertaSalaAzulPasilloCentral,
+    puerta2 = vacio,
+    puerta3 = vacio,
+    puerta4 = vacio)
+
+// rosa: izquierda / marron: arriba / amarilla: derecha
+const pasilloSurOeste = new Sala(diseno = [
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHH2HHHHHH",
+    "HH                    HH",
+    "HH                    HH",
+    "HH                    HH",
+    "H1                    3H",
+    "HH                    HH",
+    "HH                    HH",
+    "HH                    HH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH"
+    ],
+    jefe = jefeNulo,
+    zombisAleatorios = false,
+    puerta1 = puertaPasilloSurOesteColumnaSur,
+    puerta2 = puertaPasilloSurOestePasilloCentral,
+    puerta3 = puertaPasilloSurOestePasilloSurEste,
+    puerta4 = vacio)
+
+// Tramo con la palanca amarilla: amarilla a la izquierda / gris a la derecha
+const pasilloSurEste = new Sala(diseno = [
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHH1        2HHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH"
+    ],
+    jefe = jefeNulo,
+    zombisAleatorios = false,
+    puerta1 = puertaPasilloSurEstePasilloSurOeste,
+    puerta2 = puertaPasilloSurEsteAntesala,
+    puerta3 = vacio,
+    puerta4 = vacio)
+
+// Antesala sin jefe: cyan arriba / gris a la izquierda
+const antesalaKrauser = new Sala(diseno = [
+    "HHHHHHHHHHHH1HHHHHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHH2        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHH        HHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH"
+    ],
+    jefe = jefeNulo,
+    zombisAleatorios = false,
+    puerta1 = puertaAntesalaKrauser,
+    puerta2 = puertaAntesalaPasilloSurEste,
+    puerta3 = vacio,
+    puerta4 = vacio)
+
+// Sala de Krauser (puerta cyan abajo)
 const salaKrauser = new Sala(diseno = [
-        "HHHHHHHHHHHHHHHHHHHHHHHH",
-        "H                      H",
-        "H                      H",
-        "H                      H",
-        "H                      H",
-        "H                      H",
-        "H                      H",
-        "H                      H",
-        "H                      H",
-        "H                      H",
-        "H                      H",
-        "H                      H",
-        "H                      H",
-        "H                      H",
-        "HHHHHHHHHHHHH1HHHHHHHHHH"
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH",
+    "HHHHH              HHHHH",
+    "HHHHH              HHHHH",
+    "HHHHH              HHHHH",
+    "HHHHH              HHHHH",
+    "HHHHH              HHHHH",
+    "HHHHH              HHHHH",
+    "HHHHH              HHHHH",
+    "HHHHH              HHHHH",
+    "HHHHH              HHHHH",
+    "HHHHH              HHHHH",
+    "HHHHH              HHHHH",
+    "HHHHHHHHHHHHH1HHHHHHHHHH",
+    "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeKrauser,
     zombisAleatorios = false,
-    puerta1 = puertaCastilloEntradaCastillo,
+    puerta1 = puertaKrauserAntesala,
     puerta2 = vacio,
     puerta3 = vacio,
-    puerta4 = vacio
-)
+    puerta4 = vacio)
 //??????????????????????
-const castillo = salaKrauser
+
 const isla = salaVacia
 //??????????????????????
 

@@ -100,7 +100,53 @@ class Puerta {
         llaveRequerida = llaveNula
     )
 
-  
+  // violeta: castillo <-> columnaNorte
+const puertaCastilloColumnaNorte = new Puerta(destino = columnaNorte, puertaDeVuelta = puertaColumnaNorteCastillo, llaveRequerida = llaveNula)
+const puertaColumnaNorteCastillo = new Puerta(destino = castillo, puertaDeVuelta = puertaCastilloColumnaNorte, llaveRequerida = llaveNula)
+
+// naranja: castillo <-> columnaSur
+const puertaCastilloColumnaSur = new Puerta(destino = columnaSur, puertaDeVuelta = puertaColumnaSurCastillo, llaveRequerida = llaveNula)
+const puertaColumnaSurCastillo = new Puerta(destino = castillo, puertaDeVuelta = puertaCastilloColumnaSur, llaveRequerida = llaveNula)
+
+// verde: columnaNorte <-> salaVerde
+const puertaColumnaNorteSalaVerde = new Puerta(destino = salaVerde, puertaDeVuelta = puertaSalaVerdeColumnaNorte, llaveRequerida = llaveNula)
+const puertaSalaVerdeColumnaNorte = new Puerta(destino = columnaNorte, puertaDeVuelta = puertaColumnaNorteSalaVerde, llaveRequerida = llaveNula)
+
+// azul: columnaNorte <-> pasilloNorte
+const puertaColumnaNortePasilloNorte = new Puerta(destino = pasilloNorte, puertaDeVuelta = puertaPasilloNorteColumnaNorte, llaveRequerida = llaveNula)
+const puertaPasilloNorteColumnaNorte = new Puerta(destino = columnaNorte, puertaDeVuelta = puertaColumnaNortePasilloNorte, llaveRequerida = llaveNula)
+
+// roja: columnaSur <-> salaRoja
+const puertaColumnaSurSalaRoja = new Puerta(destino = salaRoja, puertaDeVuelta = puertaSalaRojaColumnaSur, llaveRequerida = llaveNula)
+const puertaSalaRojaColumnaSur = new Puerta(destino = columnaSur, puertaDeVuelta = puertaColumnaSurSalaRoja, llaveRequerida = llaveNula)
+
+// rosa: columnaSur <-> pasilloSurOeste
+const puertaColumnaSurPasilloSurOeste = new Puerta(destino = pasilloSurOeste, puertaDeVuelta = puertaPasilloSurOesteColumnaSur, llaveRequerida = llaveNula)
+const puertaPasilloSurOesteColumnaSur = new Puerta(destino = columnaSur, puertaDeVuelta = puertaColumnaSurPasilloSurOeste, llaveRequerida = llaveNula)
+
+// bordo: pasilloNorte <-> pasilloCentral
+const puertaPasilloNortePasilloCentral = new Puerta(destino = pasilloCentral, puertaDeVuelta = puertaPasilloCentralPasilloNorte, llaveRequerida = llaveNula)
+const puertaPasilloCentralPasilloNorte = new Puerta(destino = pasilloNorte, puertaDeVuelta = puertaPasilloNortePasilloCentral, llaveRequerida = llaveNula)
+
+// celeste: pasilloCentral <-> salaAzul
+const puertaPasilloCentralSalaAzul = new Puerta(destino = salaAzul, puertaDeVuelta = puertaSalaAzulPasilloCentral, llaveRequerida = llaveNula)
+const puertaSalaAzulPasilloCentral = new Puerta(destino = pasilloCentral, puertaDeVuelta = puertaPasilloCentralSalaAzul, llaveRequerida = llaveNula)
+
+// marron: pasilloCentral <-> pasilloSurOeste
+const puertaPasilloCentralPasilloSurOeste = new Puerta(destino = pasilloSurOeste, puertaDeVuelta = puertaPasilloSurOestePasilloCentral, llaveRequerida = llaveNula)
+const puertaPasilloSurOestePasilloCentral = new Puerta(destino = pasilloCentral, puertaDeVuelta = puertaPasilloCentralPasilloSurOeste, llaveRequerida = llaveNula)
+
+// amarilla: pasilloSurOeste <-> pasilloSurEste
+const puertaPasilloSurOestePasilloSurEste = new Puerta(destino = pasilloSurEste, puertaDeVuelta = puertaPasilloSurEstePasilloSurOeste, llaveRequerida = llaveNula)
+const puertaPasilloSurEstePasilloSurOeste = new Puerta(destino = pasilloSurOeste, puertaDeVuelta = puertaPasilloSurOestePasilloSurEste, llaveRequerida = llaveNula)
+
+// gris: pasilloSurEste <-> antesalaKrauser (despues se traba con las palancas)
+const puertaPasilloSurEsteAntesala = new Puerta(destino = antesalaKrauser, puertaDeVuelta = puertaAntesalaPasilloSurEste, llaveRequerida = llaveNula)
+const puertaAntesalaPasilloSurEste = new Puerta(destino = pasilloSurEste, puertaDeVuelta = puertaPasilloSurEsteAntesala, llaveRequerida = llaveNula)
+
+// cyan: antesalaKrauser <-> salaKrauser
+const puertaAntesalaKrauser = new Puerta(destino = salaKrauser, puertaDeVuelta = puertaKrauserAntesala, llaveRequerida = llaveNula)
+const puertaKrauserAntesala = new Puerta(destino = antesalaKrauser, puertaDeVuelta = puertaAntesalaKrauser, llaveRequerida = llaveNula)
     
 
   
