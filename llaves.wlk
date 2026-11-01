@@ -1,4 +1,5 @@
 import maquinaDeEstados.*
+import mapas.*
 class Llave {
     const nombre
     method nombre() = nombre
@@ -8,11 +9,18 @@ class LlaveReCogible {
     const estadoAsociado
     const posicion
     const imagen
-
-    method position() = posicion
+    const nombre
+    method nombre() = nombre 
     method image() = imagen
+    method position() = posicion  
 
-    method recoger() {
+   var recogido = false
+    method recogido() = recogido
+    method alPisar() {
+        recogido = true
+        self.recoger()
+    }
+     method recoger() {
         juego.cambiarEstado(estadoAsociado)
     }
 }
@@ -24,6 +32,6 @@ const llaveIglesia = new Llave(nombre = "llave iglesia")
 const llavePelado = new Llave(nombre = "llave pelada")
 const llaveEnano = new Llave(nombre = "llave enana")
 const llaveKrauser = new Llave(nombre = "llave Krauser")
-const llavePreEnano1 = new LlaveReCogible(posicion = game.at(21,4), imagen = "llave_1.png", estadoAsociado = llaveEnano1Recogida) 
-const llavePreEnano2 = new LlaveReCogible(posicion = game.at(4,8), imagen = "llave_1.png", estadoAsociado = llaveEnano2Recogida) 
-const llavePreGordo = new LlaveReCogible(posicion = game.at(4,2), imagen = "llave_2.png", estadoAsociado = llaveGordoRecogida)
+const llavePreEnano1 = new LlaveReCogible(nombre = "llave preenano1",posicion = game.at(4,8), imagen = "llave_1.png", estadoAsociado = llaveEnano1Recogida) 
+const llavePreEnano2 = new LlaveReCogible(nombre = "llave preenano2", posicion = game.at(20, 12), imagen = "llave_1.png", estadoAsociado = llaveEnano2Recogida) 
+const llavePreGordo = new LlaveReCogible(nombre = "llave pregordo", posicion = game.at(4,2), imagen = "llave_2.png", estadoAsociado = llaveGordoRecogida)

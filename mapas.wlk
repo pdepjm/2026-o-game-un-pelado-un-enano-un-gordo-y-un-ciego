@@ -7,6 +7,8 @@ import jefePelado.*
 import jefeEnano.*
 import jefeKrauser.*
 import emboscadaPueblo.*
+import armas.*
+import llaves.*
 class Pared {
     const posicion
 
@@ -14,6 +16,7 @@ class Pared {
     method image() = "hud_fondo.png"
     method estaVivo() = false
 }
+
 
 class Pozo {
     const posicion
@@ -28,8 +31,9 @@ class Sala {
     const jefe
     const paredes = []
     const pozos = []
-
+    const items = []
     const zombisAleatorios
+    const bloqueosInvisibles = []
 
     method jefe() = jefe
 
@@ -82,9 +86,15 @@ class Sala {
                 } else if (c == "4") {
                     puerta4.position(pos)
                     game.addVisual(puerta4)
+                } else if (c == "I") {
+                    bloqueosInvisibles.add(pos)
                 }
             })
         })
+       items.forEach({ i =>
+    if (!game.hasVisual(i)) { game.addVisual(i) }
+    mapa.agregarItem(i)
+})
     }
 
     method descargar() {
@@ -96,10 +106,12 @@ class Sala {
         game.removeVisual(puerta4)
 
         paredes.clear()
+        pozos.clear()
+        bloqueosInvisibles.clear()
     }
 
-
-    method hayPared(pos) = paredes.any({ p => p.position() == pos })
+    method sacarItem(item) { items.remove(item) }
+    method hayPared(pos) = paredes.any({ p => p.position() == pos })|| bloqueosInvisibles.contains(pos)
     method puertaEn(pos) = 
         if (puerta1 != vacio && puerta1.position() == pos) puerta1
         else if (puerta2 != vacio && puerta2.position() == pos) puerta2
@@ -115,10 +127,10 @@ class Sala {
     }
 
     method recorridoPerimetral() {
-    const xMin = 1
-    const xMax = diseno.first().length() - 2
-    const yMin = alturaInterfaz + 1
-    const yMax = alturaInterfaz + diseno.size() - 2
+    const xMin = 2
+    const xMax = diseno.get(2).length() - 3   
+    const yMin = alturaInterfaz + 2
+    const yMax = alturaInterfaz + diseno.size() - 3
 
     const ruta = []
     (xMin..xMax).forEach({ x => ruta.add(game.at(x, yMin)) })                              // abajo, de izq. a der.
@@ -161,10 +173,18 @@ method alPisar(pos) {
     if (puerta != vacio) {
         if (!salaActual.puertaBloqueadaEn(pos)) { self.cruzar(puerta) }
     }
-    const items = itemsEnSuelo.filter({ i => i.position() == pos })
-        items.forEach({ i =>i.alPisar() itemsEnSuelo.remove(i)})
+    const recogidos = itemsEnSuelo.filter({ i => i.position() == pos })
+    recogidos.forEach({ i =>
+        itemsEnSuelo.remove(i)
+        salaActual.sacarItem(i)
+        game.removeVisual(i)
+        i.alPisar()
+    })
 }
-    method agregarItem(item) { itemsEnSuelo.add(item) }
+
+    method agregarItem(item) {
+    if (!itemsEnSuelo.contains(item)) { itemsEnSuelo.add(item) }
+}
 
     method cruzar(puerta) {
     const destino = puerta.destino()
@@ -172,11 +192,12 @@ method alPisar(pos) {
     spawner.limpiar()
 
     salaActual.jefe().desaparecer()
-
+    itemsEnSuelo.forEach({ i => game.removeVisual(i) })
+    itemsEnSuelo.clear()
     salaActual.descargar()
     salaActual = destino
     salaActual.cargar()
-
+    
     personaje.position(salaActual.entradaDe(puerta.puertaDeVuelta()))
 
     salaActual.jefe().aparecer()
@@ -251,9 +272,9 @@ const pueblo = new Sala(diseno = [
     puerta4 = puertaPuebloEntradaCastillo) //odio que sea un nombre tan largo, pero este chiste ya lo hice y nadie lo borró, así que no voy a volver a hacer lo mismo porque eso sería desconsiderado de mi parte y no me parece que tenga que ser de esta manera para el equipo de ayudantes de la cursada de Paradigmas de Programación, ya que ellos han sido muy buenas personas y buenos catedráticos, los quiero mucho Atte: Lechuza-N
 
 const iglesia = new Sala(diseno = [
-        "HHHHHHHHHHHHHHHHHHHHHHH",
-        "HHHHHHHHHHHHHHHHHHHHHHH",
-        "HHHHHHHHHHHHHHHHHHHHHHH",
+        "HHHHHHHHHHHHHHHHHHHHHHHHHH",
+        "HHHHHHHHHHHHHHHHHHHHHHHHHH",
+        "HHHHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHH             HHHHHHH",
         "HHHHHH             HHHHHHH",
         "HHHHHH             HHHHHHH",
@@ -265,8 +286,8 @@ const iglesia = new Sala(diseno = [
         "HHHHHH             HHHHHHH",
         "HHHHHH             HHHHHHH",
         "HHHHHH             HHHHHHH",
-        "HHHHHH      1      HHHHHHH",
-        "HHHHHH             HHHHHHHH"
+        "HHHHHHHHHHHH1HHHHHHHHHHHHH",
+        "HHHHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
     zombisAleatorios = false,
@@ -277,9 +298,9 @@ const iglesia = new Sala(diseno = [
 )
 
 const salaJefePelado = new Sala(diseno = [
-        "HHHHHHHHHHHHHHHHHHHH",
-        "HHHHHHHHHHHHHHHHHHHH",
-        "HHHHHH 1           HHHHHHHH",
+        "HHHHHHHHHHHHHHHHHHHHHHHHHHH",
+        "HHHHHH1HHHHHHHHHHHHHHHHHHHH",
+        "HHHHHH             HHHHHHHH",
         "HHHHHH             HHHHHHHH",
         "HHHHHH             HHHHHHHH",
         "HHHHHH             HHHHHHHH",
@@ -395,6 +416,7 @@ const salaLlave1 =new Sala(
     ],
     jefe = jefeNulo,
     zombisAleatorios = true,
+    items = [llavePreEnano1],
     puerta1 = puertaLLaveEnano1Lobby,
     puerta2 = vacio,
     puerta3 = vacio,
@@ -406,21 +428,22 @@ const salaLlave2 =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HH1                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
+        "HHHI     III       I HHH",
+        "HHH   I  I  I IIIIII HHH",
+        "HHH II   II     I  I HHH",
+        "HHHIIII I  III     I HHH",
+        "HH1  I      I  II I  HHH",
+        "HHH I IIIII     I I  HHH",
+        "HHH I       I I I    HHH",
+        "HHH IIII IIIIIIIIIII HHH",
+        "HHH        I       I HHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
     zombisAleatorios = true,
+    items = [llavePreEnano2],
     puerta1 = puertaLLaveEnano2Lobby,
     puerta2 = vacio,
     puerta3 = vacio,
@@ -456,23 +479,23 @@ const salaJefeEnano =new Sala(
 const salaPasillo0 =new Sala(
     diseno = [
         "HHHHHHHHHHHHHHHHHHHHHHHHH",
-        "HHH                  HHH",
-        "HH2                  3HH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
+        "HHHHHHHHH      HHHHHHHHH",
+        "HHHHHHHH2      3HHHHHHHH",
+        "HHHHHHHHH      HHHHHHHHH",
+        "HHHHHHHHH      HHHHHHHHH",
+        "HHHHHHHHH      HHHHHHHHH",
+        "HHHHHHHHH      HHHHHHHHH",
+        "HHHHHHHHH      HHHHHHHHH",
+        "HHHHHHHHH      HHHHHHHHH",
+        "HHHHHHHHH      HHHHHHHHH",
+        "HHHHHHHHH      HHHHHHHHH",
+        "HHHHHHHHH      HHHHHHHHH",
+        "HHHHHHHHH      HHHHHHHHH",
+        "HHHHHHHHH      HHHHHHHHH",
         "HHHHHHHHHHH1HHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
-    zombisAleatorios = false,
+    zombisAleatorios = true,
     puerta1 = puertaPasillo0JefeEnano,
     puerta2 = puertaPasillo0Biblioteca,
     puerta3 = puertaPasillo0Pasillo1,
@@ -482,22 +505,23 @@ const bibiloteca =new Sala(
     diseno = [
         "HHHHHHHHHHHHHHHHHHHHHHHHH",
         "HHH                  HHH",
-        "HHH       HHHH       HHH",
-        "HHH       HHHH       1HH",
-        "HHH       HHHH       HHH",
+        "HHH   HHHH           HHH",
+        "HHH   HHHH           1HH",
+        "HHH   HHHH           HHH",
         "HHH                  HHH",
-        "HHH          HHHHHHHHHHH",
-        "HHH          HHHHHHHHHHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHHHHHHH             HHH",
-        "HHHHHHHH            HHH",
+        "HHH      HHHHHHHHHHHHHHH",
+        "HHH      HHHHHHHHHHHHHHH",
         "HHH                  HHH",
         "HHH                  HHH",
-        "HHHHHHHHHHH1HHHHHHHHHHHH"
+        "HHHHHHHHHHHHHHHH     HHH",
+        "HHHHHHHHHHHHHHHH     HHH",
+        "HHH                  HHH",
+        "HHH                  HHH",
+        "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
-    zombisAleatorios = false,
+    zombisAleatorios = true,
+    items = [llavePreGordo],
     puerta1 = puertaBibliotecaPasillo0,
     puerta2 = vacio,
     puerta3 = vacio,
@@ -523,7 +547,7 @@ const salaPasillo1 =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
-    zombisAleatorios = false,
+    zombisAleatorios = true,
     puerta1 = puertaPasillo1Pasillo0,
     puerta2 = puertaPasillo1Pasillo2,
     puerta3 = puertaPasillo1SalaEscopeta,
@@ -536,12 +560,12 @@ const salaEscopeta =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HH1                   HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
-        "HHH                  HHH",
+        "HHH     HHHHHHHHHHHHHHHHH",
+        "HHH     HHHHHHHHHHHHHHHHH",
+        "HH1     HHHHHHHHHHHHHHHHH",
+        "HHH     HHHHHHHHHHHHHHHHH",
+        "HHH     HHHHHHHHHHHHHHHHH",
+        "HHH     HHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
@@ -550,6 +574,7 @@ const salaEscopeta =new Sala(
     ],
     jefe = jefeNulo,
     zombisAleatorios = false,
+    items = [itemEscopeta],
     puerta1 = puertaSalaEscopetaPasillo1,
     puerta2 = vacio,
     puerta3 = vacio,
@@ -576,7 +601,7 @@ const salaPasillo2 =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
-    zombisAleatorios = false,
+    zombisAleatorios = true,
     puerta1 = puertaPasillo2Pasillo1,
     puerta2 = puertaPasillo2JefeGordo,
     puerta3 = vacio,

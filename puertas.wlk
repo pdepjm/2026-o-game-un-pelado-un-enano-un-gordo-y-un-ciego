@@ -8,7 +8,7 @@ class Puerta {
     const destino
     const puertaDeVuelta
     const llaveRequerida
-
+    method estaVivo() = false
     method estaTrabada() = juego.existeLlave(llaveRequerida)
 
     method destino() = destino
@@ -16,7 +16,12 @@ class Puerta {
     method position(nuevaPos) {posicion = nuevaPos}
     method position() = posicion
 }
+class PuertaDobleLlave inherits Puerta {
+    const segundaLlaveRequerida
 
+    override method estaTrabada() =
+        super() && juego.existeLlave(segundaLlaveRequerida)
+}
     const vacio = new Puerta(
         destino = salaVacia,
         puertaDeVuelta = vacio,
@@ -48,7 +53,7 @@ class Puerta {
     const puertaPuebloMuelle = new Puerta(
         destino = muelle,
         puertaDeVuelta = puertaMuellePueblo,
-        llaveRequerida = llaveNula
+        llaveRequerida = llaveIglesia
     )
     const puertaMuellePueblo = new Puerta(
         destino = pueblo,
@@ -59,7 +64,7 @@ class Puerta {
     const puertaPuebloEntradaCastillo = new Puerta(
         destino = entradaCastillo,
         puertaDeVuelta = puertaEntradaCastilloPueblo,
-        llaveRequerida = llavePelado
+        llaveRequerida = llaveIglesia
     )
     const puertaEntradaCastilloPueblo = new Puerta(
         destino = pueblo,
@@ -94,7 +99,7 @@ class Puerta {
     const puertaEntradaCastilloCastillo = new Puerta(
         destino = lobbyCastillo,
         puertaDeVuelta = puertaCastilloEntradaCastillo,
-        llaveRequerida = llaveNula
+        llaveRequerida = llavePelado
     )
     const puertaCastilloEntradaCastillo = new Puerta(
         destino = entradaCastillo,
@@ -126,17 +131,17 @@ class Puerta {
         llaveRequerida = llaveNula
     )
 
-        const puertaLobbyJefeEnano = new Puerta(
-            destino = salaJefeEnano,
-            puertaDeVuelta = puertaJefeEnanoLobby,
-            llaveRequerida = llaveNula
-        )
-
+    const puertaLobbyJefeEnano = new PuertaDobleLlave(
+       destino = salaJefeEnano,
+       puertaDeVuelta = puertaJefeEnanoLobby,
+       llaveRequerida = llaveNula,
+       segundaLlaveRequerida = llaveNula
+   )
         
         const puertaJefeEnanoLobby = new Puerta(
             destino = lobbyCastillo,
             puertaDeVuelta = puertaLobbyJefeEnano,
-            llaveRequerida = llaveNula
+            llaveRequerida = llaveEnano
         )
 
         const puertaJefeEnanoPasillo0 = new Puerta(
@@ -195,7 +200,7 @@ class Puerta {
 
         const puertaPasillo2Pasillo1 = new Puerta(
             destino = salaPasillo1,
-            puertaDeVuelta = puertaPasillo2Pasillo1,
+            puertaDeVuelta = puertaPasillo1Pasillo2,
             llaveRequerida = llaveNula
         )
 

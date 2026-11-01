@@ -38,12 +38,12 @@ const puebloCompletado = new Estado (
 )
 
 const peladoDerrotado = new Estado (
-    sala = entradaCastillo,
+    sala = salaJefePelado,
     llaveOtorgada = llavePelado
 )
 
 const enanoDerrotado = new Estado (
-    sala = entradaCastillo,  //cambiar cuando se tenga la sala
+    sala = salaJefeEnano,
     llaveOtorgada = llaveEnano
 )
 
@@ -63,7 +63,7 @@ const llaveEnano2Recogida = new Estado(
 )
 const llaveGordoRecogida = new Estado(
     sala = bibiloteca,
-    llaveOtorgada = llavePreEnano2
+    llaveOtorgada = llavePreGordo
 )
 
 const gordoDerrotado = new Estado (
@@ -72,7 +72,7 @@ const gordoDerrotado = new Estado (
 )
 
 const ciegoDerrotado = new Estado (
-    sala = salaVacia,  //cambiar cuando se tenga la sala
+    sala = salaKrauser,  
     llaveOtorgada = llaveNula
 )
 

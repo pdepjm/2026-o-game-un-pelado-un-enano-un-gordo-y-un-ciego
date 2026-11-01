@@ -3,6 +3,7 @@ import mapas.*
 import personaje.*
 import movimiento.*
 import jefePelado.*
+import interfaz.*
 
 /*
     ADVERTENCIA:
@@ -218,6 +219,7 @@ object inventario{
     var armaElegida = 0
 
     method aniadirArma(arma){
+        if (!listaInventario.contains(arma))
         listaInventario.add(arma)
     }
     method cambiarArma(){
@@ -293,4 +295,10 @@ class ItemCorazon {
         personaje.curar(curacion)
         game.removeVisual(self)
     }
+}
+
+object itemEscopeta {
+    method position() = game.at(7, 8)
+    method image() = "escopeta_suelo.png"
+    method alPisar() { inventario.aniadirArma(escopeta) }
 }

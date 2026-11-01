@@ -4,10 +4,11 @@ import personaje.*
 import movimiento.*
 import enemigo.*
 import maquinaDeEstados.*
+import llaves.*
 
 
 object jefeEnano {
-    var posicion = game.at(11, 7)
+    var posicion = game.at(11, 5)
     var vida = 6
     var estado = estadoClones
     const clones = []
@@ -37,11 +38,11 @@ method detenerClones() { self.eliminarClones() }
 
 
 method aparecer() {
-    if (!juego.existeLlave(llaves.llaveEnano)){
+    if (!juego.existeLlave(llaveEnano)){
         vida = 6
         invulnerable = false
         cooldownId += 1
-        ruta = entradaCastillo.recorridoPerimetral()
+        ruta = salaJefeEnano.recorridoPerimetral()
         indice = 0
         posicion = ruta.get(0)
         enEscena = true
@@ -61,7 +62,7 @@ method desaparecer() {
     }
 }
 method correr() {
-    if (self.estaVivo() && mapa.salaActual() == entradaCastillo) {
+    if (self.estaVivo() && mapa.salaActual() == salaJefeEnano) {
         estado.alCorrer(self)
     }
 }
@@ -125,7 +126,7 @@ method detenerTeletransporte() {
     game.removeTickEvent("teletransporteEnano")
 }
 method teletransportar() {
-    if (self.estaVivo() && mapa.salaActual() == entradaCastillo) {
+    if (self.estaVivo() && mapa.salaActual() == salaJefeEnano) {
         const origen = posicion
         posicion = spawner.posicionAleatoria()
         spawner.crearZombieEn(origen)
