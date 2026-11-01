@@ -197,9 +197,9 @@ const cuchillo = new Arma(
 
 const revolver = new Arma(
     nombre = "revolver",
-    alcance = 5,
+    alcance = 7,
     velProyectil = 4,
-    tiempoPausa = 150,
+    tiempoPausa = 350,
     imgSeleccionado ="revolver_seleccionado.png",
     imgNoSeleccionado = "revolver_noseleccionado.png"
 )

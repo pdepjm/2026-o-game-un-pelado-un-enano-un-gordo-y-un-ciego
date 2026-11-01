@@ -48,7 +48,7 @@ class Puerta {
     const puertaPuebloMuelle = new Puerta(
         destino = muelle,
         puertaDeVuelta = puertaMuellePueblo,
-        llaveRequerida = llaveEnano
+        llaveRequerida = llaveNula
     )
     const puertaMuellePueblo = new Puerta(
         destino = pueblo,
@@ -64,7 +64,7 @@ class Puerta {
     const puertaEntradaCastilloPueblo = new Puerta(
         destino = pueblo,
         puertaDeVuelta = puertaPuebloEntradaCastillo,
-        llaveRequerida = llaveEnano
+        llaveRequerida = llaveNula
     )
 
     const puertaIglesiaPelado = new Puerta(
@@ -89,8 +89,10 @@ class Puerta {
         llaveRequerida = llaveNula
     )
 
+
+    //Puertas del castillo
     const puertaEntradaCastilloCastillo = new Puerta(
-        destino = castillo,
+        destino = lobbyCastillo,
         puertaDeVuelta = puertaCastilloEntradaCastillo,
         llaveRequerida = llaveNula
     )
@@ -100,44 +102,111 @@ class Puerta {
         llaveRequerida = llaveNula
     )
 
-
-//Puertas de la isla
-const puertaCastilloColumnaNorte = new Puerta(destino = columnaNorte, puertaDeVuelta = puertaColumnaNorteCastillo, llaveRequerida = llaveNula)
-const puertaColumnaNorteCastillo = new Puerta(destino = castillo, puertaDeVuelta = puertaCastilloColumnaNorte, llaveRequerida = llaveNula)
-
-const puertaCastilloColumnaSur = new Puerta(destino = columnaSur, puertaDeVuelta = puertaColumnaSurCastillo, llaveRequerida = llaveNula)
-const puertaColumnaSurCastillo = new Puerta(destino = castillo, puertaDeVuelta = puertaCastilloColumnaSur, llaveRequerida = llaveNula)
-
-const puertaColumnaNorteSalaVerde = new Puerta(destino = salaVerde, puertaDeVuelta = puertaSalaVerdeColumnaNorte, llaveRequerida = llaveNula)
-const puertaSalaVerdeColumnaNorte = new Puerta(destino = columnaNorte, puertaDeVuelta = puertaColumnaNorteSalaVerde, llaveRequerida = llaveNula)
-
-const puertaColumnaNortePasilloNorte = new Puerta(destino = pasilloNorte, puertaDeVuelta = puertaPasilloNorteColumnaNorte, llaveRequerida = llaveNula)
-const puertaPasilloNorteColumnaNorte = new Puerta(destino = columnaNorte, puertaDeVuelta = puertaColumnaNortePasilloNorte, llaveRequerida = llaveNula)
-
-const puertaColumnaSurSalaRoja = new Puerta(destino = salaRoja, puertaDeVuelta = puertaSalaRojaColumnaSur, llaveRequerida = llaveNula)
-const puertaSalaRojaColumnaSur = new Puerta(destino = columnaSur, puertaDeVuelta = puertaColumnaSurSalaRoja, llaveRequerida = llaveNula)
-
-const puertaColumnaSurPasilloSurOeste = new Puerta(destino = pasilloSurOeste, puertaDeVuelta = puertaPasilloSurOesteColumnaSur, llaveRequerida = llaveNula)
-const puertaPasilloSurOesteColumnaSur = new Puerta(destino = columnaSur, puertaDeVuelta = puertaColumnaSurPasilloSurOeste, llaveRequerida = llaveNula)
-
-const puertaPasilloNortePasilloCentral = new Puerta(destino = pasilloCentral, puertaDeVuelta = puertaPasilloCentralPasilloNorte, llaveRequerida = llaveNula)
-const puertaPasilloCentralPasilloNorte = new Puerta(destino = pasilloNorte, puertaDeVuelta = puertaPasilloNortePasilloCentral, llaveRequerida = llaveNula)
-
-const puertaPasilloCentralSalaAzul = new Puerta(destino = salaAzul, puertaDeVuelta = puertaSalaAzulPasilloCentral, llaveRequerida = llaveNula)
-const puertaSalaAzulPasilloCentral = new Puerta(destino = pasilloCentral, puertaDeVuelta = puertaPasilloCentralSalaAzul, llaveRequerida = llaveNula)
-
-const puertaPasilloCentralPasilloSurOeste = new Puerta(destino = pasilloSurOeste, puertaDeVuelta = puertaPasilloSurOestePasilloCentral, llaveRequerida = llaveNula)
-const puertaPasilloSurOestePasilloCentral = new Puerta(destino = pasilloCentral, puertaDeVuelta = puertaPasilloCentralPasilloSurOeste, llaveRequerida = llaveNula)
-
-
-const puertaPasilloSurOestePasilloSurEste = new Puerta(destino = pasilloSurEste, puertaDeVuelta = puertaPasilloSurEstePasilloSurOeste, llaveRequerida = llaveNula)
-const puertaPasilloSurEstePasilloSurOeste = new Puerta(destino = pasilloSurOeste, puertaDeVuelta = puertaPasilloSurOestePasilloSurEste, llaveRequerida = llaveNula)
-
-const puertaPasilloSurEsteAntesala = new Puerta(destino = antesalaKrauser, puertaDeVuelta = puertaAntesalaPasilloSurEste, llaveRequerida = llaveNula)
-const puertaAntesalaPasilloSurEste = new Puerta(destino = pasilloSurEste, puertaDeVuelta = puertaPasilloSurEsteAntesala, llaveRequerida = llaveNula)
-
-const puertaAntesalaKrauser = new Puerta(destino = salaKrauser, puertaDeVuelta = puertaKrauserAntesala, llaveRequerida = llaveNula)
-const puertaKrauserAntesala = new Puerta(destino = antesalaKrauser, puertaDeVuelta = puertaAntesalaKrauser, llaveRequerida = llaveNula)
-    
-
+    const puertaLobbyLLaveEnano1 =new Puerta(
+        destino = salaLlave1,
+        puertaDeVuelta = puertaLLaveEnano1Lobby,
+        llaveRequerida = llaveNula
+    )
   
+      const puertaLLaveEnano1Lobby =new Puerta(
+        destino = lobbyCastillo,
+        puertaDeVuelta = puertaLobbyLLaveEnano1,
+        llaveRequerida = llaveNula
+    )
+    
+        const puertaLobbyLLaveEnano2 =new Puerta(
+        destino = salaLlave2,
+        puertaDeVuelta = puertaLLaveEnano2Lobby,
+        llaveRequerida = llaveNula
+    )
+
+       const puertaLLaveEnano2Lobby =new Puerta(
+        destino = lobbyCastillo,
+        puertaDeVuelta = puertaLobbyLLaveEnano2,
+        llaveRequerida = llaveNula
+    )
+
+        const puertaLobbyJefeEnano = new Puerta(
+            destino = salaJefeEnano,
+            puertaDeVuelta = puertaJefeEnanoLobby,
+            llaveRequerida = llaveNula
+        )
+
+        
+        const puertaJefeEnanoLobby = new Puerta(
+            destino = lobbyCastillo,
+            puertaDeVuelta = puertaLobbyJefeEnano,
+            llaveRequerida = llaveNula
+        )
+
+        const puertaJefeEnanoPasillo0 = new Puerta(
+            destino = salaPasillo0,
+            puertaDeVuelta = puertaPasillo0JefeEnano,
+            llaveRequerida = llaveEnano
+        )
+        
+        const puertaPasillo0JefeEnano = new Puerta(
+            destino = salaJefeEnano,
+            puertaDeVuelta = puertaJefeEnanoPasillo0,
+            llaveRequerida = llaveNula
+        )
+
+        const puertaPasillo0Biblioteca = new Puerta(
+            destino = bibiloteca,
+            puertaDeVuelta = puertaBibliotecaPasillo0,
+            llaveRequerida = llaveNula
+        )
+
+        const puertaBibliotecaPasillo0 = new Puerta(
+                destino = salaPasillo0,
+                puertaDeVuelta = puertaPasillo0Biblioteca,
+                llaveRequerida = llaveNula
+        )
+
+        const puertaPasillo0Pasillo1 = new Puerta(
+                destino = salaPasillo1,
+                puertaDeVuelta = puertaPasillo1Pasillo0,
+                llaveRequerida= llaveNula
+        )
+
+        const puertaPasillo1Pasillo0 = new Puerta(
+            destino = salaPasillo0,
+            puertaDeVuelta = puertaPasillo0Pasillo1,
+            llaveRequerida = llaveNula
+        )
+        
+        const puertaPasillo1SalaEscopeta = new Puerta(
+            destino = salaEscopeta,
+            puertaDeVuelta = puertaSalaEscopetaPasillo1,
+            llaveRequerida = llaveNula
+        )
+
+        const puertaSalaEscopetaPasillo1 = new Puerta(
+            destino = salaPasillo1,
+            puertaDeVuelta = puertaPasillo1SalaEscopeta,
+            llaveRequerida = llaveNula
+        )
+
+         const puertaPasillo1Pasillo2 = new Puerta(
+            destino = salaPasillo2,
+            puertaDeVuelta = puertaPasillo2Pasillo1,
+            llaveRequerida = llaveNula
+        )
+
+        const puertaPasillo2Pasillo1 = new Puerta(
+            destino = salaPasillo1,
+            puertaDeVuelta = puertaPasillo2Pasillo1,
+            llaveRequerida = llaveNula
+        )
+
+        const puertaPasillo2JefeGordo = new Puerta(
+            destino = salaJefeGordo,
+            puertaDeVuelta = puertaJefeGordoPasillo2,
+            llaveRequerida = llaveNula
+        )
+
+        const puertaJefeGordoPasillo2 = new Puerta(
+            destino = salaPasillo2,
+            puertaDeVuelta = puertaPasillo2JefeGordo,
+            llaveRequerida = llaveNula
+        )

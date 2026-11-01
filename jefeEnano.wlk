@@ -7,7 +7,7 @@ import maquinaDeEstados.*
 
 
 object jefeEnano {
-    var posicion = game.at(12, 8)
+    var posicion = game.at(11, 7)
     var vida = 6
     var estado = estadoClones
     const clones = []

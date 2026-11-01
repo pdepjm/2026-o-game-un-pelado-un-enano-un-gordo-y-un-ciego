@@ -52,6 +52,20 @@ const krauserDerrotado = new Estado (
     llaveOtorgada = llaveKrauser
 )
 
+const llaveEnano1Recogida = new Estado(
+    sala = salaLlave1,
+    llaveOtorgada = llavePreEnano1
+)
+
+const llaveEnano2Recogida = new Estado(
+    sala = salaLlave2,
+    llaveOtorgada = llavePreEnano2
+)
+const llaveGordoRecogida = new Estado(
+    sala = bibiloteca,
+    llaveOtorgada = llavePreEnano2
+)
+
 const gordoDerrotado = new Estado (
     sala = salaVacia,  //cambiar cuando se tenga la sala
     llaveOtorgada = llaveNula

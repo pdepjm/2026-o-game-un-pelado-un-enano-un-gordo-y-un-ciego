@@ -20,7 +20,7 @@ object partida {
             mapa.empezarEn(inicio, game.center())
 
             game.addVisual(personaje)
-            spawner.crearZombiesAleatorios()
+           
 
             listaFondoHUD.forEach({ a => game.addVisual(a) })
             listaCorazones.forEach({ a => game.addVisual(a) })

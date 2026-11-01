@@ -122,7 +122,7 @@ object spawner {
             fuerzaEmpuje = 1,
             posicion = pos,
             salud = 3,
-            velocidad = 1
+            velocidad = 2
         )
 
         enemigos.add(nuevo)
@@ -139,3 +139,22 @@ object spawner {
     }
 }
 
+const rapidin = new Enemigo(
+    nombre = "rapidin",
+    imagen = "rapidin",
+    danio = 1,
+    fuerzaEmpuje = 2,
+    velocidad = 5,
+    salud = 1,
+    posicion = game.at(1,1)
+)
+
+const tanke = new Enemigo(
+    nombre = "tanke",
+    imagen = "tanke",
+    danio = 2,
+    fuerzaEmpuje = 4,
+    velocidad = 1,
+    salud = 6,
+    posicion = game.at(1,1)
+)
