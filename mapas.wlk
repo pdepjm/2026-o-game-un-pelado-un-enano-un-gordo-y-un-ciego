@@ -348,8 +348,8 @@ const entradaCastillo = new Sala(diseno = [
     puerta3 = vacio,
     puerta4 = vacio
 )
-// Hall de entrada (lima: viene de entradaCastillo / violeta: arriba / naranja: abajo)
-const castillo = new Sala(diseno = [
+
+const isla = new Sala(diseno = [
     "HHHHHHHHHHHHHHHHHHHHHHHH",
     "HHHHHHHHHHHHHHHHHHHHHHHH",
     "HHHHHHHHHHHHHHH2HHHHHHHH",
@@ -649,7 +649,7 @@ const salaKrauser = new Sala(diseno = [
     puerta4 = vacio)
 //??????????????????????
 
-const isla = salaVacia
+const castillo = salaVacia
 //??????????????????????
 
 // ================= FONDO =================
