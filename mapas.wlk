@@ -37,6 +37,8 @@ class Sala {
     const bloqueosInvisibles = []
     const rapidinesAleatorios = false
     method rapidinesAleatorios() = rapidinesAleatorios
+    const fondo = "fondo_nivel.png"
+    method fondo() = fondo
 
     method jefe() = jefe
 
@@ -280,23 +282,24 @@ const pueblo = new Sala(diseno = [
 
 const iglesia = new Sala(diseno = [
         "HHHHHHHHHHHHHHHHHHHHHHHHHH",
-        "HHHHHHHHHHHHHHHHHHHHHHHHHH",
-        "HHHHHHHHHHHHHHHHHHHHHHHHHH",
-        "HHHHHH    HHHHH    HHHHHHH",
+        "HHHHHHHHHHHHIHHHHHHHHHHHHH",
+        "HHHHHHHHHHHHIHHHHHHHHHHHHH",
+        "HHHHHH    IIIII    HHHHHHH",
         "HHHHHH             HHHHHHH",
-        "HHHHHHHHHH    HHHHHHHHHHHH",
+        "HHHHHHIIII    IIIIIHHHHHHH",
         "HHHHHH             HHHHHHH",
-        "HHHHHHHHHH    HHHHHHHHHHHH",
+        "HHHHHHIIII    IIIIIHHHHHHH",
         "HHHHHH      2      HHHHHHH",
-        "HHHHHHHHHH    HHHHHHHHHHHH",
+        "HHHHHHIIII    IIIIIHHHHHHH",
         "HHHHHH             HHHHHHH",
-        "HHHHHHHHHH    HHHHHHHHHHHH",
+        "HHHHHHIIII    IIIIIHHHHHHH",
         "HHHHHH             HHHHHHH",
         "HHHHHH             HHHHHHH",
         "HHHHHHHHHHHH1HHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
+    fondo = fondoIglesia,
     zombisAleatorios = false,
     puerta1 = puertaIglesiaPueblo,
     puerta2 = puertaIglesiaPelado,
@@ -322,6 +325,7 @@ const salaJefePelado = new Sala(diseno = [
         "HHHHHH             HHHHHHHH"
     ],
     jefe = jefePelado,
+    fondo = fondoPelado,
    zombisAleatorios = false,
     puerta1 = puertaPeladoIglesia,
     puerta2 = vacio,
@@ -395,6 +399,7 @@ const lobbyCastillo = new Sala(diseno = [
         "HHHHHHHHHHHH1HHHHHHHHHHH"
     ],
     jefe = jefeNulo,
+    fondo = fondoCastillo,
     zombisAleatorios = false,
     puerta1 = puertaCastilloEntradaCastillo,
     puerta2 = puertaLobbyLLaveEnano1,
@@ -422,6 +427,7 @@ const salaLlave1 =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
+    fondo = fondoCastillo,
     zombisAleatorios = true,
     items = [llavePreEnano1],
     puerta1 = puertaLLaveEnano1Lobby,
@@ -435,20 +441,21 @@ const salaLlave2 =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
-        "HHHI     III       I HHH",
-        "HHH   I  I  I IIIIII HHH",
-        "HHH II   II     I  I HHH",
-        "HHHIIII I  III     I HHH",
-        "HH1  I      I  II I  HHH",
-        "HHH I IIIII     I I  HHH",
-        "HHH I       I I I    HHH",
-        "HHH IIII IIIIIIIIIII HHH",
-        "HHH        I       I HHH",
+        "HHHH     HHH       H HHH",
+        "HHH   H  H  H HHHHHH HHH",
+        "HHH HH   HH     H  H HHH",
+        "HHHHHHH H  HHH     H HHH",
+        "HH1  H      H  HH H  HHH",
+        "HHH H HHHHH     H H  HHH",
+        "HHH H       H H H    HHH",
+        "HHH HHHH HHHHHHHH HH HHH",
+        "HHH        H       H HHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
+    fondo = fondoLaberinto,
     zombisAleatorios = true,
     items = [llavePreEnano2],
     puerta1 = puertaLLaveEnano2Lobby,
@@ -476,6 +483,7 @@ const salaJefeEnano =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeEnano,
+    fondo = fondoCastillo,
     zombisAleatorios = false,
     puerta1 = puertaJefeEnanoLobby,
     puerta2 = puertaJefeEnanoPasillo0,
@@ -502,6 +510,7 @@ const salaPasillo0 =new Sala(
         "HHHHHHHHHHH1HHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
+    fondo = fondoCastillo,
     zombisAleatorios = true,
     puerta1 = puertaPasillo0JefeEnano,
     puerta2 = puertaPasillo0Biblioteca,
@@ -527,6 +536,7 @@ const bibiloteca =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
+    fondo = fondoPelado,
     zombisAleatorios = true,
     rapidinesAleatorios = true,
     items = [llavePreGordo],
@@ -555,6 +565,7 @@ const salaPasillo1 =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
+    fondo = fondoCastillo,
     zombisAleatorios = true,
     puerta1 = puertaPasillo1Pasillo0,
     puerta2 = puertaPasillo1Pasillo2,
@@ -581,6 +592,7 @@ const salaEscopeta =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
+    fondo = fondoCastillo,
     zombisAleatorios = false,
     items = [itemEscopeta],
     puerta1 = puertaSalaEscopetaPasillo1,
@@ -609,6 +621,7 @@ const salaPasillo2 =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
+    fondo = fondoCastillo,
     zombisAleatorios = true,
     rapidinesAleatorios = false,
     puerta1 = puertaPasillo2Pasillo1,
@@ -636,6 +649,7 @@ const salaJefeGordo =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeGordo,
+    fondo = fondoCastillo,
     zombisAleatorios = false,
     puerta1 = puertaJefeGordoPasillo2,
     puerta2 = vacio,
@@ -675,6 +689,11 @@ const salaSandler = salaVacia
 const antesalaKrauser = salaVacia
 const isla = salaVacia
 const fondo = "fondo_nivel.png"
+const fondoCastillo = "fondo_castillo.png"
+const fondoIglesia = "fondo_iglesia.png"
+const fondoLaberinto = "fondo_laberinto.png"
+const fondoPelado = "fondo_pelado.png"
+const fondoLobby = "fondoLobby.png"
 //??????????????????????
 
 // ================= FONDO =================
