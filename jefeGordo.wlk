@@ -129,9 +129,9 @@ object jefeGordo {
  
     method recibirDanio(cantidad) {
         const conEscopeta = inventario.armaSeleccionada() == escopeta
-        if (estado == "comiendo") {
-            self.stunear()                                     // cancela la curación
-        } else if (estado == "embistiendo" && conEscopeta && !faseFinal) {
+        if (estado == "lastrando") {
+            self.stunear()
+        } else if (estado == "rodando" && conEscopeta && !faseFinal) {
             self.stunear()
         } else if (estado == "stun" && !conEscopeta) {
             self.perderVida(cantidad)

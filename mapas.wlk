@@ -37,8 +37,6 @@ class Sala {
     const bloqueosInvisibles = []
     const rapidinesAleatorios = false
     method rapidinesAleatorios() = rapidinesAleatorios
-    const fondo = "fondo_nivel.png"
-    method fondo() = fondo
 
     method jefe() = jefe
 
@@ -218,9 +216,6 @@ method alPisar(pos) {
     
 }
 
-const fondoCastillo = "fondo_castillo.png"
-const fondoIglesia = "fondo_iglesia.png"
-const fondoIsla = "fondo_isla.png"
 
 
 // ================= SALAS=================
@@ -302,7 +297,6 @@ const iglesia = new Sala(diseno = [
         "HHHHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
-    fondo = fondoIglesia,
     zombisAleatorios = false,
     puerta1 = puertaIglesiaPueblo,
     puerta2 = puertaIglesiaPelado,
@@ -328,7 +322,6 @@ const salaJefePelado = new Sala(diseno = [
         "HHHHHH             HHHHHHHH"
     ],
     jefe = jefePelado,
-    fondo = fondoIglesia,
    zombisAleatorios = false,
     puerta1 = puertaPeladoIglesia,
     puerta2 = vacio,
@@ -402,7 +395,6 @@ const lobbyCastillo = new Sala(diseno = [
         "HHHHHHHHHHHH1HHHHHHHHHHH"
     ],
     jefe = jefeNulo,
-    fondo = fondoCastillo,
     zombisAleatorios = false,
     puerta1 = puertaCastilloEntradaCastillo,
     puerta2 = puertaLobbyLLaveEnano1,
@@ -431,7 +423,6 @@ const salaLlave1 =new Sala(
     ],
     jefe = jefeNulo,
     zombisAleatorios = true,
-    fondo = fondoCastillo,
     items = [llavePreEnano1],
     puerta1 = puertaLLaveEnano1Lobby,
     puerta2 = vacio,
@@ -459,7 +450,6 @@ const salaLlave2 =new Sala(
     ],
     jefe = jefeNulo,
     zombisAleatorios = true,
-    fondo = fondoCastillo,
     items = [llavePreEnano2],
     puerta1 = puertaLLaveEnano2Lobby,
     puerta2 = vacio,
@@ -487,7 +477,6 @@ const salaJefeEnano =new Sala(
     ],
     jefe = jefeEnano,
     zombisAleatorios = false,
-    fondo = fondoCastillo,
     puerta1 = puertaJefeEnanoLobby,
     puerta2 = puertaJefeEnanoPasillo0,
     puerta3 = vacio,
@@ -514,7 +503,6 @@ const salaPasillo0 =new Sala(
     ],
     jefe = jefeNulo,
     zombisAleatorios = true,
-    fondo = fondoCastillo,
     puerta1 = puertaPasillo0JefeEnano,
     puerta2 = puertaPasillo0Biblioteca,
     puerta3 = puertaPasillo0Pasillo1,
@@ -539,7 +527,6 @@ const bibiloteca =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
-    fondo = fondoIglesia,
     zombisAleatorios = true,
     rapidinesAleatorios = true,
     items = [llavePreGordo],
@@ -568,9 +555,7 @@ const salaPasillo1 =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
-    fondo = fondoCastillo,
     zombisAleatorios = true,
-    rapidinesAleatorios = true,
     puerta1 = puertaPasillo1Pasillo0,
     puerta2 = puertaPasillo1Pasillo2,
     puerta3 = puertaPasillo1SalaEscopeta,
@@ -596,7 +581,6 @@ const salaEscopeta =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
-    fondo = fondoCastillo,
     zombisAleatorios = false,
     items = [itemEscopeta],
     puerta1 = puertaSalaEscopetaPasillo1,
@@ -625,9 +609,8 @@ const salaPasillo2 =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeNulo,
-    fondo = fondoCastillo,
     zombisAleatorios = true,
-    rapidinesAleatorios = true,
+    rapidinesAleatorios = false,
     puerta1 = puertaPasillo2Pasillo1,
     puerta2 = puertaPasillo2JefeGordo,
     puerta3 = vacio,
@@ -653,7 +636,6 @@ const salaJefeGordo =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeGordo,
-    fondo = fondoCastillo,
     zombisAleatorios = false,
     puerta1 = puertaJefeGordoPasillo2,
     puerta2 = vacio,
@@ -680,7 +662,6 @@ const salaKrauser =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeKrauser,
-    fondo = fondoIsla,
     zombisAleatorios = false,
     puerta1 = antesalaKrauser,
     puerta2 = salaSandler,
@@ -693,16 +674,17 @@ const castillo = entradaCastillo
 const salaSandler = salaVacia
 const antesalaKrauser = salaVacia
 const isla = salaVacia
+const fondo = "fondo_nivel.png"
 //??????????????????????
 
 // ================= FONDO =================
 object fondoNivel {
     var imagen = "fondo_nivel.png"
-
     method image() = imagen
     method position() = game.origin()
     method cambiar(nuevaImagen) { imagen = nuevaImagen }
 }
+
 object nivel {
     method cargar() {
         game.addVisual(fondoNivel)
