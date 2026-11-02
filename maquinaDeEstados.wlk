@@ -67,12 +67,12 @@ const llaveGordoRecogida = new Estado(
 )
 
 const gordoDerrotado = new Estado (
-    sala = salaVacia,  //cambiar cuando se tenga la sala
-    llaveOtorgada = llaveNula
+    sala = salaJefeGordo,  
+    llaveOtorgada = llaveGordo
 )
 
 const ciegoDerrotado = new Estado (
     sala = salaKrauser,  
-    llaveOtorgada = llaveNula
+    llaveOtorgada = llaveKrauser
 )
 

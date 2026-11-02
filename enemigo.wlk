@@ -33,7 +33,7 @@ class Enemigo {
     method moverA(pos) {if (self.puedeMoverA(pos)) {posicion = pos}}
 
     method activar() {
-        game.onTick(500, "movimiento" + nombre, { self.perseguir() })
+    game.onTick(1000 / velocidad, "movimiento" + nombre, { self.perseguir() })
     }
 
     
@@ -122,7 +122,7 @@ object spawner {
             fuerzaEmpuje = 1,
             posicion = pos,
             salud = 3,
-            velocidad = 2
+            velocidad = 1
         )
 
         enemigos.add(nuevo)
@@ -137,17 +137,34 @@ object spawner {
         enemigos.filter({ e => e.estaVivo() }).forEach({ e => e.eliminar() })
         enemigos.clear()
     }
+
+    method crearRapidinEn(pos) {
+    contador += 1
+
+    const nuevo = new Enemigo(
+        nombre = "rapidin" + contador,
+        imagen = "rapidin",
+        danio = 1,
+        fuerzaEmpuje = 2,
+        posicion = pos,
+        salud = 1,
+        velocidad = 3
+    )
+
+    enemigos.add(nuevo)
+    game.addVisual(nuevo)
+    nuevo.activar()
+    }
+
+    method crearRapidin() {
+        self.crearRapidinEn(self.posicionAleatoria())
+    }
+
+    method crearRapidinesAleatorios() {
+        (1..[1, 3].anyOne()).forEach({ i => self.crearRapidin() })
+    }
 }
 
-const rapidin = new Enemigo(
-    nombre = "rapidin",
-    imagen = "rapidin",
-    danio = 1,
-    fuerzaEmpuje = 2,
-    velocidad = 5,
-    salud = 1,
-    posicion = game.at(1,1)
-)
 
 const tanke = new Enemigo(
     nombre = "tanke",

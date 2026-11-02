@@ -218,9 +218,11 @@ object inventario{
     const listaInventario = [cuchillo, revolver]
     var armaElegida = 0
 
-    method aniadirArma(arma){
-        if (!listaInventario.contains(arma))
-        listaInventario.add(arma)
+    method aniadirArma(arma) {
+        if (!listaInventario.contains(arma)) {
+            listaInventario.add(arma)
+            game.addVisual(new IconoInventario(arma = arma, indice = listaInventario.size() - 1))
+        }
     }
     method cambiarArma(){
         keyboard.num(1).onPressDo({self.seleccionar(0)})
@@ -244,6 +246,8 @@ object inventario{
     method estaSeleccionada(indice) = armaElegida == indice
     method armas() = listaInventario 
 }
+
+
 
 object loot {
     method tirar(pos) {

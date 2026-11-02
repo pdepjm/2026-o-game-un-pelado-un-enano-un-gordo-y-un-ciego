@@ -3,6 +3,7 @@ object arriba {
     method tecla() = keyboard.up()
     method desde(pos, pasos) = pos.up(pasos)
     method opuesto() = abajo
+    method ejeDeDeslizamiento() = ejeHorizontal
 }
 
 object abajo {
@@ -10,6 +11,7 @@ object abajo {
     method tecla() = keyboard.down()
     method desde(pos, pasos) = pos.down(pasos)
     method opuesto() = arriba
+    method ejeDeDeslizamiento() = ejeHorizontal
 }
 
 object izquierda {
@@ -17,6 +19,7 @@ object izquierda {
     method tecla() = keyboard.left()
     method desde(pos, pasos) = pos.left(pasos)
     method opuesto() = derecha
+    method ejeDeDeslizamiento() = ejeVertical
 }
 
 object derecha {
@@ -24,6 +27,7 @@ object derecha {
     method tecla() = keyboard.right()
     method desde(pos, pasos) = pos.right(pasos)
     method opuesto() = izquierda
+    method ejeDeDeslizamiento() = ejeVertical
 }
 
 object movimiento {
@@ -65,3 +69,14 @@ object movimiento {
         else null
 }
 
+object ejeHorizontal {
+    method haciaPositivo() = derecha
+    method haciaNegativo() = izquierda
+    method coordenada(pos) = pos.x()
+}
+
+object ejeVertical {
+    method haciaPositivo() = arriba
+    method haciaNegativo() = abajo
+    method coordenada(pos) = pos.y()
+}

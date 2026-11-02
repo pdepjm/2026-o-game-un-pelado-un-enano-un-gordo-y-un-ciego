@@ -134,8 +134,8 @@ class PuertaDobleLlave inherits Puerta {
     const puertaLobbyJefeEnano = new PuertaDobleLlave(
        destino = salaJefeEnano,
        puertaDeVuelta = puertaJefeEnanoLobby,
-       llaveRequerida = llaveNula,
-       segundaLlaveRequerida = llaveNula
+       llaveRequerida = llavePreEnano1,
+       segundaLlaveRequerida = llavePreEnano2
    )
         
         const puertaJefeEnanoLobby = new Puerta(
@@ -213,5 +213,5 @@ class PuertaDobleLlave inherits Puerta {
         const puertaJefeGordoPasillo2 = new Puerta(
             destino = salaPasillo2,
             puertaDeVuelta = puertaPasillo2JefeGordo,
-            llaveRequerida = llaveNula
+            llaveRequerida = llaveGordo
         )
