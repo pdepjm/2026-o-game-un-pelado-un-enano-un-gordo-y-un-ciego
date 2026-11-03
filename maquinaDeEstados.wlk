@@ -1,5 +1,6 @@
 import mapas.*
 import llaves.*
+import dialogos.*
 
 object juego {
     var estado = inicio
@@ -10,11 +11,14 @@ object juego {
         estado.agregarLlave()
     }
     method estado() = estado
+
     method existeLlave(llave) = llaves.any({p => p.nombre() == llave.nombre()})
+    
     method agregarLlave(llave) {
         if (!llaves.any({l => l.nombre() == llave.nombre()})) {
             llaves.add(llave)
         }
+        gestorDialogos.actualizar()
     }
 }
 

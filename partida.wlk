@@ -6,6 +6,7 @@ import personaje.*
 import movimiento.*
 import enemigo.*
 import interfaz.*
+import dialogos.*
 
 object partida {
     var iniciada = false

@@ -1,3 +1,4 @@
+import dialogos.*
 object arriba {
     method nombre() = "arriba"
     method tecla() = keyboard.up()
@@ -43,13 +44,16 @@ object movimiento {
 
     // Reemplaza los 4 bloques de activarMovimiento
     method activarTeclas(quien) {
-        self.direcciones().forEach({ dir =>
-            const tick = game.tick(100, { self.mover(quien, dir) }, false)
-            dir.tecla().onPressDo({
-                quien.direccion(dir)
-                tick.start()
-            })
-            dir.tecla().onReleaseDo({ tick.stop() })
+    self.direcciones().forEach({ dir =>
+        const tick = game.tick(100, { self.mover(quien, dir) }, false)
+
+        dir.tecla().onPressDo({
+            gestorDialogos.cerrarDialogo()
+            quien.direccion(dir)
+            tick.start()
+        })
+
+        dir.tecla().onReleaseDo({ tick.stop() })
         })
     }
     // Direcciones hacia el objetivo, la del eje más lejano primero

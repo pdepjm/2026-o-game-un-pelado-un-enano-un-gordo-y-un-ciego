@@ -11,6 +11,7 @@ import emboscadaPueblo.*
 import armas.*
 import llaves.*
 import objetosDestructibles.*
+import dialogos.*
 class Pared {
     const posicion
 
@@ -214,12 +215,21 @@ method alPisar(pos) {
     itemsEnSuelo.forEach({ i => game.removeVisual(i) })
     itemsEnSuelo.clear()
     salaActual.descargar()
+    gestorDialogos.cerrarDialogo()
     salaActual = destino
     salaActual.cargar()
     
     personaje.position(salaActual.entradaDe(puerta.puertaDeVuelta()))
 
     salaActual.jefe().aparecer()
+
+    if (salaActual == iglesia) {
+    gestorDialogos.mostrarCuerda()
+    }
+
+    if (salaActual == lobbyCastillo) {
+    gestorDialogos.mostrarDobleLlave()
+    }
 
     if (salaActual.zombisAleatorios()) {
         spawner.crearZombiesAleatorios()
