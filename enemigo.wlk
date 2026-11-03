@@ -148,7 +148,7 @@ object spawner {
         fuerzaEmpuje = 2,
         posicion = pos,
         salud = 1,
-        velocidad = 3
+        velocidad = 4
     )
 
     enemigos.add(nuevo)

@@ -101,6 +101,10 @@ class Arma {
     method imgNoSeleccionado() = imgNoSeleccionado
     var pausa = false
 
+    method reproducirSonido() {
+        game.sound("disparo_" + nombre + ".mp3").play()
+    }
+
     method vectorDe(dir)=
         if (dir == "arriba") game.at(0, 1)
         else if (dir == "abajo") game.at(0, -1)
@@ -121,6 +125,7 @@ class Arma {
                     posicion = pos
                 ).lanzar()
             }
+            self.reproducirSonido()
         }
     }
 
@@ -183,6 +188,7 @@ class Escopeta inherits Arma {
                     retraso = 100 / velProyectil,
                     posicion = pos
                 ).lanzar()
+                self.reproducirSonido()
             }
         }
     }
@@ -216,6 +222,7 @@ class LanzaPapas inherits Arma {
                     retraso = 100 / velProyectil,
                     posicion = pos
                 ).lanzar()
+                self.reproducirSonido()
             }
         }
     }
@@ -248,7 +255,7 @@ const escopeta = new Escopeta(
     imgNoSeleccionado = "escopeta_noseleccionada.png"
 )
 const lanzaGranadas = new LanzaPapas(
-    nombre = "granada",
+    nombre = "lanzapapas",
     alcance = 5,
     velProyectil = 3,
     tiempoPausa = 800,
@@ -257,7 +264,7 @@ const lanzaGranadas = new LanzaPapas(
 )
 
 object inventario{
-    const listaInventario = [cuchillo, revolver,lanzaGranadas]
+    const listaInventario = [cuchillo, revolver,escopeta,lanzaGranadas]
     var armaElegida = 0
 
     method aniadirArma(arma) {

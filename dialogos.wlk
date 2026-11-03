@@ -11,7 +11,7 @@ object cartelCuerda {
 object cartelDobleLlave {
     method image() = "dialogoDobleLlave.png"
 
-     method position() = game.at(12, 15)
+     method position() = game.at(12, 2)
 }
 
 object gestorDialogos {
