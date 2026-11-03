@@ -130,7 +130,7 @@ object spawner {
         nuevo.activar()
     }
     method crearZombiesAleatorios() {
-        (1..[1, 2].anyOne()).forEach({ i => self.crearZombie() })
+        (1..[1, 3].anyOne()).forEach({ i => self.crearZombie() })
     }
     method hayZombiesVivos() = enemigos.any({ e => e.estaVivo() })
     method limpiar() {
@@ -163,15 +163,29 @@ object spawner {
     method crearRapidinesAleatorios() {
         (1..[1, 3].anyOne()).forEach({ i => self.crearRapidin() })
     }
+    method crearTanke() {
+    self.crearTankeEn(self.posicionAleatoria())
+    }
+
+    method crearTankeEn(pos) {
+        contador += 1
+
+        const nuevo = new Enemigo(
+            nombre = "tanke" + contador,
+            imagen = "tanke",
+            danio = 2,
+            fuerzaEmpuje = 4,
+            posicion = pos,
+            salud = 6,
+            velocidad = 1
+        )
+
+        enemigos.add(nuevo)
+        game.addVisual(nuevo)
+        nuevo.activar()
+    }
+    method crearTankesAleatorios() {
+        (1..[1, 2].anyOne()).forEach({ i => self.crearTanke() })
+    }
 }
 
-
-const tanke = new Enemigo(
-    nombre = "tanke",
-    imagen = "tanke",
-    danio = 2,
-    fuerzaEmpuje = 4,
-    velocidad = 1,
-    salud = 6,
-    posicion = game.at(1,1)
-)

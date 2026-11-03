@@ -80,7 +80,16 @@ class Proyectil {
         }
     }
 }
-
+class ProyectilGranada inherits Proyectil {
+    override method detener() {
+        if (activo) {
+            activo = false
+            game.removeTickEvent("proyectil" + id)
+            game.removeVisual(self)
+            new Explosion(posicion = posicion).explotar()
+        }
+    }
+}
 class Arma {
     const nombre 
     const alcance
@@ -187,6 +196,31 @@ class Escopeta inherits Arma {
         )
 }
 
+class LanzaPapas inherits Arma {
+    var granadas = 0
+
+    method granadas() = granadas
+    method cargar(cantidad) { granadas += cantidad }
+
+    override method disparar() {
+        if (!pausa && granadas > 0) {
+            self.pausar()
+            granadas -= 1
+            const dir = personaje.direccion()
+            const pos = dir.desde(personaje.position(), 1)
+            if (!mapa.hayPared(pos)) {
+                new ProyectilGranada(
+                    nombreArma = nombre,
+                    orientacion = dir,
+                    alcance = alcance,
+                    retraso = 100 / velProyectil,
+                    posicion = pos
+                ).lanzar()
+            }
+        }
+    }
+}
+
 const cuchillo = new Arma(
     nombre = "cuchillo",
     alcance = 1,
@@ -213,9 +247,17 @@ const escopeta = new Escopeta(
     imgSeleccionado ="escopeta_seleccionada.png",
     imgNoSeleccionado = "escopeta_noseleccionada.png"
 )
+const lanzaGranadas = new LanzaPapas(
+    nombre = "granada",
+    alcance = 5,
+    velProyectil = 3,
+    tiempoPausa = 800,
+    imgSeleccionado = "granada_seleccionada.png",
+    imgNoSeleccionado = "granada_noseleccionada.png"
+)
 
 object inventario{
-    const listaInventario = [cuchillo, revolver]
+    const listaInventario = [cuchillo, revolver,lanzaGranadas]
     var armaElegida = 0
 
     method aniadirArma(arma) {
@@ -255,16 +297,26 @@ object loot {
         const item =
             if (tirada < 0.2) new ItemCorazon(posicion = pos)
             else if (tirada < 0.5) new ItemBalas(posicion = pos, cantidad = 2)
+            else if (tirada < 0.6) new ItemGranada(posicion = pos, cantidad = 1)
             else null
         if (item != null) {
             mapa.agregarItem(item)
             game.addVisual(item)
         }
     }
-
     // Esto es para el jefe Gordo, así evitamos un softlock. Si le disparás mientras se lastra un sanguche, la bola de cebo va a soltar balas
     method tirarBalas(pos, cantidad) {
         const item = new ItemBalas(posicion = pos, cantidad = cantidad)
+        mapa.agregarItem(item)
+        game.addVisual(item)
+    }
+    method tirarCorazonDoradinno(pos){
+        const corazonAu = new ItemCorazonExtra(posicion = pos)
+        mapa.agregarItem(corazonAu)
+        game.addVisual(corazonAu)
+    }
+    method tirarLanzaGranadas(pos) {
+        const item = new ItemLanzaGranadas(posicion = pos)
         mapa.agregarItem(item)
         game.addVisual(item)
     }
@@ -301,8 +353,97 @@ class ItemCorazon {
     }
 }
 
+class ItemCorazonExtra {
+    const posicion
+    const curacion = personaje.saludMaxima()
+
+    method position() = posicion
+    method image() = "corazon_dorado.png"
+    method estaVivo() = false
+
+    method alPisar() {
+        personaje.curar(curacion)
+        personaje.aniadirVida()
+        game.removeVisual(self)
+    }
+}
+
 object itemEscopeta {
     method position() = game.at(7, 8)
     method image() = "escopeta_suelo.png"
+    method estaVivo() = false  
     method alPisar() { inventario.aniadirArma(escopeta) }
 }
+
+class ItemLanzaGranadas {
+    const posicion
+
+    method position() = posicion
+    method image() = "lanzagranadas_suelo.png"
+    method estaVivo() = false
+
+    method alPisar() {
+        inventario.aniadirArma(lanzaGranadas)
+        game.removeVisual(self)
+    }
+}
+
+class ItemGranada {
+    const posicion
+    const cantidad
+
+    method position() = posicion
+    method image() = "granada_suelo.png"
+    method estaVivo() = false
+
+    method alPisar() {
+        lanzaGranadas.cargar(cantidad)
+        game.removeVisual(self)
+    }
+}
+class Explosion {
+    const posicion
+    var activa = true
+
+    method position() = posicion
+    method image() = "explosion.png"
+    method estaVivo() = false
+
+    method explotar() {
+        game.addVisual(self)
+        game.colliders(self)
+            .filter({ b => b.estaVivo() })
+            .forEach({ b => b.recibirDanio(3) })
+
+        const radio = [posicion.up(1), posicion.down(1),
+                       posicion.left(1), posicion.right(1)]
+        radio.forEach({ pos =>
+            const onda = new OndaExplosion(posicion = pos)
+            onda.explotar()
+        })
+
+        game.schedule(300, {
+            if (activa) {
+                activa = false
+                game.removeVisual(self)
+            }
+        })
+    }
+}
+
+class OndaExplosion {
+    const posicion
+
+    method position() = posicion
+    method image() = "explosion.png"
+    method estaVivo() = false
+
+    method explotar() {
+        game.addVisual(self)
+        game.colliders(self)
+            .filter({ b => b.estaVivo() })
+            .forEach({ b => b.recibirDanio(3) })
+        game.schedule(300, { game.removeVisual(self) })
+    }
+}
+

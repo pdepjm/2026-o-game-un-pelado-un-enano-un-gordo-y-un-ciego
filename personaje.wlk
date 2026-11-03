@@ -9,7 +9,7 @@ object personaje {
     var direccion = abajo
     const velocidad = 1
     method velocidad() = velocidad
-    const saludMaxima = 3
+    var saludMaxima = 3
     var salud = saludMaxima
     method saludMaxima() = saludMaxima
     var caminando = false
@@ -83,6 +83,12 @@ method recibirDanio(cantidad) {
 }
     method morido() {
         game.schedule(15, { game.stop() })
+    }
+   method aniadirVida() {
+    if (saludMaxima < 5) {
+        saludMaxima += 1
+        game.addVisual(new Corazon(indice = saludMaxima))
+    }
     }
 }
 

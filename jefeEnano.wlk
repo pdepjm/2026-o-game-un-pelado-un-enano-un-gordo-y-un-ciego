@@ -1,3 +1,4 @@
+import armas.*
 import wollok.game.*
 import mapas.*
 import personaje.*
@@ -93,6 +94,7 @@ method avanzarEnRuta() {
             vida = (vida - cantidad).max(0)
             if (!self.estaVivo()) {
                 juego.cambiarEstado(enanoDerrotado)
+                loot.tirarCorazonDoradinno(posicion)
                 self.desaparecer()
             } else {
                 invulnerable = true

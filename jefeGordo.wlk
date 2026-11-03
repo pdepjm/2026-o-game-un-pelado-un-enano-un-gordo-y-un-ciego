@@ -141,7 +141,10 @@ object jefeGordo {
     method perderVida(cantidad) {
         vida = (vida - cantidad).max(0)
         if (!self.estaVivo()) {
-            juego.cambiarEstado(gordoDerrotado)               
+            juego.cambiarEstado(gordoDerrotado)
+            loot.tirarCorazonDoradinno(posicion)
+            //El Gordo se lastró el lanzaPapas
+            loot.tirarLanzaGranadas(posicion)               
             self.desaparecer()
         } else if (vida == 1) {
             self.rafaga()

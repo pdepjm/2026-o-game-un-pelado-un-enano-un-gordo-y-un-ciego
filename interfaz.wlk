@@ -23,6 +23,12 @@ const corazon2 = new Corazon(
 const corazon3 = new Corazon(
     indice = 3
 )
+const corazon4 = new Corazon( 
+    indice = 4
+    )
+const corazon5 = new Corazon( 
+    indice = 5
+    )
 
 const listaCorazones = (1..personaje.saludMaxima()).map({ i => new Corazon(indice = i) })
 

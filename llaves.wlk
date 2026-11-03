@@ -12,7 +12,8 @@ class LlaveReCogible {
     const nombre
     method nombre() = nombre 
     method image() = imagen
-    method position() = posicion  
+    method position() = posicion
+    method estaVivo() = false  
 
    var recogido = false
     method recogido() = recogido
@@ -28,6 +29,7 @@ class LlaveReCogible {
 const llaveNula = new Llave(nombre = "ninguna")
 
 const llaveInicio = new Llave(nombre = "llave inicio")
+const llaveCuerda = new Llave(nombre = "llave cuerda")
 const llaveIglesia = new Llave(nombre = "llave iglesia")
 const llavePelado = new Llave(nombre = "llave pelada")
 const llaveEnano = new Llave(nombre = "llave enana")
