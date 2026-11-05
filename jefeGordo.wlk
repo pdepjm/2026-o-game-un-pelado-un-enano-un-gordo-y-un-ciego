@@ -15,9 +15,11 @@ object jefeGordo {
     var faseFinal = false
     var rodadasRestantes = 0
     var token = 0
+    var direccion = abajo 
+    method direccion() = direccion
 
     method position() = posicion
-    method image() = "jefeGordo_" + estado + ".png"
+    method image() = "jefeGordo_" + estado +"_"+ direccion.nombre()+".gif"
     method estaVivo() = vida > 0
     method vidaActual() = vida
 
@@ -66,21 +68,23 @@ object jefeGordo {
         if (t == token && self.estaVivo()) {
             const dir = self.direccionAlineacion()
             if (dir == null && pasos >= self.pasosMinimos()) {
-                // objetivo fijado: aviso y arremete (aunque el jugador se mueva)
-                game.schedule(self.msAviso(), { if (t == token) self.embestir() })
-            } else {
-                if (dir != null) self.moverA(dir.desde(posicion, 1))
-                game.schedule(self.msSeguimiento(), { self.seguirLinea(t, pasos + 1) })
-            }
+            direccion = pared.opuesto()        // el aviso mira hacia la embestida
+            game.schedule(self.msAviso(), { if (t == token) self.embestir() })
+        } else {
+            if (dir != null) self.moverEn(dir)
+            game.schedule(self.msSeguimiento(), { self.seguirLinea(t, pasos + 1) })
+        }
         }
     }
 
-    method moverA(pos) {
-        if (mapa.esPiso(pos)) {
-            posicion = pos
-            self.danarSiTocaJugador()
-        }
+   method moverEn(dir) {
+    const destino = dir.desde(posicion, 1)
+    direccion = dir                    // gira aunque no pueda avanzar
+    if (mapa.esPiso(destino)) {
+        posicion = destino
+        self.danarSiTocaJugador()
     }
+}
 
     method danarSiTocaJugador() {
         if (posicion == personaje.position()) personaje.recibirDanio(1)
@@ -88,6 +92,7 @@ object jefeGordo {
 
     method embestir() {
         estado = "rodando"
+        direccion = pared.opuesto()
         const t = self.nuevoToken()
         self.avanzarRodada(t, pared.opuesto(), if (faseFinal) 40 else 70)
     }

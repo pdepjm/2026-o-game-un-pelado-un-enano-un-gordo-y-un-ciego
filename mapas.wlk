@@ -234,7 +234,7 @@ method alPisar(pos) {
     gestorDialogos.mostrarDobleLlave()
     }
     if (salaActual == entradaIsla) {
-    gestorDialogos.mostrarDobleLlave()
+    gestorDialogos.mostrar(cartelPistaPalancas)
     }
 
     if (salaActual.zombisAleatorios()) {
@@ -282,7 +282,7 @@ const inicio = new Sala(diseno = [
     "H                      H",
     "H                      H"
     ],
-    jefe = jefeNulo,
+    jefe = jefeKrauser,
     zombisAleatorios = false,
     puerta1 = puertaInicioPueblo,
     puerta2 = vacio,
@@ -475,7 +475,7 @@ const salaLlave2 =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
-        "HHHH     III       I HHH",
+        "HHHI     III       I HHH",
         "HHH   I  I  I IIIIII HHH",
         "HHH II   II     I  I HHH",
         "HHHIIII I  III     I HHH",

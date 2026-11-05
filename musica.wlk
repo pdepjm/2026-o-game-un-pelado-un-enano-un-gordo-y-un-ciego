@@ -6,15 +6,14 @@ object gestorMusica {
     var sonido = null
 
     method archivoDe(sala) =
-        if ([pueblo, iglesia, muelle, salaJefePelado].contains(sala))
+        if ([pueblo, iglesia, muelle, entradaCastillo].contains(sala))
             "musica_pueblo.mp3"
-        else if ([entradaCastillo, lobbyCastillo, salaLlave1, salaLlave2, salaJefeEnano,
-                  salaPasillo0, bibiloteca, salaPasillo1, salaEscopeta, salaPasillo2,
-                  salaJefeGordo].contains(sala))
+        else if ([lobbyCastillo, salaLlave1, salaLlave2,
+                  salaPasillo0, bibiloteca, salaPasillo1, salaEscopeta, salaPasillo2].contains(sala))
             "musica_castillo.mp3"
         else if ([entradaIsla, columnaNorte, columnaSur, salaVerde, salaRoja, salaAzul,
                   pasilloNorte, pasilloCentral, pasilloSurOeste, pasilloSurEste,
-                  antesalaKrauser, salaKrauser].contains(sala))
+                  antesalaKrauser].contains(sala))
             "musica_isla.mp3"
         else if ([salaJefePelado, salaJefeEnano,salaJefeGordo, salaKrauser].contains(sala))
             "musica_jefe.mp3"
