@@ -282,7 +282,7 @@ const inicio = new Sala(diseno = [
     "H                      H",
     "H                      H"
     ],
-    jefe = jefeKrauser,
+    jefe = jefeNulo,
     zombisAleatorios = false,
     puerta1 = puertaInicioPueblo,
     puerta2 = vacio,
