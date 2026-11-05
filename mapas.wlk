@@ -7,11 +7,13 @@ import jefePelado.*
 import jefeEnano.*
 import jefeGordo.*
 import jefeKrauser.*
+import jefeFinal.*
 import emboscadaPueblo.*
 import armas.*
 import llaves.*
 import objetosDestructibles.*
 import dialogos.*
+import musica.*
 class Pared {
     const posicion
 
@@ -221,6 +223,7 @@ method alPisar(pos) {
     
     personaje.position(salaActual.entradaDe(puerta.puertaDeVuelta()))
 
+    gestorMusica.alEntrarA(salaActual)
     salaActual.jefe().aparecer()
 
     if (salaActual == iglesia) {
@@ -228,6 +231,9 @@ method alPisar(pos) {
     }
 
     if (salaActual == lobbyCastillo) {
+    gestorDialogos.mostrarDobleLlave()
+    }
+    if (salaActual == entradaIsla) {
     gestorDialogos.mostrarDobleLlave()
     }
 
@@ -240,6 +246,7 @@ method alPisar(pos) {
     if (salaActual.tankesAleatorios()) {
     spawner.crearTankesAleatorios()
     }
+    
 }
     
 }
@@ -995,11 +1002,11 @@ const salaKrauser =new Sala(
     zombisAleatorios = false,
     fondo = fondoIsla,
     puerta1 = antesalaKrauser,
-    puerta2 = salaSandler,
+    puerta2 = puertaKrauserFinal,
     puerta3 = vacio,
     puerta4 = vacio
 )
-const salaSandler =new Sala(
+const salaFinal =new Sala(
     diseno = [
         "HHHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
@@ -1017,10 +1024,10 @@ const salaSandler =new Sala(
         "HHHHHHHHHHHHH1HHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
-    jefe = jefeKrauser,
+    jefe = jefeFinal,
     zombisAleatorios = false,
     fondo = fondoIsla,
-    puerta1 = antesalaKrauser,
+    puerta1 = puertaKrauserFinal,
     puerta2 = vacio,
     puerta3 = vacio,
     puerta4 = vacio

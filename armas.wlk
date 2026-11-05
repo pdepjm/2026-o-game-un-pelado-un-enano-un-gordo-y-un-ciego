@@ -28,6 +28,7 @@ class Proyectil {
     var posicion
     var recorrido = 1
     var activo = true
+     method esDeEscopeta() = nombreArma == "escopeta"
 
     method position() = posicion
     method image() = nombreArma + "_" + orientacion.nombre() + ".png"
@@ -104,12 +105,6 @@ class Arma {
     method reproducirSonido() {
         game.sound("disparo_" + nombre + ".mp3").play()
     }
-
-    method vectorDe(dir)=
-        if (dir == "arriba") game.at(0, 1)
-        else if (dir == "abajo") game.at(0, -1)
-        else if (dir == "izquierda") game.at(-1, 0)
-        else if (dir == "derecha") game.at(1, 0)
 
     method disparar() {
         if (!pausa) {
@@ -264,7 +259,7 @@ const lanzaGranadas = new LanzaPapas(
 )
 
 object inventario{
-    const listaInventario = [cuchillo, revolver,escopeta,lanzaGranadas]
+    const listaInventario = [cuchillo, revolver]
     var armaElegida = 0
 
     method aniadirArma(arma) {

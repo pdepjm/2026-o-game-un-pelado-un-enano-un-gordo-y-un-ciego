@@ -6,6 +6,7 @@ import movimiento.*
 import enemigo.*
 import maquinaDeEstados.*
 import llaves.*
+import musica.*
 
 
 object jefeEnano {
@@ -27,6 +28,10 @@ object jefeEnano {
     method image() = "jefeEnano_"+ self.direccion()+".gif"
     method estaVivo() = vida > 0
     method vidaActual() = vida
+    method ubicarAleatoriamenteEnRuta() {
+    indice = 0.randomUpTo(ruta.size()).truncate(0)
+    posicion = ruta.get(indice)
+}
 
 method cambiarEstado(nuevoEstado) {
     estado.salir(self)
@@ -121,9 +126,9 @@ method avanzarEnRuta() {
     }
 
 method iniciarTeletransporte() {
+    self.teletransportar()   //Buffeo al enanito
     game.onTick(msTeletransporte, "teletransporteEnano", { self.teletransportar() })
 }
-
 method detenerTeletransporte() {
     game.removeTickEvent("teletransporteEnano")
 }
@@ -157,11 +162,15 @@ object estadoClones {
     method salir(jefe) { jefe.detenerClones() }
     method alCorrer(jefe) { jefe.avanzarEnRuta() }
     method alRecibirDanio(jefe) { jefe.cambiarEstado(estadoTeletransporte) }
+    
 }
 
 object estadoTeletransporte {
     method entrar(jefe) { jefe.iniciarTeletransporte() }
-    method salir(jefe) { jefe.detenerTeletransporte() }
+    method salir(jefe) {
+        jefe.detenerTeletransporte()
+        jefe.ubicarAleatoriamenteEnRuta()
+    }
     method alCorrer(jefe) { }
     method alRecibirDanio(jefe) { jefe.cambiarEstado(estadoClones) }
 }

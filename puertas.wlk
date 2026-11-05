@@ -16,6 +16,7 @@ class Puerta {
     method puertaDeVuelta() = puertaDeVuelta
     method position(nuevaPos) {posicion = nuevaPos}
     method position() = posicion
+    
 }
 class PuertaDobleLlave inherits Puerta {
     const segundaLlaveRequerida
@@ -212,7 +213,7 @@ class PuertaPalancas inherits Puerta {
 
         //Puertas de la isla de Sandler
 
-        const puertaMuelleEntradaIsla = new Puerta(destino = entradaIsla, puertaDeVuelta = puertaEntradaIslaMuelle, llaveRequerida = llaveNula) 
+        const puertaMuelleEntradaIsla = new Puerta(destino = entradaIsla, puertaDeVuelta = puertaEntradaIslaMuelle, llaveRequerida = llaveGordo) 
         const puertaEntradaIslaMuelle = new Puerta(destino = muelle, puertaDeVuelta = puertaMuelleEntradaIsla, llaveRequerida = llaveNula)
 
         const puertaIslaColumnaNorte = new Puerta(destino = columnaNorte, puertaDeVuelta = puertaColumnaNorteIsla, llaveRequerida = llaveNula)
@@ -250,3 +251,6 @@ class PuertaPalancas inherits Puerta {
 
         const puertaAntesalaKrauser = new Puerta(destino = salaKrauser, puertaDeVuelta = puertaKrauserAntesala, llaveRequerida = llaveNula)
         const puertaKrauserAntesala = new Puerta(destino = antesalaKrauser, puertaDeVuelta = puertaAntesalaKrauser, llaveRequerida = llaveNula)
+
+        const puertaKrauserFinal = new Puerta(destino = salaFinal, puertaDeVuelta = vacio, llaveRequerida = llaveKrauser)
+        
