@@ -10,7 +10,7 @@ object jefeGordo {
     const vidaMaxima = 5
     var posicion = game.at(11, 14)
     var vida = vidaMaxima
-    var estado = "siguiendo"      
+    var estado = estadoSiguiendoGordo     
     var pared = arriba            
     var faseFinal = false
     var rodadasRestantes = 0
@@ -19,9 +19,10 @@ object jefeGordo {
     method direccion() = direccion
 
     method position() = posicion
-    method image() = "jefeGordo_" + estado +"_"+ direccion.nombre()+".gif"
+    method image() = estado.imagen(direccion)
     method estaVivo() = vida > 0
     method vidaActual() = vida
+    method faseFinal() = faseFinal
 
    
     method aparecer() {
@@ -46,7 +47,7 @@ object jefeGordo {
     }
 
     method seguir() {
-        estado = "siguiendo"
+        estado = estadoSiguiendoGordo
         self.seguirLinea(self.nuevoToken(), 0)
     }
 
@@ -91,7 +92,7 @@ object jefeGordo {
     }
 
     method embestir() {
-        estado = "rodando"
+        estado = estadoRodandoGordo 
         direccion = pared.opuesto()
         const t = self.nuevoToken()
         self.avanzarRodada(t, pared.opuesto(), if (faseFinal) 40 else 70)
@@ -122,7 +123,7 @@ object jefeGordo {
 
 
     method stunear() {
-        estado = "stun"
+        estado = estadoStunGordo
         const t = self.nuevoToken()
         game.schedule(5000, { if (t == token) self.recuperarse() })
     }
@@ -133,14 +134,8 @@ object jefeGordo {
 
  
     method recibirDanio(cantidad) {
-        const conEscopeta = inventario.armaSeleccionada() == escopeta
-        if (estado == "lastrando") {
-            self.stunear()
-        } else if (estado == "rodando" && conEscopeta && !faseFinal) {
-            self.stunear()
-        } else if (estado == "stun" && !conEscopeta) {
-            self.perderVida(cantidad)
-        }
+    const conEscopeta = inventario.armaSeleccionada() == escopeta
+    estado.recibirDanio(self, cantidad, conEscopeta)
     }
 
     method perderVida(cantidad) {
@@ -163,7 +158,7 @@ object jefeGordo {
     }
 
     method lastrar() {
-        estado = "lastrando"
+        estado = estadoLastrandoGordo
         const t = self.nuevoToken()
         loot.tirarBalas(posicion, 2)       // evita el softlock (hay que reventarle el orto a ecopetazo)
         game.schedule(5000, {
@@ -179,5 +174,42 @@ object jefeGordo {
         faseFinal = true
         rodadasRestantes = 4
         self.seguir()
+    }
+}
+
+object estadoSiguiendoGordo {
+    method imagen(direccion) = "jefeGordo_siguiendo.png"
+
+    method recibirDanio(jefe, cantidad, conEscopeta) {
+    }
+}
+
+object estadoRodandoGordo {
+    method imagen(direccion) =
+        "jefeGordo_rodando_" + direccion.nombre() + ".gif"
+
+    method recibirDanio(jefe, cantidad, conEscopeta) {
+        if (conEscopeta && !jefe.faseFinal()) {
+            jefe.stunear()
+        }
+    }
+}
+
+object estadoStunGordo {
+    method imagen(direccion) = "jefeGordo_stun.png"
+
+    method recibirDanio(jefe, cantidad, conEscopeta) {
+        if (!conEscopeta) {
+            jefe.perderVida(cantidad)
+        }
+    }
+}
+
+object estadoLastrandoGordo {
+    method imagen(direccion) =
+        "jefeGordo_lastrando_" + direccion.nombre() + ".gif"
+
+    method recibirDanio(jefe, cantidad, conEscopeta) {
+        jefe.stunear()
     }
 }

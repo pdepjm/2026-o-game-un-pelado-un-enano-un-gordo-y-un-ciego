@@ -161,7 +161,7 @@ object spawner {
     }
 
     method crearRapidinesAleatorios() {
-        (1..[1, 3].anyOne()).forEach({ i => self.crearRapidin() })
+        (1..[1, 1].anyOne()).forEach({ i => self.crearRapidin() })
     }
     method crearTanke() {
     self.crearTankeEn(self.posicionAleatoria())

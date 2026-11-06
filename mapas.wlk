@@ -75,48 +75,75 @@ class Sala {
 
     method esPiso(pos) = self.caracterEn(pos) == " "
 
+    method agregarPared(pos) {
+    const pared = new Pared(posicion = pos)
+    paredes.add(pared)
+    game.addVisual(pared)
+    }
+
+    method agregarPozo(pos) {
+        const pozo = new Pozo(posicion = pos)
+        pozos.add(pozo)
+        game.addVisual(pozo)
+    }
+
+    method agregarPuerta(puerta, pos) {
+        puerta.position(pos)
+        game.addVisual(puerta)
+    }
+
+    method accionesDelMapa() {
+    const acciones = new Dictionary()
+
+    acciones.put("H", { pos => self.agregarPared(pos) })
+    acciones.put("P", { pos => self.agregarPozo(pos) })
+
+    acciones.put("1", { pos => self.agregarPuerta(puerta1, pos) })
+    acciones.put("2", { pos => self.agregarPuerta(puerta2, pos) })
+    acciones.put("3", { pos => self.agregarPuerta(puerta3, pos) })
+    acciones.put("4", { pos => self.agregarPuerta(puerta4, pos) })
+
+    acciones.put("I", { pos => bloqueosInvisibles.add(pos) })
+
+    return acciones
+}
+
 
     method cargar() {
-        fondoNivel.cambiar(fondo)
-        const filas = diseno.size()
-        (0..filas - 1).forEach({ fila =>
-            const linea = diseno.get(fila)
-            const y = alturaInterfaz + (filas - 1 - fila)
-            (0..linea.length() - 1).forEach({ x =>
-                const c = linea.charAt(x)
-                const pos = game.at(x, y)
-                if (c == "H") {
-                    const pared = new Pared(posicion = pos)
-                    paredes.add(pared)
-                    game.addVisual(pared)   
-                } else if (c == "P") {
-                    const pozo = new Pozo(posicion = pos)
-                    pozos.add(pozo)
-                    game.addVisual(pozo)
-                } else if (c == "1") {
-                    puerta1.position(pos)
-                    game.addVisual(puerta1)
-                } else if (c == "2") {
-                    puerta2.position(pos)
-                    game.addVisual(puerta2)
-                } else if (c == "3") {
-                    puerta3.position(pos)
-                    game.addVisual(puerta3)
-                } else if (c == "4") {
-                    puerta4.position(pos)
-                    game.addVisual(puerta4)
-                } else if (c == "I") {
-                    bloqueosInvisibles.add(pos)
-                }
-            })
+    fondoNivel.cambiar(fondo)
+
+    const acciones = self.accionesDelMapa()
+    const filas = diseno.size()
+
+    (0..filas - 1).forEach({ fila =>
+        const linea = diseno.get(fila)
+        const y = alturaInterfaz + (filas - 1 - fila)
+
+        (0..linea.length() - 1).forEach({ x =>
+            const c = linea.charAt(x)
+            const pos = game.at(x, y)
+
+            if (acciones.keys().contains(c)) {
+                acciones.get(c).apply(pos)
+            }
         })
-       items.forEach({ i =>
-    if (!game.hasVisual(i)) { game.addVisual(i) }
-    mapa.agregarItem(i) 
     })
-    destructibles.filter({ d => !d.roto() }).forEach({ d => game.addVisual(d) })
-    palancas.forEach({ p => game.addVisual(p) })
-    }
+
+    items.forEach({ i =>
+        if (!game.hasVisual(i)) {
+            game.addVisual(i)
+        }
+        mapa.agregarItem(i)
+    })
+
+    destructibles.filter({ d => !d.roto() }).forEach({ d =>
+        game.addVisual(d)
+    })
+
+    palancas.forEach({ p =>
+        game.addVisual(p)
+    })
+}
 
     method descargar() {
         paredes.forEach({ p => game.removeVisual(p) })
