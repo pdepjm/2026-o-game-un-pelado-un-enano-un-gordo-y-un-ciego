@@ -249,7 +249,7 @@ const escopeta = new Escopeta(
     imgSeleccionado ="escopeta_seleccionada.png",
     imgNoSeleccionado = "escopeta_noseleccionada.png"
 )
-const lanzaGranadas = new LanzaPapas(
+const lanzaPapoides = new LanzaPapas(
     nombre = "lanzapapas",
     alcance = 5,
     velProyectil = 3,
@@ -385,7 +385,7 @@ class ItemLanzaGranadas {
     method estaVivo() = false
 
     method alPisar() {
-        inventario.aniadirArma(lanzaGranadas)
+        inventario.aniadirArma(lanzaPapoides)
         game.removeVisual(self)
     }
 }
@@ -399,7 +399,7 @@ class ItemGranada {
     method estaVivo() = false
 
     method alPisar() {
-        lanzaGranadas.cargar(cantidad)
+        lanzaPapoides.cargar(cantidad)
         game.removeVisual(self)
     }
 }

@@ -178,7 +178,7 @@ object jefeGordo {
 }
 
 object estadoSiguiendoGordo {
-    method imagen(direccion) = "jefeGordo_siguiendo.png"
+    method imagen(direccion) = "jefeGordo_siguiendo_" + direccion.nombre() + ".gif"
 
     method recibirDanio(jefe, cantidad, conEscopeta) {
     }
