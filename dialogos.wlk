@@ -14,12 +14,6 @@ object cartelDobleLlave {
      method position() = game.at(13, 14)
 }
 
-object cartelPistaPalancas {
-    method image() = "pistaPalanca1.png"
-
-     method position() = game.at(12, 15)
-}
-
 class CartelSecuencia {
     const imagenes
     const posicion
@@ -34,6 +28,11 @@ class CartelSecuencia {
 }
 const pistaPalancas = new CartelSecuencia(
     imagenes = ["pistaPalanca1.png", "pistaPalanca2.png"],
+    posicion = game.at(12, 13)
+)
+
+const dialogoFinal = new CartelSecuencia(
+    imagenes = ["dialogo_prueba1.png", "dialogo_prueba2.png", "dialogo_prueba3.png", "dialogo_prueba4.png"],
     posicion = game.at(12, 13)
 )
 object gestorDialogos {
