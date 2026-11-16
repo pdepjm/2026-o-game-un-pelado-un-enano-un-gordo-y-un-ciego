@@ -30,7 +30,7 @@ object gestorMusica {
             if (archivo != null) {
                 sonido = game.sound(archivo)
                 sonido.shouldLoop(true)
-                sonido.volume(0.3)
+                sonido.volume(0.2)
                 sonido.play()
             }
         }

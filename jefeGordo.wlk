@@ -178,7 +178,7 @@ object jefeGordo {
 }
 
 object estadoSiguiendoGordo {
-    method imagen(direccion) = "jefeGordo_siguiendo_" + direccion.nombre() + ".gif"
+    method imagen(direccion) = "gordo_siguiendo_" + direccion.nombre() + ".gif"
 
     method recibirDanio(jefe, cantidad, conEscopeta) {
     }
@@ -196,7 +196,7 @@ object estadoRodandoGordo {
 }
 
 object estadoStunGordo {
-    method imagen(direccion) = "jefeGordo_stun.png"
+    method imagen(direccion) = "gordo_stuneado_" + direccion.nombre()+".gif"
 
     method recibirDanio(jefe, cantidad, conEscopeta) {
         if (!conEscopeta) {

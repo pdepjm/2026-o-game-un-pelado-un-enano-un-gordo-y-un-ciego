@@ -556,7 +556,7 @@ const salaJefeEnano =new Sala(
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeEnano,
-    fondo = fondoCastillo,
+    fondo = "fondo_enano.png",
     zombisAleatorios = false,
     puerta1 = puertaJefeEnanoLobby,
     puerta2 = puertaJefeEnanoPasillo0,
