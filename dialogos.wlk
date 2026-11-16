@@ -5,13 +5,18 @@ import personaje.*
 
 object cartelCuerda {
     method image() = "estaCuerdaPareceSospechosa.png"
-    method position() = game.at(16, 14)
+    method position() = game.at(1,12)
+    method hayMas() = false
+    method avanzar() {}
+    method reiniciar() {}
 }
 
 object cartelDobleLlave {
     method image() = "dialogoDobleLlave.png"
-
-     method position() = game.at(13, 14)
+    method position() = game.at(13, 14)
+    method hayMas() = false
+    method avanzar() {}
+    method reiniciar() {}
 }
 
 class CartelSecuencia {
@@ -37,40 +42,17 @@ const dialogoFinal = new CartelSecuencia(
 )
 object gestorDialogos {
     var dialogoActual = null
-    var secuenciaActual = null
     var teclaActivada = false
 
-    method puedeMostrarCuerda() =
-        !juego.existeLlave(llavePelado)
+    method activo() = dialogoActual != null
 
+    method puedeMostrarCuerda() = !juego.existeLlave(llavePelado)
     method puedeMostrarDobleLlave() =
-        !juego.existeLlave(llavePreEnano1) ||
-        !juego.existeLlave(llavePreEnano2)
+        !juego.existeLlave(llavePreEnano1) || !juego.existeLlave(llavePreEnano2)
 
-    method mostrarCuerda() {
-        if (self.puedeMostrarCuerda()) {
-            self.mostrar(cartelCuerda)
-        }
-    }
+    method mostrarCuerda() { if (self.puedeMostrarCuerda()) self.mostrar(cartelCuerda) }
+    method mostrarDobleLlave() { if (self.puedeMostrarDobleLlave()) self.mostrar(cartelDobleLlave) }
 
-    method mostrarDobleLlave() {
-        if (self.puedeMostrarDobleLlave()) {
-            self.mostrar(cartelDobleLlave)
-        }
-    }
-
-    method mostrar(cartel) {
-        self.cerrarDialogo()
-        game.addVisual(cartel)
-        dialogoActual = cartel
-    }
-
-    method actualizar() {
-        if (dialogoActual == cartelDobleLlave &&
-            !self.puedeMostrarDobleLlave()) {
-            self.cerrarDialogo()
-        }
-    }
     method activarTecla() {
         if (!teclaActivada) {
             teclaActivada = true
@@ -78,16 +60,25 @@ object gestorDialogos {
         }
     }
 
-    method mostrarSecuencia(cartel) {
+    method mostrar(cartel) {
         self.activarTecla()
+        self.cerrarDialogo()
         cartel.reiniciar()
-        self.mostrar(cartel)
-        secuenciaActual = cartel
+        game.addVisual(cartel)
+        dialogoActual = cartel
+    }
+
+    method mostrarSecuencia(cartel) { self.mostrar(cartel) }
+
+    method actualizar() {
+        if (dialogoActual == cartelDobleLlave && !self.puedeMostrarDobleLlave()) {
+            self.cerrarDialogo()
+        }
     }
 
     method avanzar() {
-        if (secuenciaActual != null) {
-            if (secuenciaActual.hayMas()) secuenciaActual.avanzar()
+        if (dialogoActual != null) {
+            if (dialogoActual.hayMas()) dialogoActual.avanzar()
             else self.cerrarDialogo()
         }
     }
@@ -97,6 +88,5 @@ object gestorDialogos {
             game.removeVisual(dialogoActual)
             dialogoActual = null
         }
-        secuenciaActual = null
     }
 }

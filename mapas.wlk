@@ -13,6 +13,7 @@ import armas.*
 import llaves.*
 import objetosDestructibles.*
 import dialogos.*
+import npcs.*
 import musica.*
 class Pared {
     const posicion
@@ -204,7 +205,7 @@ object mapa {
 
     
     method salaActual() = salaActual
-
+    
     method empezarEn(sala, posicionInicial) {
         salaActual = sala
         salaActual.cargar()
@@ -215,12 +216,15 @@ object mapa {
     method esPiso(pos) = salaActual.esPiso(pos)
 
     method hayPozo(pos) = salaActual.hayPozo(pos)
-    method bloqueaJugador(pos) = self.hayPared(pos) || self.hayPozo(pos) || salaActual.puertaBloqueadaEn(pos)
+    method bloqueaJugador(pos) =
+    self.hayPared(pos) || self.hayPozo(pos) || salaActual.puertaBloqueadaEn(pos) || gestorNpcs.ocupa(pos)
 
 method alPisar(pos) {
     const puerta = salaActual.puertaEn(pos)
-    if (puerta != vacio) {
-        if (!salaActual.puertaBloqueadaEn(pos)) { self.cruzar(puerta) }
+    if (puerta != vacio && !salaActual.puertaBloqueadaEn(pos)) {
+        self.cruzar(puerta)
+    } else {
+        gestorNpcs.alMoverse(pos)
     }
     const recogidos = itemsEnSuelo.filter({ i => i.position() == pos })
     recogidos.forEach({ i =>
@@ -231,6 +235,7 @@ method alPisar(pos) {
     })
 }
 
+
     method agregarItem(item) {
     if (!itemsEnSuelo.contains(item)) { itemsEnSuelo.add(item) }
 }
@@ -239,7 +244,7 @@ method alPisar(pos) {
     const destino = puerta.destino()
 
     spawner.limpiar()
-
+    gestorNpcs.ocultarTodos()
     salaActual.jefe().desaparecer()
     itemsEnSuelo.forEach({ i => game.removeVisual(i) })
     itemsEnSuelo.clear()
@@ -249,7 +254,7 @@ method alPisar(pos) {
     salaActual.cargar()
     
     personaje.position(salaActual.entradaDe(puerta.puertaDeVuelta()))
-
+    gestorNpcs.actualizar(salaActual) 
     gestorMusica.alEntrarA(salaActual)
     salaActual.jefe().aparecer()
 
@@ -261,7 +266,10 @@ method alPisar(pos) {
     gestorDialogos.mostrarDobleLlave()
     }
     if (salaActual == entradaIsla) {
-    gestorDialogos.mostrar(cartelPistaPalancas)
+    gestorDialogos.mostrar(pistaPalancas)
+    }
+    if (salaActual == salaFinal){
+        gestorDialogos.mostrar(dialogoFinal)
     }
 
     if (salaActual.zombisAleatorios()) {

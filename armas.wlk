@@ -4,6 +4,7 @@ import personaje.*
 import movimiento.*
 import jefePelado.*
 import interfaz.*
+import dialogos.*
 
 /*
     ADVERTENCIA:
@@ -41,7 +42,7 @@ class Proyectil {
     }
 
    method avanzar() {
-        if (activo) {
+        if (activo && !gestorDialogos.activo()) {
             const siguiente = orientacion.desde(posicion, 1)
             if (recorrido < alcance && !mapa.hayPared(siguiente)) {
                 posicion = siguiente

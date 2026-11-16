@@ -1,8 +1,10 @@
+import dialogos.*
 import wollok.game.*
 import interfaz.*
 import armas.*
 import mapas.*
 import movimiento.*
+
 
 object personaje {
     var posicion = game.center()
@@ -42,7 +44,7 @@ object personaje {
     method puedeMoverA(pos) = pos.x() >= 0 && pos.x() < game.width() && pos.y() >= alturaInterfaz && pos.y() < game.height() && !mapa.bloqueaJugador(pos)
        
         method moverA(pos) {
-              if (self.puedeMoverA(pos)) {
+              if (self.puedeMoverA(pos) && !gestorDialogos.activo()) {
                 posicion = pos
                 self.marcarCaminando()
                 mapa.alPisar(pos)

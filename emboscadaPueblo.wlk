@@ -1,6 +1,7 @@
 import enemigo.*
 import wollok.game.*
 import maquinaDeEstados.*
+import dialogos.*
 
 object emboscadaPueblo {
     const ultimaOleada = 5
@@ -14,7 +15,9 @@ object emboscadaPueblo {
     }
 
     method siguienteOleada() {
-        if (!spawner.hayZombiesVivos()){
+    if (gestorDialogos.activo()) {
+        game.schedule(3000, { self.siguienteOleada() })
+    } else if (!spawner.hayZombiesVivos()){
             oleada += 1
             if (oleada >= ultimaOleada) self.desaparecer()
             else {

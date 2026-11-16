@@ -3,6 +3,7 @@ import armas.*
 import mapas.*
 import personaje.*
 import movimiento.*
+import dialogos.*
 import interfaz.alturaInterfaz
 
 class Enemigo {
@@ -38,7 +39,7 @@ class Enemigo {
 
     
    method perseguir() {
-        if (!pausa) {
+        if (!pausa && !gestorDialogos.activo()) {
             const preferidas = movimiento.direccionesHacia(posicion, personaje.position())
                 .filter({ d => self.puedeAvanzar(d) })
             if (!preferidas.isEmpty()) {
