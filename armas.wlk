@@ -375,7 +375,11 @@ object itemEscopeta {
     method position() = game.at(7, 8)
     method image() = "escopeta_suelo.png"
     method estaVivo() = false  
-    method alPisar() { inventario.aniadirArma(escopeta) }
+    method alPisar() { self.levantarYParlotear(escopeta) }
+    method levantarYParlotear(uepon){
+        inventario.aniadirArma(uepon)
+        gestorDialogos.mostrar(dialogoEscopeta)
+    }
 }
 
 class ItemLanzaGranadas {

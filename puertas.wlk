@@ -202,7 +202,7 @@ class PuertaPalancas inherits Puerta {
         const puertaPasillo2JefeGordo = new Puerta(
             destino = salaJefeGordo,
             puertaDeVuelta = puertaJefeGordoPasillo2,
-            llaveRequerida = llaveNula
+            llaveRequerida = llavePreGordo
         )
 
         const puertaJefeGordoPasillo2 = new Puerta(
@@ -213,7 +213,7 @@ class PuertaPalancas inherits Puerta {
 
         //Puertas de la isla de Sandler
 
-        const puertaMuelleEntradaIsla = new Puerta(destino = entradaIsla, puertaDeVuelta = puertaEntradaIslaMuelle, llaveRequerida = llaveGordo) 
+        const puertaMuelleEntradaIsla = new Puerta(destino = entradaIsla, puertaDeVuelta = puertaEntradaIslaMuelle, llaveRequerida = llaveNula) 
         const puertaEntradaIslaMuelle = new Puerta(destino = muelle, puertaDeVuelta = puertaMuelleEntradaIsla, llaveRequerida = llaveNula)
 
         const puertaIslaColumnaNorte = new Puerta(destino = columnaNorte, puertaDeVuelta = puertaColumnaNorteIsla, llaveRequerida = llaveNula)
@@ -252,5 +252,6 @@ class PuertaPalancas inherits Puerta {
         const puertaAntesalaKrauser = new Puerta(destino = salaKrauser, puertaDeVuelta = puertaKrauserAntesala, llaveRequerida = llaveNula)
         const puertaKrauserAntesala = new Puerta(destino = antesalaKrauser, puertaDeVuelta = puertaAntesalaKrauser, llaveRequerida = llaveNula)
 
-        const puertaKrauserFinal = new Puerta(destino = salaFinal, puertaDeVuelta = vacio, llaveRequerida = llaveKrauser)
+        const puertaKrauserFinal = new Puerta(destino = salaFinal, puertaDeVuelta = vacio, llaveRequerida = llaveNula)
+        const puertaFinalKrauser = new Puerta(destino = salaKrauser, puertaDeVuelta = vacio, llaveRequerida = llaveFinal)
         

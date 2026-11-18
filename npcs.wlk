@@ -6,7 +6,7 @@ import maquinaDeEstados.juego
 
 class Npc {
     const posicion
-    const imagen
+    const imagen = null
     var visible = false
     var cerca = false
 
@@ -45,6 +45,20 @@ class Npc {
     }
 }
 
+class Cartel inherits Npc {
+    const salaDondeAparece
+    const dialogoCartel
+
+    override method aparece(sala) = sala == salaDondeAparece
+    override method dialogo() = dialogoCartel
+
+    override method mostrar() { visible = true }
+    override method ocultar() {
+        visible = false
+        cerca = false
+    }
+
+}
 
 
 class Luisito inherits Npc {
@@ -67,6 +81,22 @@ class Ashley inherits Npc {
     override method dialogo() = dialogos.anyOne()
 }
 
+class Bote inherits Npc {
+    const dialogoFijo         
+
+    override method aparece(sala) = sala == muelle && !juego.existeLlave(llaveGordo)
+
+    override method dialogo() = dialogoFijo
+}
+
+class Gordo inherits Npc {
+    const dialogoFijo         
+
+    override method aparece(sala) = sala == salaPasillo2 && !juego.existeLlave(llavePreGordo)
+
+    override method dialogo() = dialogoFijo
+}
+
 
 const dialogoLuisito = new CartelSecuencia(
     imagenes = ["luisito1.png", "luisito2.png", "luisito3.png"],
@@ -85,11 +115,14 @@ const dialogosAshley = [
 ]
 
 
+const palancas = new Cartel(posicion = game.at(8,13),salaDondeAparece = entradaIsla ,dialogoCartel = pistaPalancas)
 const luisito = new Luisito(posicion = game.at(12, 9), imagen = "npc_luisito.png", dialogoFijo = dialogoLuisito)
 const ashley  = new Ashley(posicion = game.at(10, 12), imagen = "npc_ashley.png", dialogos = dialogosAshley)
+const moto = new Bote(posicion = game.at(19, 8), dialogoFijo =  cartelBote)
+const pregordo = new Gordo(posicion = game.at(22,3), dialogoFijo = dialogoPuertaGordo)
 
 object gestorNpcs {
-    const npcs = [luisito, ashley]
+    const npcs = [luisito, ashley, palancas]
     const activos = []          
 
     method actualizar(sala) {

@@ -32,13 +32,38 @@ class CartelSecuencia {
     method reiniciar() { indice = 0 }
 }
 const pistaPalancas = new CartelSecuencia(
-    imagenes = ["pistaPalanca1.png", "pistaPalanca2.png"],
-    posicion = game.at(12, 13)
+    imagenes = ["pistaPalancas1.png", "pistaPalancas2.png"],
+    posicion = game.at(9, 12)
 )
 
 const dialogoFinal = new CartelSecuencia(
     imagenes = ["dialogo_prueba1.png", "dialogo_prueba2.png", "dialogo_prueba3.png", "dialogo_prueba4.png"],
-    posicion = game.at(12, 13)
+    posicion = game.at(9, 12)
+)
+
+const dialogoEscopeta = new CartelSecuencia(
+    imagenes = ["dialogo_escopeta1.png", "dialogo_escopeta2.png", "dialogo_escopeta3.png", "dialogo_escopeta4.png"],
+    posicion = game.at(9, 12)
+)
+
+const dialogoEnanoMuerto = new CartelSecuencia(
+    imagenes = ["dialogo_postenano.png"],
+    posicion = game.at(9,12)
+)
+
+const dialogoPuertaGordo = new CartelSecuencia(
+    imagenes = ["dialogo_pregordo.png"],
+    posicion = game.at(9,12)
+)
+
+const dialogoGordoMuerto = new CartelSecuencia(
+    imagenes = ["dialogo_gordo1.png","dialogo_gordo2.png"],
+    posicion = game.at(9,12)
+)
+
+const cartelBote = new CartelSecuencia(
+    imagenes = ["dialogo_bote1.png"],
+    posicion = game.at(9, 12)
 )
 object gestorDialogos {
     var dialogoActual = null

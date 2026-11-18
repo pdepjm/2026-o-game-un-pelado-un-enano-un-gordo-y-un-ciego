@@ -42,21 +42,22 @@ object movimiento {
         fuerza.times({ i => self.mover(quien, dir) })
     }
 
-    // Reemplaza los 4 bloques de activarMovimiento
+
     method activarTeclas(quien) {
     self.direcciones().forEach({ dir =>
         const tick = game.tick(100, { self.mover(quien, dir) }, false)
 
         dir.tecla().onPressDo({
-            gestorDialogos.cerrarDialogo()
-            quien.direccion(dir)
-            tick.start()
+           if (!gestorDialogos.activo()) {  
+                quien.direccion(dir)
+                tick.start()
+            }
         })
 
         dir.tecla().onReleaseDo({ tick.stop() })
         })
     }
-    // Direcciones hacia el objetivo, la del eje más lejano primero
+
     method direccionesHacia(desde, hasta) {
         const dx = hasta.x() - desde.x()
         const dy = hasta.y() - desde.y()
@@ -64,7 +65,7 @@ object movimiento {
         const vertical = if (dy > 0) [arriba] else if (dy < 0) [abajo] else []
         return if (dx.abs() >= dy.abs()) horizontal + vertical else vertical + horizontal
     }
-    // Reemplaza la cadena de if de perseguir
+
     method haciaObjetivo(desde, hasta) =
         if (hasta.x() > desde.x()) derecha
         else if (hasta.x() < desde.x()) izquierda

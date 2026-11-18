@@ -7,6 +7,8 @@ import movimiento.*
 import enemigo.*
 import interfaz.*
 import dialogos.*
+import musica.*
+import jefeFinal.*
 
 object partida {
     var iniciada = false

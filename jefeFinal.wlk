@@ -1,6 +1,7 @@
 import wollok.game.*
 import enemigo.*
 import personaje.*
+import musica.*
 
 class EnemigoSandler inherits Enemigo {
 override method image() = "prueba.png"
@@ -73,18 +74,45 @@ object jefeFinal {
         }
     }
 }
+
+class Escena {
+    const property imagen
+    const property duracionMs
+}
+
 object finalJuego {
     var mostrado = false
+    var indice = 0
 
-    method image() = "final.png"
+    const escenas = [
+        new Escena(imagen = "creditos1.gif", duracionMs = 6000)
+    ]
+
+    method image() = escenas.get(indice).imagen()
     method position() = game.origin()
-    method estaVivo() = false         
+    method estaVivo() = false
 
     method mostrar() {
         if (!mostrado) {
-            mostrado = true      
+            mostrado = true
+            personaje.bloquear()
+            gestorMusica.detener()
             game.addVisual(self)
-            game.schedule(8000, { game.stop() })
+            game.sound("musica_creditos.mp3").play()
+            self.programarSiguiente()
+        }
+    }
+
+    method programarSiguiente() {
+        game.schedule(escenas.get(indice).duracionMs(), { self.siguiente() })
+    }
+
+    method siguiente() {
+        if (indice < escenas.size() - 1) {
+            indice += 1
+            self.programarSiguiente()
+        } else {
+            game.stop()
         }
     }
 }

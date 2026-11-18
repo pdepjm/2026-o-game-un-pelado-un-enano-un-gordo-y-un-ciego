@@ -1,3 +1,4 @@
+import dialogos.*
 import wollok.game.*
 import armas.*
 import mapas.*
@@ -69,7 +70,7 @@ object jefeGordo {
         if (t == token && self.estaVivo()) {
             const dir = self.direccionAlineacion()
             if (dir == null && pasos >= self.pasosMinimos()) {
-            direccion = pared.opuesto()        // el aviso mira hacia la embestida
+            direccion = pared.opuesto()        
             game.schedule(self.msAviso(), { if (t == token) self.embestir() })
         } else {
             if (dir != null) self.moverEn(dir)
@@ -80,7 +81,7 @@ object jefeGordo {
 
    method moverEn(dir) {
     const destino = dir.desde(posicion, 1)
-    direccion = dir                    // gira aunque no pueda avanzar
+    direccion = dir                    
     if (mapa.esPiso(destino)) {
         posicion = destino
         self.danarSiTocaJugador()
@@ -95,7 +96,7 @@ object jefeGordo {
         estado = estadoRodandoGordo 
         direccion = pared.opuesto()
         const t = self.nuevoToken()
-        self.avanzarRodada(t, pared.opuesto(), if (faseFinal) 40 else 70)
+        self.avanzarRodada(t, pared.opuesto(), if (faseFinal) 40 else 80)
     }
 
     method avanzarRodada(t, dir, ms) {
@@ -117,7 +118,7 @@ object jefeGordo {
             rodadasRestantes -= 1
             if (rodadasRestantes > 0) self.seguir() else self.stunear()
         } else {
-            self.seguir()
+            self.entreFases()  
         }
     }
 
@@ -146,6 +147,7 @@ object jefeGordo {
             //El Gordo se lastró el lanzaPapas
             loot.tirarLanzaGranadas(posicion)               
             self.desaparecer()
+            gestorDialogos.mostrar(dialogoGordoMuerto)
         } else if (vida == 1) {
             self.rafaga()
         } else {
@@ -154,7 +156,7 @@ object jefeGordo {
     }
 
     method entreFases() {
-        if (vida < vidaMaxima && 0.randomUpTo(1) < 0.5) self.lastrar() else self.seguir()
+        if (vida < vidaMaxima && 0.randomUpTo(1) < 0.3) self.lastrar() else self.seguir()
     }
 
     method lastrar() {
