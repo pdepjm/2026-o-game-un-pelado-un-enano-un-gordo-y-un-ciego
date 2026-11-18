@@ -213,7 +213,7 @@ class PuertaPalancas inherits Puerta {
 
         //Puertas de la isla de Sandler
 
-        const puertaMuelleEntradaIsla = new Puerta(destino = entradaIsla, puertaDeVuelta = puertaEntradaIslaMuelle, llaveRequerida = llaveNula) 
+        const puertaMuelleEntradaIsla = new Puerta(destino = entradaIsla, puertaDeVuelta = puertaEntradaIslaMuelle, llaveRequerida = llaveGordo) 
         const puertaEntradaIslaMuelle = new Puerta(destino = muelle, puertaDeVuelta = puertaMuelleEntradaIsla, llaveRequerida = llaveNula)
 
         const puertaIslaColumnaNorte = new Puerta(destino = columnaNorte, puertaDeVuelta = puertaColumnaNorteIsla, llaveRequerida = llaveNula)

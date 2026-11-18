@@ -4,7 +4,6 @@ import interfaz.*
 import armas.*
 import mapas.*
 import movimiento.*
-import musica.*
 
 
 object personaje {
@@ -18,8 +17,6 @@ object personaje {
     var caminando = false
     var herido = false
     var pasoId = 0
-    var bloqueado = false
-    method bloquear() { bloqueado = true }
 
 
     method image() {
@@ -46,13 +43,13 @@ object personaje {
 
     method puedeMoverA(pos) = pos.x() >= 0 && pos.x() < game.width() && pos.y() >= alturaInterfaz && pos.y() < game.height() && !mapa.bloqueaJugador(pos)
        
-    method moverA(pos) {
-        if (!bloqueado && self.puedeMoverA(pos) && !gestorDialogos.activo()) {
-            posicion = pos
-            self.marcarCaminando()
-            mapa.alPisar(pos)
+        method moverA(pos) {
+              if (self.puedeMoverA(pos) && !gestorDialogos.activo()) {
+                posicion = pos
+                self.marcarCaminando()
+                mapa.alPisar(pos)
+            }
         }
-    }
 
     method activarMovimiento() { movimiento.activarTeclas(self) }
 
@@ -63,11 +60,8 @@ object personaje {
         game.schedule(150, { if (pasoId == id) caminando = false })
     }
     method activarDisparo() {
-    keyboard.x().onPressDo({
-        if (!bloqueado) inventario.armaSeleccionada().disparar()
-     })
+        keyboard.x().onPressDo({ inventario.armaSeleccionada().disparar() })
     }
-
 
        method empujado(enemigo) {
         movimiento.empujar(self, enemigo.direccion(), enemigo.fuerzaEmpuje())
@@ -90,7 +84,7 @@ method recibirDanio(cantidad) {
     }
 }
     method morido() {
-    game.schedule(500, { gameOver.mostrar() })   // deja ver la animación de herido
+        game.schedule(1500, { game.stop() })
     }
    method aniadirVida() {
     if (saludMaxima < 5) {
@@ -101,22 +95,3 @@ method recibirDanio(cantidad) {
 }
 
 
-object gameOver {
-    var mostrado = false
-    const msDuracion = 6000      
-
-    method image() = "gameover.gif"
-    method position() = game.origin()
-    method estaVivo() = false
-
-    method mostrar() {
-        if (!mostrado) {
-            mostrado = true
-            personaje.bloquear()
-            gestorMusica.detener()
-            game.addVisual(self)            
-            game.sound("gameover.mp3").play()
-            game.schedule(msDuracion, { game.stop() })
-        }
-    }
-}
