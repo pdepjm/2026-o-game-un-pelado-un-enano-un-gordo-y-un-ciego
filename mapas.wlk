@@ -1065,7 +1065,7 @@ const salaFinal =new Sala(
     ],
     jefe = jefeFinal,
     zombisAleatorios = false,
-    fondo = fondoIsla,
+    fondo = "fondo_jefeFinal.png",
     puerta1 = puertaFinalKrauser,
     puerta2 = vacio,
     puerta3 = vacio,
