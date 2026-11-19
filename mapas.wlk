@@ -510,11 +510,11 @@ const salaLlave2 =new Sala(
     diseno = [
         "HHHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
-        "HHHHHHHHHHHHHHHHHHHHHHHH",
+        "HHHIIIIIIIIIIIIIIIIIIHHH",
         "HHHI     III       I HHH",
         "HHH   I  I  I IIIIII HHH",
         "HHH II   II     I  I HHH",
-        "HHHIIII I  III     I HHH",
+        "HHIIIII I  III     I HHH",
         "HH1  I      I  II I  HHH",
         "HHH I IIIII     I I  HHH",
         "HHH I       I I I    HHH",
