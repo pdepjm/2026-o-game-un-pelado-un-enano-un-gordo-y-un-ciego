@@ -4,6 +4,7 @@ import interfaz.*
 import armas.*
 import mapas.*
 import movimiento.*
+import musica.*
 
 
 object personaje {
@@ -70,8 +71,10 @@ object personaje {
 
     var invulnerable = false
 
+var muerto = false
+
 method recibirDanio(cantidad) {
-    if (!invulnerable) {
+    if (!invulnerable && !muerto) {
         salud = (salud - cantidad).max(0)
         if (!self.estaVivo()) {
             self.morido()
@@ -83,9 +86,14 @@ method recibirDanio(cantidad) {
         }
     }
 }
-    method morido() {
-        game.schedule(1500, { game.stop() })
+
+method morido() {
+    if (!muerto) {
+        muerto = true
+        gestorMusica.detener()
+        game.schedule(1500, { game.addVisual(pantallaGameOver) })
     }
+}
    method aniadirVida() {
     if (saludMaxima < 5) {
         saludMaxima += 1
@@ -94,4 +102,8 @@ method recibirDanio(cantidad) {
     }
 }
 
-
+object pantallaGameOver {
+    method image() = "gameover.png"
+    method position() = game.origin()
+    method estaVivo() = false    
+}

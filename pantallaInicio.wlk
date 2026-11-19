@@ -2,12 +2,12 @@ import wollok.game.*
 import partida.*
 
 object pantallaInicio {
-    var comenzo = false
+    var estado = "menu"       
 
     const musica = game.sound("menu_principal.mp3")
 
     method mostrar() {
-        comenzo = false
+        estado = "menu"
         game.boardGround("menu_principal.gif")
 
         musica.shouldLoop(true)
@@ -17,12 +17,13 @@ object pantallaInicio {
     }
 
     method comenzar() {
-        if (!comenzo) {
-            comenzo = true
-
+        if (estado == "menu") {
+            estado = "controles"
             musica.stop()
+            game.boardGround("controles.png")
+        } else if (estado == "controles") {
+            estado = "jugando"
             game.boardGround("fondo_nivel.png")
-
             partida.comenzar()
         }
     }

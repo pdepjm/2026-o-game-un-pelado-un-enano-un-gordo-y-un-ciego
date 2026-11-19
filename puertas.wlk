@@ -252,6 +252,6 @@ class PuertaPalancas inherits Puerta {
         const puertaAntesalaKrauser = new Puerta(destino = salaKrauser, puertaDeVuelta = puertaKrauserAntesala, llaveRequerida = llaveNula)
         const puertaKrauserAntesala = new Puerta(destino = antesalaKrauser, puertaDeVuelta = puertaAntesalaKrauser, llaveRequerida = llaveNula)
 
-        const puertaKrauserFinal = new Puerta(destino = salaFinal, puertaDeVuelta = vacio, llaveRequerida = llaveNula)
-        const puertaFinalKrauser = new Puerta(destino = salaKrauser, puertaDeVuelta = vacio, llaveRequerida = llaveFinal)
+        const puertaKrauserFinal = new Puerta(destino = salaFinal, puertaDeVuelta = puertaFinalKrauser, llaveRequerida = llaveNula)
+        const puertaFinalKrauser = new Puerta(destino = salaKrauser, puertaDeVuelta = puertaKrauserFinal, llaveRequerida = llaveFinal)
         
