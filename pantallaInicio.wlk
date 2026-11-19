@@ -2,7 +2,7 @@ import wollok.game.*
 import partida.*
 
 object pantallaInicio {
-    var estado = "menu"       
+    var estado = "menu"
 
     const musica = game.sound("menu_principal.mp3")
 
@@ -22,6 +22,9 @@ object pantallaInicio {
             musica.stop()
             game.boardGround("controles.png")
         } else if (estado == "controles") {
+            estado = "contexto"
+            game.boardGround("contexto.png")
+        } else if (estado == "contexto") {
             estado = "jugando"
             game.boardGround("fondo_nivel.png")
             partida.comenzar()

@@ -22,7 +22,7 @@ object faseMutado {
     method msGolpe() = 2000
     method danio() = 2
     method empuje() = 2
-    method image(dir) = "krauserMutado_" + dir.nombre() + ".gif"
+    method image(dir) = "krauser_mutado_" + dir.nombre() + ".gif"
 
     method debeMutar(vida, vidaMaxima) = false
     method siguiente() = self

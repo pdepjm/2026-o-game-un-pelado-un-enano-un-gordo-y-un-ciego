@@ -100,7 +100,7 @@ class Gordo inherits Npc {
 
 const dialogoLuisito = new CartelSecuencia(
     imagenes = ["luisito1.png", "luisito2.png", "luisito3.png"],
-    posicion = game.at(12, 13)
+    posicion = game.at(10, 12)
 )
 
 const dialogosAshley = [
