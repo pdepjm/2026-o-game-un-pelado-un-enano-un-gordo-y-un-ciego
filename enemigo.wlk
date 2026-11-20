@@ -81,7 +81,7 @@ class Enemigo {
     }
     method atacar(){
         personaje.empujado(self)
-        personaje.recibirDanio(fuerzaEmpuje)
+        personaje.recibirDanio(danio)
     }
 
     method pausar() {

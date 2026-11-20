@@ -1,6 +1,7 @@
 import wollok.game.*
 import enemigo.*
 import personaje.*
+import dialogos.*
 
 class EnemigoSandler inherits Enemigo {
 override method image() = "prueba.png"
@@ -45,7 +46,7 @@ object jefeFinal {
 
             token += 1
             const t = token
-            game.schedule(1500, { self.hablar(t) })
+            game.schedule(3000, { self.hablar(t) })
         }
     }
 

@@ -3,6 +3,7 @@ import armas.*
 import laser.*
 import mapas.*
 import maquinaDeEstados.*
+import dialogos.*
 
 object jefePelado {
     const posicion = game.at(12, 7)
@@ -36,6 +37,7 @@ object jefePelado {
             if (!self.estaVivo()) {
                 juego.cambiarEstado(peladoDerrotado)
                 self.desaparecer()
+                gestorDialogos.mostrar(dialogoPeladoMuerto)
             }
             
             cooldownId += 1

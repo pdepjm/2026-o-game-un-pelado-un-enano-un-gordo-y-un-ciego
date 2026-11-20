@@ -37,7 +37,8 @@ const pistaPalancas = new CartelSecuencia(
 )
 
 const dialogoFinal = new CartelSecuencia(
-    imagenes = ["dialogo_prueba1.png", "dialogo_prueba2.png", "dialogo_prueba3.png", "dialogo_prueba4.png"],
+    imagenes = ["dialogo_prueba1.png", "dialogo_prueba2.png", "dialogo_prueba3.png", 
+    "dialogo_prueba4.png", "dialogo_prueba5.png", "dialogo_prueba6.png"],
     posicion = game.at(9, 12)
 )
 
@@ -46,8 +47,38 @@ const dialogoEscopeta = new CartelSecuencia(
     posicion = game.at(9, 12)
 )
 
+const dialogoPeladoMuerto = new CartelSecuencia(
+    imagenes = ["dialogo_postpelado1.png", "dialogo_postpelado2.png"],
+    posicion = game.at(9,12)
+)
+
 const dialogoEnanoMuerto = new CartelSecuencia(
-    imagenes = ["dialogo_postenano.png"],
+    imagenes = ["dialogo_postenano1.png", "dialogo_postenano2.png"],
+    posicion = game.at(9,12)
+)
+
+const dialogoKrauserMuerto = new CartelSecuencia(
+    imagenes = ["dialogo_postkrause1.png", "dialogo_postkrauser2.png"],
+    posicion = game.at(9,12)
+)
+
+const lore1 = new CartelSecuencia(
+    imagenes = ["loreverde1.png", "loreverde2.png", "loreverde3.png", "loreverde4.png"],
+    posicion = game.at(9,12)
+)
+
+const lore2 = new CartelSecuencia(
+    imagenes = ["lorerojo1.png", "lorerojo2.png", "lorerojo3.png", "lorerojo4.png"],
+    posicion = game.at(9,12)
+)
+
+const lore3 = new CartelSecuencia(
+    imagenes = ["loreazul1.png", "loreazul2.png", "loreazul3.png", "loreazul4.png"],
+    posicion = game.at(9,12)
+)
+
+const lore4 = new CartelSecuencia(
+    imagenes = ["loreamarillo1.png", "loreamarillo2.png", "loreamarillo3.png", "loreamarillo4.png"],
     posicion = game.at(9,12)
 )
 
@@ -113,5 +144,9 @@ object gestorDialogos {
             game.removeVisual(dialogoActual)
             dialogoActual = null
         }
+    }
+    method reiniciar() {
+        dialogoActual = null
+        teclaActivada = false     
     }
 }

@@ -23,6 +23,7 @@ class Destructible {
             alRomperse.apply()
         }
     }
+    method reiniciar() { roto = false }
 }
 
 const cuerdaIglesia = new Destructible(
@@ -46,6 +47,7 @@ class Palanca {
     method recibirDanio(cantidad) {
         if (inventario.armaSeleccionada() == cuchillo) bajada = !bajada
     }
+    method reiniciar() { bajada = false }
 }
 
 const palancaRoja     = new Palanca(posicion = game.at(12, 7), color = "roja",     bajadaCorrecta = true)

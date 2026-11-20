@@ -5,6 +5,7 @@ import mapas.*
 import personaje.*
 import movimiento.*
 import llaves.*
+import dialogos.*
 
 object faseCuchillo {
     method msMovimiento() = 500
@@ -124,6 +125,7 @@ object jefeKrauser {
         vida = (vida - cantidad).max(0)
         if (!self.estaVivo()) {
             self.morir()
+            gestorDialogos.mostrar(dialogoKrauserMuerto)
         } else if (fase.debeMutar(vida, vidaMaxima)) {
             self.mutar()
         }

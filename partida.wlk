@@ -13,6 +13,8 @@ import jefeFinal.*
 object partida {
     var iniciada = false
 
+    method reiniciar() { iniciada = false }
+
     method comenzar() {
         if (!iniciada) {
             iniciada = true
@@ -28,6 +30,8 @@ object partida {
             listaFondoHUD.forEach({ a => game.addVisual(a) })
             listaCorazones.forEach({ a => game.addVisual(a) })
             listaIconos.forEach({ a => game.addVisual(a) })
+            game.addVisual(contadorEscopeta)
+            game.addVisual(contadorGranadas)
         }
     }
 }

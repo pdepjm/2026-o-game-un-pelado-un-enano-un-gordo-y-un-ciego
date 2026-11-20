@@ -19,7 +19,33 @@ object municion {
         return contador
     }
 }
+class ContadorMunicion {
+    const arma
+    const prefijo
+    const posicion
+    const color
 
+    method position() = posicion
+    method textColor() = color
+    method estaVivo() = false          // balas y explosiones lo ignoran
+
+    method text() =
+        if (inventario.armas().contains(arma)) prefijo + arma.cantidad() else ""
+}
+
+const contadorEscopeta = new ContadorMunicion(
+    arma = escopeta,
+    prefijo = "ESC x",
+    posicion = game.at(23, 0),
+    color = "FFFFFFFF"
+)
+
+const contadorGranadas = new ContadorMunicion(
+    arma = lanzaPapoides,
+    prefijo = "GRA x",
+    posicion = game.at(20, 0),
+    color = "FFFFFFFF"
+)
 class Proyectil {
     const id = municion.siguienteId()
     const nombreArma
@@ -134,8 +160,10 @@ class Arma {
 class Escopeta inherits Arma {
     var balas = 0
 
+    method cantidad() = balas
     method balas() = balas
     method cargar(cantidad) { balas += cantidad }
+    method vaciar() { balas = 0 }
 
     override method disparar() {
         if (!pausa && balas > 0) {
@@ -203,6 +231,8 @@ class LanzaPapas inherits Arma {
 
     method granadas() = granadas
     method cargar(cantidad) { granadas += cantidad }
+    method vaciar() { granadas = 0 }
+    method cantidad() = granadas
 
     override method disparar() {
         if (!pausa && granadas > 0) {
@@ -290,6 +320,15 @@ object inventario{
     method arma(indice) = listaInventario.get(indice)
     method estaSeleccionada(indice) = armaElegida == indice
     method armas() = listaInventario 
+    method reiniciar() {
+        listaInventario.clear()
+        listaInventario.add(cuchillo)
+        listaInventario.add(revolver)
+        armaElegida = 0
+        soloCuchillo = false
+        escopeta.vaciar()
+        lanzaPapoides.vaciar()
+    }
 }
 
 

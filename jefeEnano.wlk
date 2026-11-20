@@ -7,6 +7,7 @@ import enemigo.*
 import maquinaDeEstados.*
 import llaves.*
 import musica.*
+import dialogos.*
 
 
 object jefeEnano {
@@ -101,6 +102,7 @@ method avanzarEnRuta() {
                 juego.cambiarEstado(enanoDerrotado)
                 loot.tirarCorazonDoradinno(posicion)
                 self.desaparecer()
+                gestorDialogos.mostrar(dialogoEnanoMuerto)
             } else {
                 invulnerable = true
                 estado.alRecibirDanio(self)

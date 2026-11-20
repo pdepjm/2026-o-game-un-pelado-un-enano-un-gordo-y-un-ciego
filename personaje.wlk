@@ -5,6 +5,9 @@ import armas.*
 import mapas.*
 import movimiento.*
 import musica.*
+import maquinaDeEstados.*
+import pantallaInicio.*
+import partida.*
 
 
 object personaje {
@@ -45,7 +48,7 @@ object personaje {
     method puedeMoverA(pos) = pos.x() >= 0 && pos.x() < game.width() && pos.y() >= alturaInterfaz && pos.y() < game.height() && !mapa.bloqueaJugador(pos)
        
         method moverA(pos) {
-              if (self.puedeMoverA(pos) && !gestorDialogos.activo()) {
+               if (self.estaVivo() && self.puedeMoverA(pos) && !gestorDialogos.activo()) {
                 posicion = pos
                 self.marcarCaminando()
                 mapa.alPisar(pos)
@@ -71,39 +74,69 @@ object personaje {
 
     var invulnerable = false
 
-var muerto = false
+    
 
-method recibirDanio(cantidad) {
-    if (!invulnerable && !muerto) {
-        salud = (salud - cantidad).max(0)
-        if (!self.estaVivo()) {
-            self.morido()
-        } else {
-            invulnerable = true
-            herido = true
-            game.schedule(400, { herido = false })
-            game.schedule(1000, { invulnerable = false })
+    method recibirDanio(cantidad) {
+        if (!invulnerable && !muerto) {
+            salud = (salud - cantidad).max(0)
+            if (!self.estaVivo()) {
+                self.morido()
+            } else {
+                invulnerable = true
+                herido = true
+                game.schedule(400, { herido = false })
+                game.schedule(1000, { invulnerable = false })
+            }
+        }
+    }
+    var muerto = false
+
+    method morido() {
+        if (!muerto) {
+            muerto = true
+            gestorMusica.detener()
+            game.schedule(700, { gameOver.mostrar() })
+        }
+    }
+
+    method reiniciar() {
+        saludMaxima = 3
+        salud = saludMaxima
+        muerto = false
+        invulnerable = false
+        herido = false
+        caminando = false
+        direccion = abajo
+        posicion = game.center()
+    }
+    method aniadirVida() {
+        if (saludMaxima < 5) {
+            saludMaxima += 1
+            game.addVisual(new Corazon(indice = saludMaxima))
         }
     }
 }
 
-method morido() {
-    if (!muerto) {
-        muerto = true
-        gestorMusica.detener()
-        game.schedule(1500, { game.addVisual(pantallaGameOver) })
-    }
-}
-   method aniadirVida() {
-    if (saludMaxima < 5) {
-        saludMaxima += 1
-        game.addVisual(new Corazon(indice = saludMaxima))
-    }
-    }
-}
+object gameOver {
+    var activo = false
 
-object pantallaGameOver {
-    method image() = "gameover.png"
-    method position() = game.origin()
-    method estaVivo() = false    
+    method mostrar() {
+        activo = true
+        mapa.limpiarTodo()
+        gestorDialogos.cerrarDialogo()
+        game.clear()
+        game.boardGround("gameover.png")
+        keyboard.enter().onPressDo({ if (activo) self.volverAlMenu() })
+    }
+
+    method volverAlMenu() {
+        activo = false
+        personaje.reiniciar()
+        partida.reiniciar()  
+        juego.reiniciar()
+        inventario.reiniciar()
+        gestorDialogos.reiniciar()
+        pantallaInicio.mostrar()
+        mapa.reiniciarMundo()
+    }
 }

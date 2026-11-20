@@ -3,9 +3,10 @@ import mapas.*
 import llaves.*
 import dialogos.*
 import maquinaDeEstados.juego
+import enemigo.*
 
 class Npc {
-    const posicion
+    var posicion
     const imagen = null
     var visible = false
     var cerca = false
@@ -79,6 +80,20 @@ class Ashley inherits Npc {
         && !juego.existeLlave(llaveEnano)
 
     override method dialogo() = dialogos.anyOne()
+
+    override method mostrar() {
+        if (!visible) {
+            posicion = spawner.posicionAleatoria()
+        }
+        super()
+     }
+     
+    method posicionLibre() {
+        const pos = spawner.posicionAleatoria()
+        const vecinosLibres = [pos.up(1), pos.down(1), pos.left(1), pos.right(1)]
+            .count({ p => mapa.esPiso(p) })
+        return if (vecinosLibres >= 3) pos else self.posicionLibre()
+    }
 }
 
 class Bote inherits Npc {
@@ -97,6 +112,14 @@ class Gordo inherits Npc {
     override method dialogo() = dialogoFijo
 }
 
+class Bitacora inherits Npc {
+    const dialogoFijo 
+    const salaDondeAparece        
+
+    override method aparece(sala) = sala == salaDondeAparece
+
+    override method dialogo() = dialogoFijo
+}
 
 const dialogoLuisito = new CartelSecuencia(
     imagenes = ["luisito1.png", "luisito2.png", "luisito3.png"],
@@ -120,9 +143,13 @@ const luisito = new Luisito(posicion = game.at(12, 9), imagen = "npc_luisito.png
 const ashley  = new Ashley(posicion = game.at(10, 12), imagen = "npc_ashley.png", dialogos = dialogosAshley)
 const moto = new Bote(posicion = game.at(17, 9), dialogoFijo =  cartelBote)
 const pregordo = new Gordo(posicion = game.at(22,3), dialogoFijo = dialogoPuertaGordo)
-
+const bitacoraVerde = new Bitacora(salaDondeAparece = salaVerde, posicion = game.at(18,11), dialogoFijo = lore1)
+const bitacoraRoja = new Bitacora(salaDondeAparece = salaRoja, posicion = game.at(18,11), dialogoFijo = lore2)
+const bitacoraAzul = new Bitacora(salaDondeAparece = salaAzul, posicion = game.at(18,11), dialogoFijo = lore3)
+const bitacoraAmarilla = new Bitacora(salaDondeAparece = pasilloSurEste, posicion = game.at(18,11), dialogoFijo = lore4)
 object gestorNpcs {
-    const npcs = [luisito, ashley, palancas, moto, pregordo]
+    const npcs = [luisito, ashley, palancas, moto, pregordo, bitacoraVerde, 
+    bitacoraRoja, bitacoraAzul, bitacoraAmarilla]
     const activos = []          
 
     method actualizar(sala) {

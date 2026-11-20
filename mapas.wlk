@@ -110,42 +110,45 @@ class Sala {
 }
 
 
+    var itemsIniciales = null
+
     method cargar() {
-    fondoNivel.cambiar(fondo)
+        if (itemsIniciales == null) itemsIniciales = items.map({ i => i })
+        fondoNivel.cambiar(fondo)
 
-    const acciones = self.accionesDelMapa()
-    const filas = diseno.size()
+        const acciones = self.accionesDelMapa()
+        const filas = diseno.size()
 
-    (0..filas - 1).forEach({ fila =>
-        const linea = diseno.get(fila)
-        const y = alturaInterfaz + (filas - 1 - fila)
+        (0..filas - 1).forEach({ fila =>
+            const linea = diseno.get(fila)
+            const y = alturaInterfaz + (filas - 1 - fila)
 
-        (0..linea.length() - 1).forEach({ x =>
-            const c = linea.charAt(x)
-            const pos = game.at(x, y)
+            (0..linea.length() - 1).forEach({ x =>
+                const c = linea.charAt(x)
+                const pos = game.at(x, y)
 
-            if (acciones.keys().contains(c)) {
-                acciones.get(c).apply(pos)
-            }
+                if (acciones.keys().contains(c)) {
+                    acciones.get(c).apply(pos)
+                }
+            })
         })
-    })
 
-    items.forEach({ i =>
-        if (!game.hasVisual(i)) {
-            game.addVisual(i)
-        }
-        mapa.agregarItem(i)
-    })
+        items.forEach({ i =>
+            if (!game.hasVisual(i)) {
+                game.addVisual(i)
+            }
+            mapa.agregarItem(i)
+        })
 
-    destructibles.filter({ d => !d.roto() }).forEach({ d =>
-        game.addVisual(d)
-    })
+        destructibles.filter({ d => !d.roto() }).forEach({ d =>
+            game.addVisual(d)
+        })
 
-    palancas.forEach({ p =>
-        game.addVisual(p)
-    })
+        palancas.forEach({ p =>
+            game.addVisual(p)
+        })
 }
-
+    
     method descargar() {
         paredes.forEach({ p => game.removeVisual(p) })
         pozos.forEach({ p => game.removeVisual(p) })
@@ -188,10 +191,15 @@ class Sala {
     (xMin..(xMax - 1)).asList().reverse().forEach({ x => ruta.add(game.at(x, yMax)) })     // arriba, de der. a izq.
     ((yMin + 1)..(yMax - 1)).asList().reverse().forEach({ y => ruta.add(game.at(xMin, y)) }) // izquierda, bajando
     return ruta.filter({ p => self.esPiso(p) })
-}
+    }
 
     method puertaBloqueadaEn(pos) = self.puertaEn(pos) != vacio && !self.puertaEn(pos).estaTrabada()
-
+    method reiniciar() {
+    if (itemsIniciales != null) {
+        items.clear()
+        items.addAll(itemsIniciales)
+    }
+    }   
 }
 
 object jefeNulo {
@@ -280,6 +288,25 @@ method alPisar(pos) {
     }
     
 }
+    method limpiarTodo() {
+        spawner.limpiar()
+        gestorNpcs.ocultarTodos()
+        salaActual.jefe().desaparecer()   
+        itemsEnSuelo.forEach({ i => game.removeVisual(i) })
+        itemsEnSuelo.clear()
+        salaActual.descargar()           
+        salaActual = salaVacia
+    }
+
+    method reiniciarMundo() {
+    cuerdaIglesia.reiniciar()
+    iglesia.cambiarFondo(fondoIglesia)
+        
+    [palancaRoja, palancaAzul, palancaVerde, palancaAmarilla].forEach({ p => p.reiniciar() })
+    [llavePreEnano1, llavePreEnano2, llavePreGordo].forEach({ l => l.reiniciar() })
+    [salaLlave1, salaLlave2, bibiloteca, salaEscopeta].forEach({ s => s.reiniciar() })
+    emboscadaPueblo.reiniciar()
+    }
     
 }
 

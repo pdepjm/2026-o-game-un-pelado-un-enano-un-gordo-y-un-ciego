@@ -20,6 +20,11 @@ object juego {
         }
         gestorDialogos.actualizar()
     }
+    method reiniciar() {
+        llaves.clear()
+        llaves.add(llaveNula)
+        estado = inicial
+    }
 }
 
 class Estado {

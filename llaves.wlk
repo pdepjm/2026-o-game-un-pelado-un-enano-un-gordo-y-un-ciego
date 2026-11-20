@@ -14,6 +14,7 @@ class LlaveReCogible {
     method image() = imagen
     method position() = posicion
     method estaVivo() = false  
+    method reiniciar() { recogido = false }
 
    var recogido = false
     method recogido() = recogido
