@@ -13,7 +13,7 @@ object cartelCuerda {
 
 object cartelDobleLlave {
     method image() = "dialogoDobleLlave.png"
-    method position() = game.at(13, 14)
+    method position() = game.at(9, 12)
     method hayMas() = false
     method avanzar() {}
     method reiniciar() {}

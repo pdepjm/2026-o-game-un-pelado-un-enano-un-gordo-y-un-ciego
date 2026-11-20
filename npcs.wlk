@@ -118,11 +118,11 @@ const dialogosAshley = [
 const palancas = new Cartel(posicion = game.at(8,13),salaDondeAparece = entradaIsla ,dialogoCartel = pistaPalancas)
 const luisito = new Luisito(posicion = game.at(12, 9), imagen = "npc_luisito.png", dialogoFijo = dialogoLuisito)
 const ashley  = new Ashley(posicion = game.at(10, 12), imagen = "npc_ashley.png", dialogos = dialogosAshley)
-const moto = new Bote(posicion = game.at(19, 8), dialogoFijo =  cartelBote)
+const moto = new Bote(posicion = game.at(17, 9), dialogoFijo =  cartelBote)
 const pregordo = new Gordo(posicion = game.at(22,3), dialogoFijo = dialogoPuertaGordo)
 
 object gestorNpcs {
-    const npcs = [luisito, ashley, palancas]
+    const npcs = [luisito, ashley, palancas, moto, pregordo]
     const activos = []          
 
     method actualizar(sala) {
