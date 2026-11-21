@@ -30,7 +30,9 @@ object partida {
             listaFondoHUD.forEach({ a => game.addVisual(a) })
             listaCorazones.forEach({ a => game.addVisual(a) })
             listaIconos.forEach({ a => game.addVisual(a) })
+            game.addVisual(iconoEscopeta)
             game.addVisual(contadorEscopeta)
+            game.addVisual(iconoGranadas)
             game.addVisual(contadorGranadas)
         }
     }

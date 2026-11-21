@@ -19,33 +19,8 @@ object municion {
         return contador
     }
 }
-class ContadorMunicion {
-    const arma
-    const prefijo
-    const posicion
-    const color
 
-    method position() = posicion
-    method textColor() = color
-    method estaVivo() = false          // balas y explosiones lo ignoran
 
-    method text() =
-        if (inventario.armas().contains(arma)) prefijo + arma.cantidad() else ""
-}
-
-const contadorEscopeta = new ContadorMunicion(
-    arma = escopeta,
-    prefijo = "ESC x",
-    posicion = game.at(23, 0),
-    color = "FFFFFFFF"
-)
-
-const contadorGranadas = new ContadorMunicion(
-    arma = lanzaPapoides,
-    prefijo = "GRA x",
-    posicion = game.at(20, 0),
-    color = "FFFFFFFF"
-)
 class Proyectil {
     const id = municion.siguienteId()
     const nombreArma
@@ -331,7 +306,33 @@ object inventario{
     }
 }
 
+class IconoMunicion {
+    const arma
+    const imagen
+    const desdeDerecha
 
+    method position() = game.at(game.width() - desdeDerecha, 0)
+    method image() = if (inventario.armas().contains(arma)) imagen else "vacio.png"
+    method estaVivo() = false
+}
+
+class ContadorMunicion {
+    const arma
+    const desdeDerecha
+
+    method position() = game.at(game.width() - desdeDerecha, 0)
+    method textColor() = "FFFFFFFF"
+    method estaVivo() = false
+    method text() =
+        if (inventario.armas().contains(arma)) arma.cantidad().toString() else ""
+}
+
+
+const iconoEscopeta   = new IconoMunicion(arma = escopeta, imagen = "balas_escopeta.png", desdeDerecha = 2)
+const contadorEscopeta = new ContadorMunicion(arma = escopeta, desdeDerecha = 1)
+
+const iconoGranadas   = new IconoMunicion(arma = lanzaPapoides, imagen = "granada_suelo.png", desdeDerecha = 4)
+const contadorGranadas = new ContadorMunicion(arma = lanzaPapoides, desdeDerecha = 3)
 
 object loot {
     method tirar(pos) {
@@ -397,7 +398,7 @@ class ItemCorazon {
 
 class ItemCorazonExtra {
     const posicion
-    const curacion = personaje.saludMaxima()
+    const curacion = (personaje.saludMaxima() + 1)
 
     method position() = posicion
     method image() = "corazon_dorado.png"
