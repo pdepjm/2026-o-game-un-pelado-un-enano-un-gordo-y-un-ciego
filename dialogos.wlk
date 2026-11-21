@@ -58,7 +58,7 @@ const dialogoEnanoMuerto = new CartelSecuencia(
 )
 
 const dialogoKrauserMuerto = new CartelSecuencia(
-    imagenes = ["dialogo_postkrause1.png", "dialogo_postkrauser2.png"],
+    imagenes = ["dialogo_postkrauser1.png", "dialogo_postkrauser2.png"],
     posicion = game.at(9,12)
 )
 
