@@ -265,7 +265,7 @@ const lanzaPapoides = new LanzaPapas(
 )
 
 object inventario{
-    const listaInventario = [cuchillo, revolver]
+    const listaInventario = [cuchillo, revolver, escopeta, lanzaPapoides]
     var armaElegida = 0
 
     method aniadirArma(arma) {
@@ -307,33 +307,39 @@ object inventario{
 }
 
 class IconoMunicion {
-    const arma
     const imagen
     const desdeDerecha
 
     method position() = game.at(game.width() - desdeDerecha, 0)
-    method image() = if (inventario.armas().contains(arma)) imagen else "vacio.png"
+    method image() = imagen
     method estaVivo() = false
 }
 
-class ContadorMunicion {
+class Digito {
     const arma
     const desdeDerecha
+    const esDecena
 
     method position() = game.at(game.width() - desdeDerecha, 0)
-    method textColor() = "FFFFFFFF"
     method estaVivo() = false
-    method text() =
-        if (inventario.armas().contains(arma)) arma.cantidad().toString() else ""
-    method textSize() = 64
+
+    method cantidad() = arma.cantidad().min(99)
+    method valor() = if (esDecena) self.cantidad().div(10) else self.cantidad() % 10
+    method image() = "numero_" + self.valor() + ".png"
 }
 
 
-const iconoEscopeta   = new IconoMunicion(arma = escopeta, imagen = "balas_escopeta.png", desdeDerecha = 2)
-const contadorEscopeta = new ContadorMunicion(arma = escopeta, desdeDerecha = 1)
+const iconoEscopeta     = new IconoMunicion(imagen = "balas_escopeta.png", desdeDerecha = 3)
+const decenasEscopeta   = new Digito(arma = escopeta, desdeDerecha = 2, esDecena = true)
+const unidadesEscopeta  = new Digito(arma = escopeta, desdeDerecha = 1, esDecena = false)
 
-const iconoGranadas   = new IconoMunicion(arma = lanzaPapoides, imagen = "granada_suelo.png", desdeDerecha = 4)
-const contadorGranadas = new ContadorMunicion(arma = lanzaPapoides, desdeDerecha = 3)
+
+const iconoGranadas     = new IconoMunicion(imagen = "granada_suelo.png", desdeDerecha = 7)
+const decenasGranadas   = new Digito(arma = lanzaPapoides, desdeDerecha = 6, esDecena = true)
+const unidadesGranadas  = new Digito(arma = lanzaPapoides, desdeDerecha = 5, esDecena = false)
+
+const hudEscopeta = [iconoEscopeta, decenasEscopeta, unidadesEscopeta]
+const hudGranadas = [iconoGranadas, decenasGranadas, unidadesGranadas]
 
 object loot {
     method tirar(pos) {
