@@ -130,6 +130,8 @@ class Arma {
         pausa = true
         game.schedule(tiempoPausa, { pausa = false })
     }
+    
+    method mostrarContador() { }
 }
 
 class Escopeta inherits Arma {
@@ -199,6 +201,9 @@ class Escopeta inherits Arma {
             direccion.desde(personaje.position(), posicion).x() + ortogonal.desde(game.at(0,0), expansion).x(),
             direccion.desde(personaje.position(), posicion).y() + ortogonal.desde(game.at(0,0), expansion).y()
         )
+     override method mostrarContador() {
+        hudEscopeta.forEach({ v => game.addVisual(v) })
+    }
 }
 
 class LanzaPapas inherits Arma {
@@ -226,6 +231,9 @@ class LanzaPapas inherits Arma {
                 self.reproducirSonido()
             }
         }
+    }
+        override method mostrarContador() {
+        hudGranadas.forEach({ v => game.addVisual(v) })
     }
 }
 
@@ -269,9 +277,10 @@ object inventario{
     var armaElegida = 0
 
     method aniadirArma(arma) {
-        if (!listaInventario.contains(arma)) {
-            listaInventario.add(arma)
-            game.addVisual(new IconoInventario(arma = arma, indice = listaInventario.size() - 1))
+    if (!listaInventario.contains(arma)) {
+        listaInventario.add(arma)
+        game.addVisual(new IconoInventario(arma = arma, indice = listaInventario.size() - 1))
+        arma.mostrarContador()
         }
     }
     method cambiarArma(){
@@ -411,8 +420,8 @@ class ItemCorazonExtra {
     method estaVivo() = false
 
     method alPisar() {
-        personaje.curar(curacion)
         personaje.aniadirVida()
+        personaje.curar(curacion)
         game.removeVisual(self)
     }
 }
