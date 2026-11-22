@@ -325,6 +325,7 @@ class ContadorMunicion {
     method estaVivo() = false
     method text() =
         if (inventario.armas().contains(arma)) arma.cantidad().toString() else ""
+    method textSize() = 64
 }
 
 

@@ -143,10 +143,10 @@ const luisito = new Luisito(posicion = game.at(12, 9), imagen = "npc_luisito.png
 const ashley  = new Ashley(posicion = game.at(10, 12), imagen = "npc_ashley.png", dialogos = dialogosAshley)
 const moto = new Bote(posicion = game.at(17, 9), dialogoFijo =  cartelBote)
 const pregordo = new Gordo(posicion = game.at(22,3), dialogoFijo = dialogoPuertaGordo)
-const bitacoraVerde = new Bitacora(salaDondeAparece = salaVerde, posicion = game.at(18,11), dialogoFijo = lore1)
-const bitacoraRoja = new Bitacora(salaDondeAparece = salaRoja, posicion = game.at(18,11), dialogoFijo = lore2)
-const bitacoraAzul = new Bitacora(salaDondeAparece = salaAzul, posicion = game.at(18,11), dialogoFijo = lore3)
-const bitacoraAmarilla = new Bitacora(salaDondeAparece = pasilloSurEste, posicion = game.at(18,11), dialogoFijo = lore4)
+const bitacoraVerde = new Bitacora(salaDondeAparece = salaVerde, posicion = game.at(15,11), dialogoFijo = lore1)
+const bitacoraRoja = new Bitacora(salaDondeAparece = salaRoja, posicion = game.at(15,11), dialogoFijo = lore2)
+const bitacoraAzul = new Bitacora(salaDondeAparece = salaAzul, posicion = game.at(15,11), dialogoFijo = lore3)
+const bitacoraAmarilla = new Bitacora(salaDondeAparece = pasilloSurEste, posicion = game.at(15,11), dialogoFijo = lore4)
 object gestorNpcs {
     const npcs = [luisito, ashley, palancas, moto, pregordo, bitacoraVerde, 
     bitacoraRoja, bitacoraAzul, bitacoraAmarilla]
