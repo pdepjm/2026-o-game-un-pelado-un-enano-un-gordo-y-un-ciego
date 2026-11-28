@@ -3,6 +3,7 @@ import armas.*
 import maquinaDeEstados.*
 import llaves.*
 import mapas.*
+import npcs.*
 
 class Destructible {
     const posicion
@@ -33,6 +34,14 @@ const cuerdaIglesia = new Destructible(
     llaveOtorgada = llaveCuerda,
     alRomperse = { iglesia.cambiarFondo("fondo_iglesia_rota.png") }
 )
+
+const tablasPasillo2 = new Destructible(
+    posicion = game.at(18,3),
+    imagen = "tablas.png",
+    armaRequerida = escopeta,
+    llaveOtorgada =  llaveTablas,
+    alRomperse = { gestorNpcs.actualizar(mapa.salaActual()) }
+    )
 class Palanca {
     const posicion
     const color

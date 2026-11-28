@@ -248,7 +248,12 @@ method alPisar(pos) {
     if (!itemsEnSuelo.contains(item)) { itemsEnSuelo.add(item) }
 }
 
-    method cruzar(puerta) {
+   method cinematicaPara(sala) =
+    if (sala == lobbyCastillo) cinematicaLobby
+    else if (sala == salaKrauser) cinematicaKrauser
+    else null
+
+method cruzar(puerta) {
     const destino = puerta.destino()
 
     spawner.limpiar()
@@ -258,35 +263,31 @@ method alPisar(pos) {
     itemsEnSuelo.clear()
     salaActual.descargar()
     gestorDialogos.cerrarDialogo()
+
+    const cine = self.cinematicaPara(destino)
+    if (cine != null && !cine.vista()) {
+        gestorDialogos.mostrarCinematica(cine, { self.entrarA(destino, puerta) })
+    } else {
+        self.entrarA(destino, puerta)
+    }
+}
+
+method entrarA(destino, puerta) {
     salaActual = destino
     salaActual.cargar()
-    
+
     personaje.position(salaActual.entradaDe(puerta.puertaDeVuelta()))
-    gestorNpcs.actualizar(salaActual) 
+    gestorNpcs.actualizar(salaActual)
     gestorMusica.alEntrarA(salaActual)
     salaActual.jefe().aparecer()
 
-    if (salaActual == iglesia) {
-    gestorDialogos.mostrarCuerda()
-    }
+    if (salaActual == iglesia) gestorDialogos.mostrarCuerda()
+    if (salaActual == lobbyCastillo) gestorDialogos.mostrarDobleLlave()   // como era originalmente
+    if (salaActual == salaFinal) gestorDialogos.mostrar(dialogoFinal)
 
-    if (salaActual == lobbyCastillo) {
-    gestorDialogos.mostrarDobleLlave()
-    }
-    if (salaActual == salaFinal){
-        gestorDialogos.mostrar(dialogoFinal)
-    }
-
-    if (salaActual.zombisAleatorios()) {
-        spawner.crearZombiesAleatorios()
-    }
-    if (salaActual.rapidinesAleatorios()) {
-    spawner.crearRapidinesAleatorios()
-    }
-    if (salaActual.tankesAleatorios()) {
-    spawner.crearTankesAleatorios()
-    }
-    
+    if (salaActual.zombisAleatorios()) spawner.crearZombiesAleatorios()
+    if (salaActual.rapidinesAleatorios()) spawner.crearRapidinesAleatorios()
+    if (salaActual.tankesAleatorios()) spawner.crearTankesAleatorios()
 }
     method limpiarTodo() {
         spawner.limpiar()
@@ -305,6 +306,7 @@ method alPisar(pos) {
     [palancaRoja, palancaAzul, palancaVerde, palancaAmarilla].forEach({ p => p.reiniciar() })
     [llavePreEnano1, llavePreEnano2, llavePreGordo].forEach({ l => l.reiniciar() })
     [salaLlave1, salaLlave2, bibiloteca, salaEscopeta].forEach({ s => s.reiniciar() })
+    [cinematicaLobby, cinematicaKrauser].forEach({ c => c.olvidar() })
     emboscadaPueblo.reiniciar()
     }
     
@@ -663,6 +665,7 @@ const salaPasillo1 =new Sala(
     ],
     jefe = jefeNulo,
     fondo = "fondo_pasillo1.png",
+    destructibles = [tablasPasillo2],
     zombisAleatorios = true,
     rapidinesAleatorios = true,
     puerta1 = puertaPasillo1Pasillo0,
@@ -713,7 +716,7 @@ const salaPasillo2 =new Sala(
         "HHH      HHHHHHHHHHHHHHH",
         "HHH      HHHHHHHHHHHHHHH",
         "HHH      IIIIIIIIIIIIHHH",
-        "HHH                  IHH",
+        "HHH      I   I  I   IIHH",
         "HHH                  2HH",
         "HHH                  HHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH"
@@ -1049,7 +1052,7 @@ const antesalaKrauser = new Sala(diseno = [
 const salaKrauser =new Sala(
     diseno = [
         "HHHHHHHHHHHHHHHHHHHHHHHHH",
-        "HHHHHHHHHHHHH2HHHHHHHHHH",
+        "HHIIIIIIIIII2IIIIIIIIIHH",
         "HH                    HH",
         "HH                    HH",
         "HH                    HH",
@@ -1066,7 +1069,7 @@ const salaKrauser =new Sala(
     ],
     jefe = jefeKrauser,
     zombisAleatorios = false,
-    fondo = fondoIsla,
+    fondo = "fondo_krauser.png",
     puerta1 = puertaKrauserAntesala,
     puerta2 = puertaKrauserFinal,
     puerta3 = vacio,
@@ -1076,6 +1079,7 @@ const salaFinal =new Sala(
     diseno = [
         "HHHHHHHHHHHHHHHHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH",
+        "HHIIIIIIIIIIIIIIIIIIIIHH",
         "HH                    HH",
         "HH                    HH",
         "HH                    HH",
@@ -1086,8 +1090,7 @@ const salaFinal =new Sala(
         "HH                    HH",
         "HH                    HH",
         "HH                    HH",
-        "HH                    HH",
-        "HHHHHHHHHHHHH1HHHHHHHHHH",
+        "HHHHHHHHHHHH1HHHHHHHHHHH",
         "HHHHHHHHHHHHHHHHHHHHHHHH"
     ],
     jefe = jefeFinal,

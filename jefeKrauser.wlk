@@ -78,7 +78,7 @@ object jefeKrauser {
 
   
     method actuar() {
-        if (self.estaVivo() && mapa.salaActual() == salaKrauser) {
+      if (self.estaVivo() && mapa.salaActual() == salaKrauser && !gestorDialogos.activo()){
             if (self.jugadorCerca()) self.golpear() else self.perseguir()
         }
     }

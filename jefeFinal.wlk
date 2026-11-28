@@ -8,8 +8,7 @@ override method image() = "prueba.png"
 override method morido() {
     self.eliminar()
     jefeFinal.callar()
-    dialogoFinalMuerto.mostrar({ finalJuego.mostrar()})
-    finalJuego.mostrar()
+    gestorDialogos.mostrar(dialogoFinalMuerto)
 }
 }
 

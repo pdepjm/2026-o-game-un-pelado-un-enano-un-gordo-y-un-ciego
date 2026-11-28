@@ -2,6 +2,9 @@ import wollok.game.*
 import maquinaDeEstados.*
 import llaves.*
 import personaje.*
+import musica.*
+import mapas.*
+import jefeFinal.*
 
 object cartelCuerda {
     method image() = "estaCuerdaPareceSospechosa.png"
@@ -9,6 +12,7 @@ object cartelCuerda {
     method hayMas() = false
     method avanzar() {}
     method reiniciar() {}
+    method alCerrar(natural) {}
 }
 
 object cartelDobleLlave {
@@ -17,6 +21,7 @@ object cartelDobleLlave {
     method hayMas() = false
     method avanzar() {}
     method reiniciar() {}
+    method alCerrar(natural) {}
 }
 
 class CartelSecuencia {
@@ -24,7 +29,7 @@ class CartelSecuencia {
     const posicion
     var indice = 0
     
-
+    method alCerrar(natural) {}
     method image() = imagenes.get(indice)
     method position() = posicion
     method hayMas() = indice < imagenes.size() - 1
@@ -62,12 +67,16 @@ const dialogoKrauserMuerto = new CartelSecuencia(
     posicion = game.at(9,12)
 )
 
-const dialogoFinalMuerto  = new CartelSecuencia(
-    imagenes = ["dialogo_prueba7.png", "dialogo_prueba8.png", "dialogo_prueba9.png", 
+const dialogoFinalMuerto = new CartelConFinal(
+    imagenes = ["dialogo_prueba7.png", "dialogo_prueba8.png", "dialogo_prueba9.png",
     "dialogo_prueba10.png", "dialogo_prueba11.png"],
     posicion = game.at(9,12)
 )
 
+const cartelTablas = new CartelSecuencia(
+    imagenes = ["dialogo_tablas1.png", "dialogo_tablas2.png"],
+    posicion = game.at(9,12)
+)
 
 
 const lore1 = new CartelSecuencia(
@@ -107,8 +116,34 @@ const cartelBote = new CartelSecuencia(
 object gestorDialogos {
     var dialogoActual = null
     var teclaActivada = false
+    var cinematicaActual = null
 
-    method activo() = dialogoActual != null
+    method activo() = dialogoActual != null || cinematicaActual != null
+
+    method mostrarCinematica(cinematica, accion) {
+        self.activarTecla()
+        self.cerrarDialogo()
+        cinematicaActual = cinematica
+        cinematica.iniciar(accion)
+    }
+
+    method cinematicaTerminada() { cinematicaActual = null }
+
+    method avanzar() {
+        if (cinematicaActual != null) cinematicaActual.terminar()    
+        else if (dialogoActual != null) {
+            if (dialogoActual.hayMas()) dialogoActual.avanzar()
+            else self.cerrar(true)
+
+        }
+    }
+
+    method reiniciar() {
+        dialogoActual = null
+        cinematicaActual = null
+        teclaActivada = false
+    }
+
 
     method puedeMostrarCuerda() = !juego.existeLlave(llavePelado)
     method puedeMostrarDobleLlave() =
@@ -140,21 +175,96 @@ object gestorDialogos {
         }
     }
 
-    method avanzar() {
+    method alCerrar(natural) {}
+
+
+    method cerrarDialogo() { self.cerrar(false) }
+
+
+    method cerrar(natural) {
         if (dialogoActual != null) {
-            if (dialogoActual.hayMas()) dialogoActual.avanzar()
-            else self.cerrarDialogo()
+            const cerrado = dialogoActual
+            game.removeVisual(cerrado)
+            dialogoActual = null
+            cerrado.alCerrar(natural)
         }
     }
 
-    method cerrarDialogo() {
-        if (dialogoActual != null) {
-            game.removeVisual(dialogoActual)
-            dialogoActual = null
-        }
+    method mostrarCinematica(cinematica) {
+    if (!cinematica.vista()) {
+        self.mostrar(cinematica)
+        cinematica.iniciar()
     }
-    method reiniciar() {
-        dialogoActual = null
-        teclaActivada = false     
+    }
+
+    method terminarSi(cartel) {
+        if (dialogoActual == cartel) self.cerrar(true)
+    }
+
+
+}
+
+class Cinematica {
+    const imagen
+    const audio
+    const duracion
+    var vista = false
+    var sonido = null
+    var turno = 0
+    var ocultos = []
+    var alTerminar = {}
+    const retrasoAudio = 0 
+
+    method vista() = vista
+    method olvidar() { vista = false }
+
+   method iniciar(accion) {
+        vista = true
+        alTerminar = accion
+        turno += 1
+        const miTurno = turno
+
+        gestorMusica.detener()
+
+        ocultos = game.allVisuals().map({ v => v })
+        ocultos.forEach({ v => game.removeVisual(v) })
+        game.boardGround(imagen)
+
+        sonido = game.sound(audio)
+        game.schedule(retrasoAudio, { if (turno == miTurno) sonido.play() })
+        game.schedule(duracion, { if (turno == miTurno) self.terminar() })
+    }
+
+    method terminar() {
+        turno += 1
+        if (sonido.played()) sonido.stop()  
+        sonido = null
+
+        game.boardGround("fondo_nivel.png")           
+        ocultos.forEach({ v => game.addVisual(v) })
+        ocultos = []
+
+        gestorDialogos.cinematicaTerminada()
+        alTerminar.apply()                            
+    }
+}
+
+const cinematicaLobby = new Cinematica(
+    imagen = "cinematica_lobby.gif",
+    audio = "cinematica_lobby.mp3",
+    duracion = 61000,
+    retrasoAudio = 1000
+)
+
+const cinematicaKrauser = new Cinematica(
+    imagen = "cinematica_krauser.gif",
+    audio = "cinematica_krauser.mp3",
+    duracion = 97000,
+    retrasoAudio = 1000
+)
+
+class CartelConFinal inherits CartelSecuencia {
+    override method alCerrar(natural) {
+        if (natural) game.schedule(2000, { finalJuego.mostrar() })
     }
 }
