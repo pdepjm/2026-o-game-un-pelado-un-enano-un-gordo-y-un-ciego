@@ -1,0 +1,56 @@
+import jefePelado.*
+import jefeEnano.*
+import jefeGordo.*
+import wollok.game.*
+import enemigo.*
+import movimiento.*
+
+
+describe "Tests del Jefe Pelado" {
+
+    test "El jefe comienza con 5 vidas" {
+        assert.equals(5, jefePelado.vidaActual())
+    }
+
+    test "El jefe comienza vivo" {
+        assert.equals(true, jefePelado.estaVivo())
+    }
+
+    test "El jefe comienza reflejando balas" {
+        assert.equals(true, jefePelado.reflejaBalas())
+    }
+
+    test "El jefe comienza en estado normal" {
+        assert.equals("jefePelado_normal.gif", jefePelado.image())
+    }
+}
+
+describe "Tests del Jefe Enano" {
+
+    test "El jefe comienza con 6 vidas" {
+        assert.equals(6, jefeEnano.vidaActual())
+    }
+
+    test "El jefe comienza vivo" {
+        assert.equals(true, jefeEnano.estaVivo())
+    }
+
+    test "El jefe comienza en la posicion correcta" {
+        assert.equals(game.at(11, 5), jefeEnano.position())
+    }
+}
+
+describe "Tests del Jefe Gordo" {
+
+    test "El jefe comienza con 5 vidas" {
+        assert.equals(5, jefeGordo.vidaActual())
+    }
+
+    test "El jefe comienza vivo" {
+        assert.equals(true, jefeGordo.estaVivo())
+    }
+
+    test "El jefe comienza en su posicion inicial" {
+        assert.equals(game.at(11, 14), jefeGordo.position())
+    }
+}
