@@ -252,7 +252,7 @@ class Cinematica {
 const cinematicaLobby = new Cinematica(
     imagen = "cinematica_lobby.gif",
     audio = "cinematica_lobby.mp3",
-    duracion = 61000,
+    duracion = 59000,
     retrasoAudio = 1000
 )
 
